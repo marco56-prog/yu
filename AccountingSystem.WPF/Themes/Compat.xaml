@@ -1,0 +1,25 @@
+<!-- Themes/Compat.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- =============================================== -->
+    <!-- طبقة توافق مع أسماء الموارد والستايلات القديمة -->
+    <!-- =============================================== -->
+
+    <!-- Aliases/Bridges إلى المفاتيح الحديثة -->
+    <SolidColorBrush x:Key="TextOnPrimaryColorCompat" Color="{DynamicResource TextOnPrimaryColorValue}"/>
+    <SolidColorBrush x:Key="AccentColorCompat" Color="{DynamicResource AccentBrush}"/>
+    
+    <!-- بعض الشاشات قد تنادي CardBackgroundBrush -->
+    <SolidColorBrush x:Key="CardBackgroundBrushCompat" Color="{DynamicResource SurfaceColorValue}"/>
+    
+    <!-- أسماء ستايلات قديمة -->
+    <Style x:Key="ModernButton" TargetType="Button" BasedOn="{StaticResource ModernButtonStyle}"/>
+    <Style x:Key="ModernPrimaryButtonCompat" TargetType="Button" BasedOn="{StaticResource ModernButtonStyle}"/>
+
+    <!-- مفاتيح إضافية للتوافق -->
+    <SolidColorBrush x:Key="PrimaryButtonBackground" Color="{DynamicResource PrimaryColorValue}"/>
+    <SolidColorBrush x:Key="SecondaryButtonBackground" Color="{DynamicResource SurfaceColorValue}"/>
+    <SolidColorBrush x:Key="DefaultButtonForeground" Color="{DynamicResource TextOnPrimaryColorValue}"/>
+
+</ResourceDictionary>

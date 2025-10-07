@@ -1,0 +1,116 @@
+<Window x:Class="AccountingSystem.WPF.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="تسجيل الدخول - النظام المحاسبي"
+        Height="600" Width="500"
+        Style="{StaticResource StandardDialog}"
+        ResizeMode="NoResize">
+
+    <Grid Style="{StaticResource MainContentLayout}">
+        <Border Style="{StaticResource ElevatedCard}" Padding="{StaticResource ExtraLargeMargin}">
+            
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- العنوان -->
+                <Border Style="{StaticResource TitleBarLayout}" Margin="{StaticResource ExtraLargeMargin}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{StaticResource SettingsIcon}" 
+                                   FontSize="32" 
+                                   HorizontalAlignment="Center" 
+                                   Margin="{StaticResource MediumMargin}"/>
+                        <TextBlock Text="النظام المحاسبي المتكامل" 
+                                   Style="{StaticResource HeaderTextBlock}"
+                                   Foreground="{StaticResource TextOnPrimaryBrush}" 
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="نظام إدارة المحاسبة والمخازن" 
+                                   Style="{StaticResource BodyTextBlock}"
+                                   Foreground="{StaticResource TextOnPrimaryBrush}" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- حقل اسم المستخدم -->
+                <StackPanel Style="{StaticResource FormFieldGroup}" Width="300">
+                    <TextBlock Text="اسم المستخدم:" Style="{StaticResource FieldLabel}"/>
+                    <TextBox x:Name="txtUsername" 
+                             Height="40" 
+                             Style="{StaticResource StandardTextBox}"
+                             Padding="{StaticResource MediumPadding}"/>
+                </StackPanel>
+
+                <!-- حقل كلمة المرور -->
+                <StackPanel Style="{StaticResource FormFieldGroup}" Width="300">
+                    <TextBlock Text="كلمة المرور:" Style="{StaticResource FieldLabel}"/>
+                    <PasswordBox x:Name="txtPassword" 
+                                 Height="40" 
+                                 Style="{StaticResource StandardPasswordBox}"
+                                 Padding="{StaticResource MediumPadding}"/>
+                </StackPanel>
+
+                <!-- خيار تذكرني -->
+                <CheckBox x:Name="chkRememberMe" 
+                          Content="تذكرني" 
+                          Style="{StaticResource {x:Type CheckBox}}"
+                          Margin="{StaticResource LargeMargin}" 
+                          HorizontalAlignment="Right"/>
+
+                <!-- رسائل الخطأ -->
+                <Border x:Name="ErrorMessage" 
+                        Style="{StaticResource ErrorMessage}" 
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="lblMessage" 
+                               Style="{StaticResource BodyTextBlock}"
+                               Foreground="{StaticResource ErrorBrush}" 
+                               TextAlignment="Center" 
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <!-- شريط التحميل -->
+                <ProgressBar x:Name="prgBusy" 
+                             Height="4" 
+                             IsIndeterminate="True" 
+                             Visibility="Collapsed" 
+                             Margin="{StaticResource LargeMargin}" 
+                             Width="300"
+                             Foreground="{StaticResource PrimaryBrush}"/>
+
+                <!-- الأزرار -->
+                <StackPanel Style="{StaticResource DialogButtonGroup}">
+                    <Button x:Name="btnLogin" 
+                            Style="{StaticResource PrimaryButton}"
+                            Width="150" Height="45" 
+                            Click="btnLogin_Click"
+                            IsDefault="True">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource SuccessIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تسجيل الدخول"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="btnCancel" 
+                            Style="{StaticResource SecondaryButton}"
+                            Width="100" Height="45" 
+                            Click="btnCancel_Click" 
+                            IsCancel="True">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource CancelIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="إلغاء"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- معلومات إضافية -->
+                <StackPanel HorizontalAlignment="Center" Margin="{StaticResource ExtraLargeMargin}">
+                    <Border Style="{StaticResource InfoMessage}">
+                        <TextBlock Text="المستخدم الافتراضي: admin | كلمة المرور: admin" 
+                                   Style="{StaticResource CaptionTextBlock}"
+                                   HorizontalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="© 2024 - النظام المحاسبي المتقدم" 
+                               Style="{StaticResource CaptionTextBlock}"
+                               HorizontalAlignment="Center" 
+                               Margin="{StaticResource SmallMargin}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

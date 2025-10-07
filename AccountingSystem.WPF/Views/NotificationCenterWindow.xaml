@@ -1,0 +1,228 @@
+<Window x:Class="AccountingSystem.WPF.Views.NotificationCenterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="مركز الإشعارات"
+        Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <Style x:Key="NotificationItemStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8F9FA"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="UnreadNotificationStyle" TargetType="Border" BasedOn="{StaticResource NotificationItemStyle}">
+            <Setter Property="Background" Value="#E3F2FD"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NotificationTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style x:Key="NotificationMessageStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#666"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+        </Style>
+
+        <Style x:Key="NotificationTimeStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#999"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+        </Style>
+
+        <Style x:Key="FilterButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#666"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#2196F3"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ActiveFilterButtonStyle" TargetType="Button" BasedOn="{StaticResource FilterButtonStyle}">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <!-- الشريط العلوي -->
+        <Border Grid.Row="0" Background="#2196F3">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🔔" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="مركز الإشعارات" FontSize="18" FontWeight="Bold" 
+                              Foreground="White" VerticalAlignment="Center"/>
+                    <Border Background="#F44336" CornerRadius="10" Padding="8,4" Margin="15,0,0,0"
+                            Visibility="{Binding HasUnreadNotifications, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="{Binding UnreadCount}" FontSize="12" 
+                                  Foreground="White" FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="🔄 تحديث" Background="Transparent" Foreground="White" 
+                           BorderThickness="1" BorderBrush="White" Padding="15,8" Margin="0,0,10,0"
+                           Command="{Binding RefreshCommand}"/>
+                    <Button Content="✓ تحديد الكل كمقروء" Background="Transparent" Foreground="White" 
+                           BorderThickness="1" BorderBrush="White" Padding="15,8"
+                           Command="{Binding MarkAllAsReadCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- المرشحات -->
+        <Border Grid.Row="1" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="20,10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="عرض:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                
+                <Button Content="الكل" Style="{StaticResource FilterButtonStyle}"
+                        Command="{Binding FilterCommand}" CommandParameter="All"/>
+                <Button Content="غير مقروءة" Style="{StaticResource FilterButtonStyle}"
+                        Command="{Binding FilterCommand}" CommandParameter="Unread"/>
+                <Button Content="مهمة" Style="{StaticResource FilterButtonStyle}"
+                        Command="{Binding FilterCommand}" CommandParameter="Important"/>
+                <Button Content="تحذيرات" Style="{StaticResource FilterButtonStyle}"
+                        Command="{Binding FilterCommand}" CommandParameter="Warning"/>
+                <Button Content="معلومات" Style="{StaticResource FilterButtonStyle}"
+                        Command="{Binding FilterCommand}" CommandParameter="Info"/>
+            </StackPanel>
+        </Border>
+
+        <!-- قائمة الإشعارات -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding FilteredNotifications}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{Binding IsRead, Converter={StaticResource BoolToNotificationStyleConverter}}">
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" 
+                                            Command="{Binding DataContext.NotificationClickCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                            CommandParameter="{Binding}"/>
+                            </Border.InputBindings>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- أيقونة النوع -->
+                                <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" 
+                                       Background="{Binding Priority, Converter={StaticResource PriorityToColorConverter}}"
+                                       VerticalAlignment="Top" Margin="0,0,15,0">
+                                    <TextBlock Text="{Binding Type, Converter={StaticResource NotificationTypeToIconConverter}}" FontSize="18" 
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Foreground="White"/>
+                                </Border>
+
+                                <!-- المحتوى -->
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding Title}" Style="{StaticResource NotificationTitleStyle}"/>
+                                    <TextBlock Text="{Binding Message}" Style="{StaticResource NotificationMessageStyle}"/>
+                                    <TextBlock Text="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}" 
+                                              Style="{StaticResource NotificationTimeStyle}"/>
+                                </StackPanel>
+
+                                <!-- الإجراءات -->
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
+                                    <Button Content="✓" ToolTip="تحديد كمقروء"
+                                           Width="30" Height="30" FontSize="14"
+                                           Background="Transparent" BorderThickness="0"
+                                           Foreground="#4CAF50" FontWeight="Bold"
+                                           Command="{Binding DataContext.MarkAsReadCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{Binding}"
+                                           Visibility="{Binding IsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                    
+                                    <Button Content="🗑" ToolTip="حذف"
+                                           Width="30" Height="30" FontSize="12"
+                                           Background="Transparent" BorderThickness="0"
+                                           Foreground="#F44336" FontWeight="Bold" Margin="5,0,0,0"
+                                           Command="{Binding DataContext.DeleteNotificationCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- الشريط السفلي -->
+        <Border Grid.Row="3" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding TotalNotifications, StringFormat='إجمالي: {0} إشعار'}" 
+                              FontSize="12" Foreground="#666" Margin="0,0,20,0"/>
+                    <TextBlock Text="{Binding UnreadCount, StringFormat='غير مقروء: {0}'}" 
+                              FontSize="12" Foreground="#F44336" FontWeight="Bold"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="إغلاق" 
+                       Background="#666" Foreground="White" 
+                       BorderThickness="0" Padding="20,10"
+                       Click="CloseButton_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- Loading Indicator -->
+        <Grid Grid.RowSpan="4" Background="#80000000" 
+              Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Background="White" CornerRadius="10" Width="200" Height="100"
+                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="⏳" FontSize="24" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="جاري التحميل..." FontSize="14" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

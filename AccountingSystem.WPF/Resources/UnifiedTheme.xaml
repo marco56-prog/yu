@@ -1,0 +1,478 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===================== الألوان الموحدة ===================== -->
+    
+    <!-- الألوان الأساسية -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#2196F3"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#1976D2"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#BBDEFB"/>
+    
+    <!-- الألوان الثانوية -->
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#FF9800"/>
+    <SolidColorBrush x:Key="SecondaryDarkBrush" Color="#F57C00"/>
+    <SolidColorBrush x:Key="SecondaryLightBrush" Color="#FFE0B2"/>
+    
+    <!-- ألوان الحالات -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#FF5722"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#F44336"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="#2196F3"/>
+    
+    <!-- ألوان النصوص -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+    <SolidColorBrush x:Key="TextDisabledBrush" Color="#BDBDBD"/>
+    <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="#FFFFFF"/>
+    
+    <!-- ألوان الخلفيات -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FAFAFA"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="DividerBrush" Color="#E0E0E0"/>
+    
+    <!-- ألوان التفاعل -->
+    <SolidColorBrush x:Key="HoverBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="SelectedBrush" Color="#E3F2FD"/>
+    <SolidColorBrush x:Key="FocusBrush" Color="#2196F3"/>
+    
+    <!-- ===================== الخطوط الموحدة ===================== -->
+    
+    <FontFamily x:Key="PrimaryFont">Segoe UI, Tahoma, Arial Unicode MS</FontFamily>
+    <FontFamily x:Key="MonospaceFont">Consolas, Courier New</FontFamily>
+    
+    <!-- أحجام الخطوط -->
+    <system:Double xmlns:system="clr-namespace:System;assembly=mscorlib" x:Key="FontSizeCaption">10</system:Double>
+    <system:Double xmlns:system="clr-namespace:System;assembly=mscorlib" x:Key="FontSizeBody">12</system:Double>
+    <system:Double xmlns:system="clr-namespace:System;assembly=mscorlib" x:Key="FontSizeSubheading">14</system:Double>
+    <system:Double xmlns:system="clr-namespace:System;assembly=mscorlib" x:Key="FontSizeHeading">16</system:Double>
+    <system:Double xmlns:system="clr-namespace:System;assembly=mscorlib" x:Key="FontSizeDisplay">20</system:Double>
+    
+    <!-- ===================== المسافات الموحدة ===================== -->
+    
+    <Thickness x:Key="SmallMargin">4</Thickness>
+    <Thickness x:Key="MediumMargin">8</Thickness>
+    <Thickness x:Key="LargeMargin">16</Thickness>
+    <Thickness x:Key="ExtraLargeMargin">24</Thickness>
+    
+    <Thickness x:Key="SmallPadding">6</Thickness>
+    <Thickness x:Key="MediumPadding">12</Thickness>
+    <Thickness x:Key="LargePadding">20</Thickness>
+    
+    <!-- ===================== الأنماط الموحدة للأزرار ===================== -->
+    
+    <!-- الزر الأساسي -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{StaticResource TextDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- الزر الثانوي -->
+    <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Background" Value="{StaticResource SecondaryBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryDarkBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- زر النجاح -->
+    <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#388E3C"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- زر التحذير -->
+    <Style x:Key="WarningButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#D84315"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- زر الخطر -->
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#D32F2F"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- الزر المحدد (Outlined) -->
+    <Style x:Key="OutlinedButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource SelectedBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للحقول ===================== -->
+    
+    <!-- حقل النص -->
+    <Style x:Key="StandardTextBox" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="{StaticResource SmallPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                    Padding="{TemplateBinding Padding}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource FocusBrush}"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{StaticResource HoverBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TextDisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- حقل كلمة المرور -->
+    <Style x:Key="StandardPasswordBox" TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="{StaticResource SmallPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                    Padding="{TemplateBinding Padding}"
+                                    VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource FocusBrush}"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- القائمة المنسدلة -->
+    <Style x:Key="StandardComboBox" TargetType="ComboBox">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="{StaticResource SmallPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للعناوين ===================== -->
+    
+    <!-- العنوان الرئيسي -->
+    <Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplay}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- العنوان الفرعي -->
+    <Style x:Key="SubheaderTextBlock" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeading}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- النص العادي -->
+    <Style x:Key="BodyTextBlock" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+    </Style>
+    
+    <!-- النص الثانوي -->
+    <Style x:Key="CaptionTextBlock" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeCaption}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للجداول ===================== -->
+    
+    <!-- الجدول الأساسي -->
+    <Style x:Key="StandardDataGrid" TargetType="DataGrid">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource DividerBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource HoverBrush}"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+    </Style>
+    
+    <!-- عمود الجدول -->
+    <Style x:Key="StandardDataGridColumnHeader" TargetType="DataGridColumnHeader">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للنوافذ ===================== -->
+    
+    <!-- النافذة الأساسية -->
+    <Style x:Key="StandardWindow" TargetType="Window">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="WindowStartupLocation" Value="CenterOwner"/>
+        <Setter Property="ResizeMode" Value="CanResize"/>
+        <Setter Property="ShowInTaskbar" Value="True"/>
+    </Style>
+    
+    <!-- الحوار الأساسي -->
+    <Style x:Key="StandardDialog" TargetType="Window" BasedOn="{StaticResource StandardWindow}">
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="WindowStartupLocation" Value="CenterParent"/>
+        <Setter Property="ShowInTaskbar" Value="False"/>
+        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للبطاقات ===================== -->
+    
+    <!-- البطاقة الأساسية -->
+    <Style x:Key="StandardCard" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="{StaticResource LargePadding}"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#00000020" 
+                                Direction="270" 
+                                ShadowDepth="2" 
+                                BlurRadius="8"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- البطاقة المرتفعة -->
+    <Style x:Key="ElevatedCard" TargetType="Border" BasedOn="{StaticResource StandardCard}">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#00000030" 
+                                Direction="270" 
+                                ShadowDepth="4" 
+                                BlurRadius="16"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- اسماء مستعارة للبطاقات (للتوافق مع النوافذ القديمة) -->
+    <Style x:Key="CardStyle" TargetType="Border" BasedOn="{StaticResource StandardCard}"/>
+    <Style x:Key="Card" TargetType="Border" BasedOn="{StaticResource StandardCard}"/>
+    
+    <!-- ===================== أنماط أزرار المنتجات ===================== -->
+    
+    <!-- زر المنتج في نقطة البيع -->
+    <Style x:Key="ProductButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ===================== أنماط البحث ===================== -->
+    
+    <!-- شريط البحث -->
+    <Style x:Key="SearchBar" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="25"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    
+    <!-- ===================== الأنماط الموحدة للأيقونات ===================== -->
+    
+    <!-- الأيقونة الأساسية -->
+    <Style x:Key="StandardIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- الأيقونة الكبيرة -->
+    <Style x:Key="LargeIcon" TargetType="TextBlock" BasedOn="{StaticResource StandardIcon}">
+        <Setter Property="FontSize" Value="24"/>
+    </Style>
+    
+    <!-- أيقونة الحالة -->
+    <Style x:Key="StatusIcon" TargetType="TextBlock" BasedOn="{StaticResource StandardIcon}">
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+</ResourceDictionary>

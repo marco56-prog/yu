@@ -1,0 +1,66 @@
+<Window x:Class="AccountingSystem.WPF.Views.CategoryEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="فئة المنتج" 
+        Height="260" Width="420"
+        Style="{StaticResource StandardDialog}"
+        ResizeMode="NoResize">
+    <Grid Style="{StaticResource MainWindowLayout}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <TextBlock Text="فئة المنتج" 
+                       Style="{StaticResource HeaderTextBlock}"
+                       Foreground="{StaticResource TextOnPrimaryBrush}"/>
+        </Border>
+
+        <!-- محتوى النموذج -->
+        <Border Grid.Row="1" Style="{StaticResource FormFieldGroup}">
+            <StackPanel>
+                <TextBlock Text="اسم الفئة:" Style="{StaticResource FieldLabelTextBlock}"/>
+                <TextBox Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource StandardTextBox}"/>
+                         
+                <TextBlock Text="الوصف:" 
+                           Style="{StaticResource FieldLabelTextBlock}" 
+                           Margin="{StaticResource LargeMargin}"/>
+                <TextBox Text="{Binding Description}" 
+                         AcceptsReturn="True" 
+                         Height="80" 
+                         TextWrapping="Wrap"
+                         Style="{StaticResource StandardTextBox}"/>
+                         
+                <CheckBox Content="نشطة" 
+                          IsChecked="{Binding IsActive}" 
+                          Style="{StaticResource StandardCheckBox}"
+                          Margin="{StaticResource LargeMargin}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- أزرار التحكم -->
+        <Border Grid.Row="2" Style="{StaticResource ActionBarLayout}">
+            <StackPanel Style="{StaticResource HorizontalButtonGroup}" HorizontalAlignment="Center">
+                <Button Style="{StaticResource SuccessButton}" 
+                        IsDefault="True"
+                        Click="btnSave_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource SaveIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="حفظ"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource SecondaryButton}" 
+                        IsCancel="True">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource CancelIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="إلغاء"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

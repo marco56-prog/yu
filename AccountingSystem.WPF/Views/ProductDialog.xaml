@@ -1,0 +1,281 @@
+<Window x:Class="AccountingSystem.WPF.Views.ProductDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="صنف مخازن" Height="640" Width="980"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize" FlowDirection="RightToLeft"
+        FontFamily="Tahoma" FontSize="11"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="HeaderBrush"  Color="#D9D0FF"/>  <!-- بنفسجي فاتح -->
+        <SolidColorBrush x:Key="BarBrush"     Color="#EDEDED"/>
+        <SolidColorBrush x:Key="ReadOnlyBg"   Color="#DADADA"/>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="4,2"/>
+        </Style>
+        <Style x:Key="NumBox" TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="SlimBtn" TargetType="Button">
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Margin"  Value="6,0,0,0"/>
+            <Setter Property="Background" Value="#EFEFEF"/>
+            <Setter Property="BorderBrush"  Value="#BFBFBF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style x:Key="ReadOnlyBox" TargetType="TextBox" BasedOn="{StaticResource NumBox}">
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Background" Value="{StaticResource ReadOnlyBg}"/>
+        </Style>
+        <Style x:Key="SectionLabel" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>   <!-- شريط علوي -->
+            <RowDefinition Height="32"/>   <!-- عنوان -->
+            <RowDefinition Height="*"/>    <!-- جسم -->
+            <RowDefinition Height="Auto"/> <!-- منطقة الأزرار الوسطى -->
+            <RowDefinition Height="42"/>   <!-- شريط سفلي -->
+        </Grid.RowDefinitions>
+
+        <!-- شريط علوي (F4) -->
+        <Border Grid.Row="0" Background="{StaticResource BarBrush}" BorderBrush="#CCC" BorderThickness="0,0,0,1">
+            <DockPanel LastChildFill="False" Margin="6,0">
+                <Button Content="F4  &lt;&lt;  أول كود / نهائي" Style="{StaticResource SlimBtn}" Click="BtnF4_Click"/>
+            </DockPanel>
+        </Border>
+
+        <!-- عنوان -->
+        <Border Grid.Row="1" Background="{StaticResource HeaderBrush}" BorderBrush="#C7C2F7" BorderThickness="0,0,0,1">
+            <TextBlock Text="صنف مخازن" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- جسم الشاشة -->
+        <Grid Grid.Row="2" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="330"/>  <!-- مساحة صورة/ملاحظة رمادية -->
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- لوحة الصورة/المرفق الرمادية -->
+            <Border Grid.Column="0" Background="#BFBFBF" BorderBrush="#999" BorderThickness="1" Height="210" Margin="0,36,0,0"/>
+
+            <!-- بقية الحقول -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>  <!-- سطر أكواد/باركود -->
+                    <RowDefinition Height="Auto"/>  <!-- توصيف/مجموعة/مورد -->
+                    <RowDefinition Height="Auto"/>  <!-- وحدات/أرقام -->
+                    <RowDefinition Height="Auto"/>  <!-- خصومات شراء + مكان التخزين -->
+                    <RowDefinition Height="Auto"/>  <!-- أسعار شراء/تكلفة/متوسط/نسبة ربح -->
+                    <RowDefinition Height="Auto"/>  <!-- أسعار توزيع/جملة/نصف/تجزئة -->
+                    <RowDefinition Height="Auto"/>  <!-- خصم بيع -->
+                    <RowDefinition Height="*"/>     <!-- فراغ -->
+                    <RowDefinition Height="Auto"/>  <!-- مخزن + حدود + كود/اسم -->
+                </Grid.RowDefinitions>
+
+                <!-- سطر الكود/الباركود -->
+                <Grid Grid.Row="0" Margin="0,2,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="كود" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtCode" Grid.Column="1" Style="{StaticResource NumBox}"/>
+                    <Button Content="تغيير الكود" Grid.Column="2" Width="70" Margin="6,0,0,0" Click="BtnChangeCode_Click"/>
+                    <TextBlock Grid.Column="3" Text="باركود" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                    <TextBox x:Name="txtBarcode" Grid.Column="4" Grid.ColumnSpan="2"/>
+                </Grid>
+
+                <!-- توصيف + مجموعة + مورد + أكواد فرعية -->
+                <Grid Grid.Row="1" Margin="0,2,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="توصيف"/>
+                    <TextBox x:Name="txtName" Grid.Column="1"/>
+                    <TextBlock Text="مجموعة" Grid.Column="2"/>
+                    <ComboBox x:Name="cmbGroup" Grid.Column="3"/>
+                    <TextBlock Text="مورد" Grid.Column="4"/>
+                    <ComboBox x:Name="cmbSupplier" Grid.Column="5"/>
+                </Grid>
+
+                <!-- أكواد فرعية ومكان التخزين أعلى اليمين (زي الصورة) -->
+                <Grid Grid.Row="3" Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="أكواد فرعية" Grid.Column="0" Width="90" Click="BtnSubCodes_Click"/>
+                    <TextBox Grid.Column="1"/>
+                    <TextBlock Grid.Column="2" Text="مكان التخزين" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                    <TextBox x:Name="txtLocation" Grid.Column="3"/>
+                </Grid>
+
+                <!-- الوحدات (01/كرتونة) + وحدة1/وحدة2 + أرقام 24 و22 -->
+                <Grid Grid.Row="2" Margin="0,2,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="وحدة" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtUnitCode" Grid.Column="1" Style="{StaticResource NumBox}" Text="01"/>
+                    <TextBox x:Name="txtUnitName" Grid.Column="2" Text="كرتونة"/>
+                    <TextBlock Grid.Column="3" Text="وحدة 1"/>
+                    <TextBox x:Name="txtUnit1" Grid.Column="4" Style="{StaticResource NumBox}" Text="24"/>
+                    <TextBlock Grid.Column="5" Text="وحدة 2"/>
+                    <TextBox x:Name="txtUnit2" Grid.Column="6" Style="{StaticResource NumBox}" Text="22"/>
+                    <CheckBox Grid.Column="7" Content="أصغر" VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- خصم شراء1/2 + سعر شراء -->
+                <Grid Grid.Row="4" Margin="0,2,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="خصم شراء 1" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPDisc1" Grid.Column="1" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Grid.Column="2" Text="خصم شراء 2" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPDisc2" Grid.Column="3" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Grid.Column="4" Text="سعر شراء" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPurchase" Grid.Column="5" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Grid.Column="6" Text="متوسط سعر" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtAvgCost" Grid.Column="7" Style="{StaticResource ReadOnlyBox}" Text="0"/>
+                </Grid>
+
+                <!-- صافي تكلفة + %نسبة الربح -->
+                <Grid Grid.Row="4" Margin="0,40,0,6" VerticalAlignment="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="صافي تكلفة" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtNetCost" Grid.Column="1" Style="{StaticResource ReadOnlyBox}" Text="0"/>
+                    <TextBlock Grid.Column="2" Text="% نسبة الربح" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtProfitPercent" Grid.Column="3" Style="{StaticResource NumBox}" Text="0"/>
+                </Grid>
+
+                <!-- أسعار البيع (توزيع/جملة/نصف/تجزئة) + أسعار للجزء -->
+                <Grid Grid.Row="5" Margin="0,6,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="سعر توزيع"/>
+                    <TextBox x:Name="txtPriceDist" Grid.Column="1" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Text="سعر جملة" Grid.Column="2"/>
+                    <TextBox x:Name="txtPriceWhole" Grid.Column="3" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Text="سعر نصف ج." Grid.Column="4"/>
+                    <TextBox x:Name="txtPriceHalf" Grid.Column="5" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Text="سعر تجزئة" Grid.Column="6"/>
+                    <TextBox x:Name="txtPriceRetail" Grid.Column="7" Style="{StaticResource NumBox}" Text="0"/>
+                </Grid>
+
+                <Grid Grid.Row="5" Margin="0,36,0,6" VerticalAlignment="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="سعر الجزء 1"/>
+                    <TextBox x:Name="txtPartPrice1" Grid.Column="1" Style="{StaticResource NumBox}" Text="0"/>
+                    <TextBlock Text="سعر الجزء 2" Grid.Column="2"/>
+                    <TextBox x:Name="txtPartPrice2" Grid.Column="3" Style="{StaticResource NumBox}" Text="0"/>
+                </Grid>
+
+                <!-- خصم بيع 1 -->
+                <Grid Grid.Row="6" Margin="0,2,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="خصم بيع 1"/>
+                    <TextBox x:Name="txtSDisc1" Grid.Column="1" Style="{StaticResource NumBox}" Text="0"/>
+                </Grid>
+
+                <!-- مخزن + حد أدنى/أقصى + كود/اسم (أسفل يمين) -->
+                <Border Grid.Row="8" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="0,8,0,0" Margin="0,6,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="مخزن"/>
+                        <ComboBox x:Name="cmbStore" Grid.Column="1"/>
+                        <TextBlock Text="حد أدنى" Grid.Column="2"/>
+                        <TextBox x:Name="txtMin" Grid.Column="3" Style="{StaticResource NumBox}" Text="0"/>
+                        <TextBlock Text="حد أقصى" Grid.Column="4"/>
+                        <TextBox x:Name="txtMax" Grid.Column="5" Style="{StaticResource NumBox}" Text="0"/>
+                        <TextBlock Text="كود" Grid.Column="6"/>
+                        <TextBox x:Name="txtAltCode" Grid.Column="7" Margin="0,0,6,0"/>
+                        <TextBlock Text="الاسم" Grid.Column="0" Margin="0,34,0,0"/>
+                        <TextBox x:Name="txtAltName" Grid.Column="1" Grid.ColumnSpan="7" Margin="0,30,6,0"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- أزرار وسط (F7/F8/F9) -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6">
+            <Button x:Name="btnEdit"    Content="تعديل   F7" Width="120" Style="{StaticResource SlimBtn}" Click="BtnEdit_Click"/>
+            <Button x:Name="btnSave"    Content="تسجيل  F8" Width="120" Style="{StaticResource SlimBtn}" Click="Save_Click"/>
+            <Button x:Name="btnArchive" Content="أرشفة F9" Width="120" Style="{StaticResource SlimBtn}" Click="BtnArchive_Click"/>
+        </StackPanel>
+
+        <!-- شريط سفلي F5/F6 -->
+        <Border Grid.Row="4" Background="{StaticResource BarBrush}" BorderBrush="#CCC" BorderThickness="1,1,1,0" Padding="6,4">
+            <DockPanel LastChildFill="False">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <Button Content="F5  &lt;&lt;  السابق" Width="140" Style="{StaticResource SlimBtn}" Click="BtnPrev_Click"/>
+                    <Button Content="F6  التالي  &gt;&gt;" Width="140" Style="{StaticResource SlimBtn}" Click="BtnNext_Click"/>
+                </StackPanel>
+                <TextBlock Text="Esc إغلاق | Ctrl+S حفظ" Foreground="#777" VerticalAlignment="Center" DockPanel.Dock="Right"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,11 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- حجم الخط 125% -->
+    <FontFamily x:Key="AppFontFamily">Segoe UI, Tahoma, Arial</FontFamily>
+    <sys:Double x:Key="FontSizeXS">13</sys:Double>
+    <sys:Double x:Key="FontSizeSmall">14</sys:Double>
+    <sys:Double x:Key="FontSizeNormal">15</sys:Double>
+    <sys:Double x:Key="FontSizeLarge">16</sys:Double>
+    <sys:Double x:Key="FontSizeXL">18</sys:Double>
+</ResourceDictionary>

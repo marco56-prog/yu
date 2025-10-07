@@ -1,0 +1,256 @@
+name: 🩺 Nightly System Health Check
+
+on:
+  schedule:
+    # تشغيل يومياً في الساعة 2:00 صباحاً UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    # السماح بالتشغيل اليدوي
+    inputs:
+      comprehensive_check:
+        description: 'تشغيل فحص شامل (بما في ذلك الاختبارات البصرية)'
+        required: false
+        default: 'false'
+        type: boolean
+      auto_fix:
+        description: 'محاولة الإصلاح التلقائي للمشاكل'
+        required: false
+        default: 'true'
+        type: boolean
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  SOLUTION_PATH: 'AccountingSystem.sln'
+  DOCTOR_PROJECT: 'AccountingSystem.Doctor'
+
+jobs:
+  system-health-check:
+    runs-on: windows-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: 📦 Restore Dependencies
+      run: |
+        dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: 🏗️ Build Solution
+      run: |
+        dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
+
+    - name: 🩺 Run System Diagnostics
+      id: diagnostics
+      run: |
+        # تشغيل طبيب النظام مع إعدادات مختلفة حسب المدخلات
+        if (${{ github.event.inputs.comprehensive_check == 'true' }}) {
+          dotnet run --project ${{ env.DOCTOR_PROJECT }} -- --comprehensive --output-format json --output-file health-report.json
+        } else {
+          dotnet run --project ${{ env.DOCTOR_PROJECT }} -- --quick --output-format json --output-file health-report.json
+        }
+      continue-on-error: true
+
+    - name: 🔧 Auto Fix Issues (if enabled)
+      if: ${{ github.event.inputs.auto_fix == 'true' || github.event.inputs.auto_fix == null }}
+      run: |
+        dotnet run --project ${{ env.DOCTOR_PROJECT }} -- --fix --safe-only --output-format json --output-file fix-report.json
+      continue-on-error: true
+
+    - name: 📊 Generate Performance Report
+      run: |
+        dotnet run --project ${{ env.DOCTOR_PROJECT }} -- --performance-test --output-format html --output-file performance-report.html
+      continue-on-error: true
+
+    - name: 🖼️ Run Visual Regression Tests (if comprehensive)
+      if: ${{ github.event.inputs.comprehensive_check == 'true' }}
+      run: |
+        dotnet run --project ${{ env.DOCTOR_PROJECT }} -- --visual-test --output-format html --output-file visual-report.html
+      continue-on-error: true
+
+    - name: 📋 Parse Health Report
+      id: parse-report
+      run: |
+        $healthReport = Get-Content health-report.json | ConvertFrom-Json
+        $totalChecks = $healthReport.results.Count
+        $failedChecks = ($healthReport.results | Where-Object { $_.status -eq "Failed" }).Count
+        $warningChecks = ($healthReport.results | Where-Object { $_.status -eq "Warning" }).Count
+        $okChecks = ($healthReport.results | Where-Object { $_.status -eq "Ok" }).Count
+        
+        echo "total-checks=$totalChecks" >> $env:GITHUB_OUTPUT
+        echo "failed-checks=$failedChecks" >> $env:GITHUB_OUTPUT  
+        echo "warning-checks=$warningChecks" >> $env:GITHUB_OUTPUT
+        echo "ok-checks=$okChecks" >> $env:GITHUB_OUTPUT
+        echo "is-healthy=$($failedChecks -eq 0)" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+
+    - name: 📤 Upload Health Report Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: health-reports-${{ github.run_number }}
+        path: |
+          health-report.json
+          fix-report.json
+          performance-report.html
+          visual-report.html
+        retention-days: 30
+
+    - name: 📧 Create Issue on Failure
+      if: steps.parse-report.outputs.is-healthy == 'false'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const failedChecks = ${{ steps.parse-report.outputs.failed-checks }};
+          const warningChecks = ${{ steps.parse-report.outputs.warning-checks }};
+          const totalChecks = ${{ steps.parse-report.outputs.total-checks }};
+          
+          const issueTitle = `🚨 System Health Check Failed - ${failedChecks} Critical Issues`;
+          const issueBody = `
+          ## 🩺 System Health Check Report
+          
+          **تاريخ الفحص:** ${new Date().toLocaleString('ar-EG')}
+          **رقم التشغيل:** #${{ github.run_number }}
+          
+          ### 📊 ملخص النتائج
+          - 🔴 **فحوصات فاشلة:** ${failedChecks}
+          - 🟡 **تحذيرات:** ${warningChecks}  
+          - 🟢 **فحوصات سليمة:** ${{ steps.parse-report.outputs.ok-checks }}
+          - 📋 **المجموع:** ${totalChecks}
+          
+          ### 🔗 الروابط المفيدة
+          - [تقرير الفحص الكامل](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          - [تحميل التقارير](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
+          
+          ### 📋 الخطوات التالية
+          1. مراجعة التقرير المفصل المرفق
+          2. تحليل الأخطاء الحرجة
+          3. تطبيق الإصلاحات المطلوبة
+          4. إعادة تشغيل الفحص للتأكد
+          
+          **تم إنشاء هذه المسألة تلقائياً بواسطة نظام طبيب النظام 🤖**
+          `;
+          
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: issueTitle,
+            body: issueBody,
+            labels: ['bug', 'health-check', 'automated']
+          });
+
+    - name: 💬 Post Success Comment
+      if: steps.parse-report.outputs.is-healthy == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          // البحث عن آخر issue للفحص الصحي المفتوح
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: 'health-check',
+            state: 'open'
+          });
+          
+          if (issues.data.length > 0) {
+            // إغلاق آخر issue للفحص الصحي
+            const latestIssue = issues.data[0];
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: latestIssue.number,
+              body: `
+              ## ✅ تم إصلاح المشاكل بنجاح!
+              
+              **تاريخ الإصلاح:** ${new Date().toLocaleString('ar-EG')}
+              **رقم التشغيل:** #${{ github.run_number }}
+              
+              جميع الفحوصات تمت بنجاح. النظام بحالة صحية ممتازة! 🎉
+              
+              **النتائج:**
+              - ✅ **فحوصات سليمة:** ${{ steps.parse-report.outputs.ok-checks }}
+              - ⚠️ **تحذيرات:** ${{ steps.parse-report.outputs.warning-checks }}
+              - ❌ **أخطاء:** 0
+              
+              يتم إغلاق هذه المسألة تلقائياً.
+              `
+            });
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: latestIssue.number,
+              state: 'closed'
+            });
+          }
+
+    - name: 📊 Update Health Badge
+      run: |
+        $isHealthy = "${{ steps.parse-report.outputs.is-healthy }}"
+        $badgeColor = if ($isHealthy -eq "true") { "brightgreen" } else { "red" }
+        $badgeMessage = if ($isHealthy -eq "true") { "healthy" } else { "issues" }
+        
+        # إنشاء badge JSON
+        $badge = @{
+          schemaVersion = 1
+          label = "System Health"
+          message = $badgeMessage
+          color = $badgeColor
+          namedLogo = "github"
+        } | ConvertTo-Json
+        
+        # حفظ في ملف
+        $badge | Out-File -FilePath "health-badge.json" -Encoding UTF8
+      shell: pwsh
+
+    - name: 📤 Upload Health Badge
+      uses: actions/upload-artifact@v4
+      with:
+        name: health-badge
+        path: health-badge.json
+
+  security-scan:
+    runs-on: windows-latest
+    needs: system-health-check
+    
+    steps:
+    - name: 📥 Checkout Repository  
+      uses: actions/checkout@v4
+
+    - name: 🔒 Run Security Audit
+      run: |
+        dotnet list package --vulnerable --include-transitive > security-report.txt
+        echo "## 🔒 Security Audit Results" >> $env:GITHUB_STEP_SUMMARY
+        Get-Content security-report.txt | ForEach-Object { echo "- $_" >> $env:GITHUB_STEP_SUMMARY }
+      shell: pwsh
+
+    - name: 📤 Upload Security Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-report
+        path: security-report.txt
+
+  notification:
+    runs-on: ubuntu-latest
+    needs: [system-health-check, security-scan]
+    if: always()
+    
+    steps:
+    - name: 📬 Send Notification Summary
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const healthResult = '${{ needs.system-health-check.result }}';
+          const securityResult = '${{ needs.security-scan.result }}';
+          
+          const emoji = healthResult === 'success' ? '🟢' : '🔴';
+          const status = healthResult === 'success' ? 'سليم' : 'يحتاج عناية';
+          
+          console.log(`${emoji} System Health: ${status}`);
+          console.log(`🔒 Security Scan: ${securityResult === 'success' ? 'مكتمل' : 'فشل'}`);
+          
+          // يمكن إضافة إشعارات أخرى هنا (Slack, Teams, إلخ)

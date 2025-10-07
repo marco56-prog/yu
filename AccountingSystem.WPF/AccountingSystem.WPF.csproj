@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <EnableDefaultPageItems>true</EnableDefaultPageItems>
+    <EnableDefaultApplicationDefinition>true</EnableDefaultApplicationDefinition>
+    <StartupObject>AccountingSystem.WPF.Program</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- تم ترقية جميع المكتبات لتتوافق مع .NET 8 -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AccountingSystem.Business\AccountingSystem.Business.csproj" />
+    <ProjectReference Include="..\AccountingSystem.Models\AccountingSystem.Models.csproj" />
+    <!-- إضافة مرجع للـData لأن App.xaml.cs يستخدم AccountingDbContext مباشرة -->
+    <ProjectReference Include="..\AccountingSystem.Data\AccountingSystem.Data.csproj" />
+    <!-- إضافة مرجع لنظام التشخيص - معطل مؤقتاً -->
+    <!-- <ProjectReference Include="..\AccountingSystem.Diagnostics\AccountingSystem.Diagnostics.csproj" /> -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- مكتبات حديثة متوافقة مع .NET 8 -->
+    <PackageReference Include="itext7" Version="9.3.0" />
+    <PackageReference Include="LiveChartsCore" Version="2.0.0-rc6.1" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc6.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9" />
+    <PackageReference Include="QuestPDF" Version="2025.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.9" />
+    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.13" />
+    <!-- إضافة الحزم المفقودة للرسوم البيانية و 3D -->
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="3.119.0" />
+    <PackageReference Include="OpenTK" Version="3.3.1" />
+    <PackageReference Include="OpenTK.GLWpfControl" Version="3.3.0" />
+    <!-- حزم إضافية للنظام -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Resources\UnifiedStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

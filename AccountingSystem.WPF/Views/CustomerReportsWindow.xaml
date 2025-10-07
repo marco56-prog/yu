@@ -1,0 +1,40 @@
+<Window x:Class="AccountingSystem.WPF.Views.CustomerReportsWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Title="تقارير العملاء" 
+	Height="520" Width="900" 
+	Style="{StaticResource StandardDialog}">
+	<Grid Style="{StaticResource MainWindowLayout}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		
+		<Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+				<TextBlock Text="{StaticResource CustomersIcon}" 
+						   FontSize="20" 
+						   VerticalAlignment="Center" 
+						   Margin="{StaticResource SmallMargin}"/>
+				<TextBlock Text="تقارير العملاء" 
+						   Style="{StaticResource HeaderTextBlock}"
+						   Foreground="{StaticResource TextOnPrimaryBrush}"/>
+			</StackPanel>
+		</Border>
+		
+		<Border Grid.Row="1" Style="{StaticResource TableContainer}">
+			<DataGrid x:Name="dgCustomers" Style="{StaticResource StandardDataGrid}"/>
+		</Border>
+		
+		<Border Grid.Row="2" Style="{StaticResource ActionBarLayout}">
+			<Button Style="{StaticResource SecondaryButton}" 
+					Click="Close_Click">
+				<StackPanel Orientation="Horizontal">
+					<ContentPresenter Content="{StaticResource CloseIcon}" Margin="0,0,5,0"/>
+					<TextBlock Text="إغلاق"/>
+				</StackPanel>
+			</Button>
+		</Border>
+	</Grid>
+</Window>

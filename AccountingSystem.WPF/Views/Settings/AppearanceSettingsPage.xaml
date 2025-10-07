@@ -1,0 +1,157 @@
+<Page x:Class="AccountingSystem.WPF.Views.Settings.AppearanceSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:svc="clr-namespace:AccountingSystem.WPF.Services"
+      Title="إعدادات المظهر"
+      FlowDirection="RightToLeft">
+    <Grid Background="{DynamicResource BackgroundBrush}" Margin="20">
+        <StackPanel>
+            <!-- عنوان الصفحة -->
+            <Border Style="{DynamicResource Card}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="إعدادات المظهر" 
+                               FontSize="{DynamicResource FontSizeXL}"
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Margin="0,0,0,10"/>
+                    <TextBlock Text="تخصيص شكل ولون وحجم خط التطبيق"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات المظهر -->
+            <Border Style="{DynamicResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- اختيار نوع الثيم -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                               Text="نوع الثيم:" 
+                               FontSize="{DynamicResource FontSizeNormal}"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1"
+                              x:Name="cmbTheme" 
+                              Style="{DynamicResource ModernComboBox}"
+                              Width="200"
+                              HorizontalAlignment="Left"
+                              Margin="0,0,0,15"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2"
+                               Text="تحديد شكل النوافذ والعناصر"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <!-- اختيار اللون الأساسي -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                               Text="اللون الأساسي:" 
+                               FontSize="{DynamicResource FontSizeNormal}"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" 
+                                Orientation="Horizontal" 
+                                Margin="0,0,0,15">
+                        <ComboBox x:Name="cmbAccent" 
+                                  Style="{DynamicResource ModernComboBox}"
+                                  Width="200"
+                                  Margin="0,0,10,0"/>
+                        <Border x:Name="colorPreview" 
+                                Width="30" Height="30" 
+                                CornerRadius="{DynamicResource RadiusS}"
+                                Background="{DynamicResource PrimaryBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="1" Grid.Column="2"
+                               Text="لون الأزرار والعناصر التفاعلية"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <!-- اختيار حجم الخط -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" 
+                               Text="حجم الخط:" 
+                               FontSize="{DynamicResource FontSizeNormal}"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1"
+                              x:Name="cmbFont" 
+                              Style="{DynamicResource ModernComboBox}"
+                              Width="200"
+                              HorizontalAlignment="Left"
+                              Margin="0,0,0,15"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2"
+                               Text="تكبير أو تصغير النصوص"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <!-- معاينة -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" 
+                               Text="معاينة:" 
+                               FontSize="{DynamicResource FontSizeNormal}"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Top"
+                               Margin="0,10,15,0"/>
+                    <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                            Style="{DynamicResource Card}"
+                            Margin="0,10,0,15">
+                        <StackPanel>
+                            <TextBlock Text="هذا نص تجريبي للمعاينة"
+                                       FontSize="{DynamicResource FontSizeLarge}"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="نص فرعي بحجم أصغر"
+                                       FontSize="{DynamicResource FontSizeSmall}"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       Margin="0,0,0,10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="زر أساسي" 
+                                        Style="{DynamicResource PrimaryButtonStyle}" 
+                                        Margin="0,0,10,0"/>
+                                <Button Content="زر ثانوي" 
+                                        Style="{DynamicResource SecondaryButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- أزرار التحكم -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Margin="0,10,0,0">
+                        <Button Content="تطبيق التغييرات" 
+                                Style="{DynamicResource PrimaryButtonStyle}"
+                                Click="Apply_Click" 
+                                Margin="0,0,10,0"
+                                Padding="15,8"/>
+                        <Button Content="استعادة الافتراضي" 
+                                Style="{DynamicResource SecondaryButtonStyle}"
+                                Click="Reset_Click"
+                                Padding="15,8"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

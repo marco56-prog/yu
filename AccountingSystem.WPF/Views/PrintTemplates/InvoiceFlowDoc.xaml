@@ -1,0 +1,122 @@
+<FlowDocument
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FontFamily="Segoe UI"
+    FontSize="12"
+    FlowDirection="RightToLeft"
+    PagePadding="40"
+    ColumnWidth="999999"
+    xml:lang="ar-EG"
+    NumberSubstitution.CultureSource="Override"
+    NumberSubstitution.CultureOverride="ar-EG"
+    NumberSubstitution.Substitution="National"
+    Typography.NumeralStyle="Traditional">
+
+  <FlowDocument.Resources>
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#2E8B57"/>
+    <SolidColorBrush x:Key="HeaderBgBrush" Color="#F0F0F0"/>
+
+    <!-- نمط رأس الجدول -->
+    <Style x:Key="HeaderCellStyle" TargetType="TableCell">
+      <Setter Property="BorderBrush" Value="Black"/>
+      <Setter Property="BorderThickness" Value="0,0,1,1"/>
+      <Setter Property="Padding" Value="4"/>
+      <Setter Property="TextAlignment" Value="Center"/>
+      <Setter Property="Background" Value="{StaticResource HeaderBgBrush}"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+    </Style>
+
+    <!-- نمط خلايا الجسم -->
+    <Style x:Key="BodyCellStyle" TargetType="TableCell">
+      <Setter Property="BorderBrush" Value="Black"/>
+      <Setter Property="BorderThickness" Value="0,0,1,1"/>
+      <Setter Property="Padding" Value="3"/>
+      <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+  </FlowDocument.Resources>
+
+  <!-- عنوان -->
+  <Paragraph TextAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,0,0,15" Foreground="{StaticResource PrimaryBrush}">
+    <Run Text="فاتورة بيع رقم: "/>
+    <Run Text="{Binding InvoiceNumber}"/>
+  </Paragraph>
+
+  <!-- التاريخ والوقت -->
+  <Paragraph TextAlignment="Center" Margin="0,0,0,20">
+    <Run Text="التاريخ: "/>
+    <Run Text="{Binding InvoiceDate, StringFormat='{}{0:yyyy/MM/dd}'}"/>
+    <Run Text="   "/>
+    <Run Text="الوقت: "/>
+    <Run Text="{Binding InvoiceDate, StringFormat='{}{0:HH:mm}'}"/>
+  </Paragraph>
+
+  <!-- بيانات العميل -->
+  <Paragraph Margin="0,0,0,15">
+    <Bold><Run Text="العميل: "/></Bold><Run Text="{Binding CustomerName}"/><Run Text="    "/>
+    <Bold><Run Text="الهاتف: "/></Bold><Run Text="{Binding CustomerPhone}"/><LineBreak/>
+    <Bold><Run Text="العنوان: "/></Bold><Run Text="{Binding CustomerAddress}"/>
+  </Paragraph>
+
+  <!-- جدول تفاصيل الفاتورة -->
+  <Table CellSpacing="0" BorderBrush="Black" BorderThickness="1" Margin="0,0,0,10">
+    <Table.Columns>
+      <TableColumn Width="40"/>
+      <TableColumn Width="200"/>
+      <TableColumn Width="80"/>
+      <TableColumn Width="80"/>
+      <TableColumn Width="90"/>
+      <TableColumn Width="90"/>
+      <TableColumn Width="100"/>
+    </Table.Columns>
+
+    <TableRowGroup>
+      <TableRow>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>#</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>المنتج</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>الوحدة</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>الكمية</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>السعر</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>الخصم</Paragraph></TableCell>
+        <TableCell Style="{StaticResource HeaderCellStyle}"><Paragraph>الصافي</Paragraph></TableCell>
+      </TableRow>
+    </TableRowGroup>
+
+    <!-- هيملا بالكود (BodyGroup) -->
+    <TableRowGroup x:Name="BodyGroup"/>
+  </Table>
+
+  <!-- الإجماليات -->
+  <Paragraph Margin="0,10,0,20">
+    <Bold><Run Text="الإجمالي الفرعي: "/></Bold>
+    <Run Text="{Binding SubTotal, StringFormat='{}{0:N2} ج.م'}"/><Run Text="   "/>
+
+    <Bold><Run Text="إجمالي الخصم: "/></Bold>
+    <Run Text="{Binding DiscountAmount, StringFormat='{}{0:N2} ج.م'}"/><Run Text="   "/>
+
+    <Bold><Run Text="الضريبة: "/></Bold>
+    <Run Text="{Binding TaxAmount, StringFormat='{}{0:N2} ج.م'}"/>
+    <LineBreak/>
+
+    <Bold><Run Text="الإجمالي النهائي: "/></Bold>
+    <Run Text="{Binding NetTotal, StringFormat='{}{0:N2} ج.م'}"/><Run Text="   "/>
+
+    <Bold><Run Text="المدفوع: "/></Bold>
+    <Run Text="{Binding PaidAmount, StringFormat='{}{0:N2} ج.م'}"/><Run Text="   "/>
+
+    <Bold><Run Text="المتبقي: "/></Bold>
+    <Run Text="{Binding RemainingAmount, StringFormat='{}{0:N2} ج.م'}"/>
+    <LineBreak/>
+
+    <Bold><Run Text="الرصيد السابق: "/></Bold>
+    <Run Text="{Binding PreviousBalance, StringFormat='{}{0:N2} ج.م'}"/><Run Text="   "/>
+
+    <Bold><Run Text="الإجمالي العام: "/></Bold>
+    <Run Text="{Binding GrandTotal, StringFormat='{}{0:N2} ج.م'}"/>
+  </Paragraph>
+
+  <!-- تذييل -->
+  <Paragraph TextAlignment="Center" FontStyle="Italic" Foreground="Gray" FontSize="10" Margin="0,20,0,0">
+    شكراً لتعاملكم معنا — قد يختلف الشكل النهائي حسب إعدادات الطابعة وهوامش الصفحة.
+  </Paragraph>
+</FlowDocument>

@@ -1,0 +1,119 @@
+<Window x:Class="AccountingSystem.WPF.Views.SuppliersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="إدارة الموردين" 
+        Height="600" Width="900" 
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized">
+
+    <Grid Style="{StaticResource MainWindowLayout}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- شريط العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{StaticResource SuppliersIcon}" 
+                           FontSize="24" 
+                           VerticalAlignment="Center" 
+                           Margin="{StaticResource SmallMargin}"/>
+                <TextBlock Text="إدارة الموردين" 
+                           Style="{StaticResource HeaderTextBlock}"
+                           Foreground="{StaticResource TextOnPrimaryBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- شريط التحكم -->
+        <Border Grid.Row="1" Style="{StaticResource StandardCard}" Margin="{StaticResource MediumMargin}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Style="{StaticResource HorizontalButtonGroup}">
+                    <Button Name="btnAdd" 
+                            Style="{StaticResource PrimaryButton}" 
+                            Click="btnAdd_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource AddIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="إضافة مورد جديد"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnEdit" 
+                            Style="{StaticResource SecondaryButton}" 
+                            Click="btnEdit_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource EditIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تعديل"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnDelete" 
+                            Style="{StaticResource DangerButton}" 
+                            Click="btnDelete_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource DeleteIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="حذف"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnRefresh" 
+                            Style="{StaticResource SecondaryButton}" 
+                            Click="btnRefresh_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource RefreshIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تحديث"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Style="{StaticResource FilterContainer}">
+                    <StackPanel Style="{StaticResource FilterGroup}">
+                        <TextBlock Text="بحث:" 
+                                   Style="{StaticResource BodyTextBlock}" 
+                                   VerticalAlignment="Center"/>
+                        <Border Style="{StaticResource SearchBar}">
+                            <TextBox Name="txtSearch" 
+                                     Width="200" 
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     TextChanged="txtSearch_TextChanged"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- جدول الموردين -->
+        <DataGrid Grid.Row="2" Name="dgSuppliers" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="رقم المورد" Binding="{Binding SupplierId}" Width="80" IsReadOnly="True"/>
+                <DataGridTextColumn Header="اسم المورد" Binding="{Binding SupplierName}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="العنوان" Binding="{Binding Address}" Width="200" IsReadOnly="True"/>
+                <DataGridTextColumn Header="الهاتف" Binding="{Binding Phone}" Width="120" IsReadOnly="True"/>
+                <DataGridTextColumn Header="البريد الإلكتروني" Binding="{Binding Email}" Width="180" IsReadOnly="True"/>
+                <DataGridTextColumn Header="الرصيد" Binding="{Binding Balance, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="نشط" Binding="{Binding IsActive}" Width="60" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- شريط الحالة -->
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" Text="جاهز"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Name="lblCount" Text="عدد الموردين: 0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

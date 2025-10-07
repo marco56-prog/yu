@@ -1,0 +1,243 @@
+<Window x:Class="AccountingSystem.WPF.Views.BarcodeReaderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="قارئ الباركود - Barcode Reader" 
+        Height="600" Width="800"
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized"
+        ResizeMode="CanResize">
+
+    <Grid Style="{StaticResource MainWindowLayout}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- شريط العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="{StaticResource BarcodeIcon}" 
+                               FontSize="24" 
+                               VerticalAlignment="Center" 
+                               Margin="{StaticResource SmallMargin}"/>
+                    <TextBlock Text="قارئ الباركود المتقدم" 
+                               Style="{StaticResource HeaderTextBlock}"
+                               Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Border Style="{StaticResource SummaryPill}" Background="{StaticResource WarningBrush}">
+                        <TextBlock Name="lblStatus" 
+                                   Text="غير متصل" 
+                                   Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                    </Border>
+                    <Border Style="{StaticResource SummaryPill}" Background="{StaticResource InfoBrush}" Margin="{StaticResource SmallMargin}">
+                        <TextBlock Name="lblScannedCount" 
+                                   Text="تم المسح: 0" 
+                                   Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- منطقة الكاميرا والمسح -->
+        <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="2" Margin="15">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- منطقة عرض الكاميرا -->
+                <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="5">
+                    <Grid>
+                        <!-- منطقة الكاميرا (ستكون فعلية لاحقاً) -->
+                        <Rectangle Name="CameraPreview" Fill="Black"/>
+                        
+                        <!-- دليل المسح المرئي -->
+                        <Canvas Name="ScanningGuide">
+                            <!-- خط الوسط الأفقي -->
+                            <Rectangle Width="300" Height="2" Fill="LimeGreen" Canvas.Left="150" Canvas.Top="200" Opacity="0.8"/>
+                            <!-- خط الوسط العمودي -->
+                            <Rectangle Width="2" Height="300" Fill="LimeGreen" Canvas.Left="300" Canvas.Top="50" Opacity="0.8"/>
+                            
+                            <!-- مربع التركيز -->
+                            <Rectangle Width="200" Height="150" Stroke="LimeGreen" StrokeThickness="3" 
+                                       Canvas.Left="200" Canvas.Top="125" Fill="Transparent" 
+                                       StrokeDashArray="10,5" Name="FocusFrame"/>
+                            
+                            <!-- نص الإرشاد -->
+                            <TextBlock Text="📱 ضع الباركود في المنطقة المحددة" 
+                                       Foreground="White" FontSize="{DynamicResource FontSizeNormal}" FontWeight="Bold"
+                                       Canvas.Left="150" Canvas.Top="300" 
+                                       Background="{DynamicResource PrimaryBrush}" Opacity="0.8" Padding="10,5"/>
+                        </Canvas>
+
+                        <!-- رسالة عدم وجود كاميرا -->
+                        <StackPanel Name="NoCameraMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                            <TextBlock Text="📷" FontSize="48" HorizontalAlignment="Center" Foreground="Gray"/>
+                            <TextBlock Text="لا توجد كاميرا متاحة" FontSize="16" HorizontalAlignment="Center" Foreground="Gray" Margin="0,10,0,0"/>
+                            <TextBlock Text="استخدم الإدخال اليدوي أدناه" FontSize="{DynamicResource FontSizeSmall}" HorizontalAlignment="Center" Foreground="LightGray"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- شريط الحالة السفلي -->
+                <Border Grid.Row="1" Background="{DynamicResource SecondaryBrush}" Padding="10" Margin="0,5,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Name="lblLastScanned" Text="آخر مسح: لا يوجد" 
+                                   Foreground="White" FontSize="{StaticResource FontSizeSmall}" VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Name="btnManualEntry" Content="⌨️ إدخال يدوي" 
+                                    Style="{StaticResource PrimaryButton}" 
+                                    Padding="10,5" Margin="5,0" Click="btnManualEntry_Click"/>
+                            <Button Name="btnToggleCamera" Content="📷 تشغيل الكاميرا" 
+                                    Style="{StaticResource SuccessButton}" 
+                                    Padding="10,5" Click="btnToggleCamera_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- معلومات المنتج المسحوح -->
+        <Border Grid.Row="2" Name="ProductInfoPanel" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" 
+                BorderThickness="1" Margin="15,0,15,10" Padding="15" CornerRadius="5" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>   <!-- الصورة -->
+                    <ColumnDefinition Width="*"/>     <!-- المعلومات -->
+                    <ColumnDefinition Width="Auto"/>  <!-- الإجراءات -->
+                </Grid.ColumnDefinitions>
+
+                <!-- صورة المنتج -->
+                <Border Grid.Column="0" Background="{DynamicResource BorderBrush}" Width="80" Height="80" CornerRadius="5">
+                    <TextBlock Text="📦" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray"/>
+                </Border>
+
+                <!-- معلومات المنتج -->
+                <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Name="lblProductName" Text="اسم المنتج" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" Text="الكود: " FontSize="{StaticResource FontSizeSmall}" Foreground="Gray"/>
+                        <TextBlock Grid.Column="1" Name="lblProductCode" Text="12345" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold" Margin="0,0,20,0"/>
+                        <TextBlock Grid.Column="2" Text="السعر: " FontSize="{StaticResource FontSizeSmall}" Foreground="Gray"/>
+                        <TextBlock Grid.Column="3" Name="lblProductPrice" Text="0.00 ج.م" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold" Foreground="Green"/>
+                    </Grid>
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" Text="المخزون: " FontSize="{StaticResource FontSizeSmall}" Foreground="Gray"/>
+                        <TextBlock Grid.Column="1" Name="lblProductStock" Text="0" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold" Margin="0,0,20,0"/>
+                        <TextBlock Grid.Column="2" Text="الفئة: " FontSize="{StaticResource FontSizeSmall}" Foreground="Gray"/>
+                        <TextBlock Grid.Column="3" Name="lblProductCategory" Text="غير محدد" FontSize="{StaticResource FontSizeSmall}"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- أزرار الإجراءات -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox Name="txtQuantity" Text="1" Width="50" Height="30" TextAlignment="Center" 
+                             FontSize="{StaticResource FontSizeNormal}" FontWeight="Bold" Margin="5,0"/>
+                    <Button Name="btnAddToCart" Content="➕ إضافة للسلة" 
+                            Style="{StaticResource SuccessButton}" 
+                            Padding="15,8" FontWeight="Bold" Click="btnAddToCart_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- أزرار التحكم -->
+        <Border Grid.Row="3" Background="{StaticResource MasterBackgroundBrush}" Padding="15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- معلومات إضافية -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🔊" FontSize="{StaticResource FontSizeNormal}" Margin="0,0,5,0"/>
+                    <CheckBox Name="chkSoundEnabled" Content="تفعيل الصوت عند المسح" IsChecked="True" FontSize="{StaticResource FontSizeSmall}"/>
+                    <TextBlock Text="⚡" FontSize="{StaticResource FontSizeNormal}" Margin="20,0,5,0"/>
+                    <CheckBox Name="chkAutoAdd" Content="إضافة تلقائية للسلة" IsChecked="False" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,20,0"/>
+                    <TextBlock Name="lblScanSpeed" Text="السرعة: متوسطة" FontSize="{StaticResource FontSizeSmall}" Foreground="Gray"/>
+                </StackPanel>
+
+                <!-- أزرار التحكم الرئيسية -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="btnClearLast" Content="🗑️ مسح آخر" 
+                            Style="{StaticResource DangerButton}" 
+                            Padding="10,8" Margin="5,0" Click="btnClearLast_Click"/>
+                    <Button Name="btnSettings" Content="⚙️ إعدادات" 
+                            Background="{StaticResource MasterSecondaryBrush}" Foreground="{StaticResource TextOnPrimaryColor}" 
+                            Padding="10,8" Margin="5,0" Click="btnSettings_Click"/>
+                    <Button Name="btnClose" Content="❌ إغلاق" 
+                            Background="{StaticResource MasterSecondaryBrush}" Foreground="{StaticResource TextOnPrimaryColor}" 
+                            Padding="15,8" Margin="5,0" Click="btnClose_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- حوار الإدخال اليدوي (مخفي افتراضياً) -->
+        <Border Name="ManualEntryDialog" Grid.RowSpan="4" Background="{StaticResource MasterTextBrush}" Opacity="0.8" 
+                Visibility="Collapsed" MouseLeftButtonDown="ManualEntryDialog_MouseLeftButtonDown">
+            <Border Background="{StaticResource MasterSurfaceBrush}" Width="400" Height="300" CornerRadius="10" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="⌨️ إدخال الباركود يدوياً" FontSize="16" FontWeight="Bold" 
+                               HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                        <TextBlock Text="رقم الباركود:" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <TextBox Name="txtManualBarcode" Height="40" FontSize="16" 
+                                 TextAlignment="Center" Padding="10"/>
+                        <TextBlock Text="اكتب أو الصق رقم الباركود هنا" FontSize="11" Foreground="Gray" 
+                                   HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnManualSearch" Content="🔍 بحث" 
+                                Background="{StaticResource MasterPrimaryBrush}" Foreground="{StaticResource TextOnPrimaryColor}" 
+                                Padding="20,10" Margin="10,0" FontWeight="Bold"
+                                Click="btnManualSearch_Click"/>
+                        <Button Name="btnCancelManual" Content="❌ إلغاء" 
+                                Background="{StaticResource MasterSecondaryBrush}" Foreground="{StaticResource TextOnPrimaryColor}" 
+                                Padding="20,10" Margin="10,0"
+                                Click="btnCancelManual_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

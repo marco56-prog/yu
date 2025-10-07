@@ -1,0 +1,314 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===================== تخطيطات النوافذ الموحدة ===================== -->
+    
+    <!-- تخطيط النافذة الرئيسية -->
+    <Style x:Key="MainWindowLayout" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+    
+    <!-- تخطيط شريط العنوان -->
+    <Style x:Key="TitleBarLayout" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Padding" Value="{StaticResource LargePadding}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#00000020" 
+                                Direction="270" 
+                                ShadowDepth="2" 
+                                BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- تخطيط الشريط الجانبي -->
+    <Style x:Key="SidebarLayout" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        <Setter Property="Width" Value="250"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+    </Style>
+    
+    <!-- تخطيط المحتوى الرئيسي -->
+    <Style x:Key="MainContentLayout" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Padding" Value="{StaticResource LargePadding}"/>
+    </Style>
+    
+    <!-- تخطيط شريط الحالة -->
+    <Style x:Key="StatusBarLayout" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات النماذج الموحدة ===================== -->
+    
+    <!-- حاوي النموذج الأساسي -->
+    <Style x:Key="FormContainer" TargetType="Border" BasedOn="{StaticResource StandardCard}">
+        <Setter Property="MaxWidth" Value="600"/>
+        <Setter Property="MinWidth" Value="400"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+    </Style>
+    
+    <!-- شبكة النموذج -->
+    <Style x:Key="FormGrid" TargetType="Grid">
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- مجموعة حقول النموذج -->
+    <Style x:Key="FormFieldGroup" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- صف النموذج -->
+    <Style x:Key="FormRow" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+    
+    <!-- تسمية الحقل -->
+    <Style x:Key="FieldLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+    </Style>
+    
+    <!-- حاوي الحقل -->
+    <Style x:Key="FieldContainer" TargetType="Border">
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات القوائم والجداول ===================== -->
+    
+    <!-- حاوي الجدول -->
+    <Style x:Key="TableContainer" TargetType="Border" BasedOn="{StaticResource StandardCard}">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- رأس الجدول -->
+    <Style x:Key="TableHeader" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+    </Style>
+    
+    <!-- شريط أدوات الجدول -->
+    <Style x:Key="TableToolbar" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- محتوى الجدول -->
+    <Style x:Key="TableContent" TargetType="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات الأزرار ===================== -->
+    
+    <!-- مجموعة أزرار أفقية -->
+    <Style x:Key="HorizontalButtonGroup" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="{StaticResource LargeMargin}"/>
+    </Style>
+    
+    <!-- مجموعة أزرار عمودية -->
+    <Style x:Key="VerticalButtonGroup" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- أزرار الحوار -->
+    <Style x:Key="DialogButtonGroup" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="{StaticResource LargeMargin}"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#00000010" 
+                                Direction="90" 
+                                ShadowDepth="1" 
+                                BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ===================== تخطيطات لوحة التحكم ===================== -->
+    
+    <!-- بطاقة لوحة التحكم -->
+    <Style x:Key="DashboardCard" TargetType="Border" BasedOn="{StaticResource StandardCard}">
+        <Setter Property="MinHeight" Value="120"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    
+    <!-- شبكة لوحة التحكم -->
+    <Style x:Key="DashboardGrid" TargetType="UniformGrid">
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- إحصائية لوحة التحكم -->
+    <Style x:Key="StatisticContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- رقم الإحصائية -->
+    <Style x:Key="StatisticNumber" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- تسمية الإحصائية -->
+    <Style x:Key="StatisticLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات البحث والفلترة ===================== -->
+    
+    <!-- شريط البحث -->
+    <Style x:Key="SearchBar" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+        <Setter Property="MinWidth" Value="200"/>
+    </Style>
+    
+    <!-- حاوي الفلاتر -->
+    <Style x:Key="FilterContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+    </Style>
+    
+    <!-- مجموعة فلتر -->
+    <Style x:Key="FilterGroup" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات الرسائل والتنبيهات ===================== -->
+    
+    <!-- حاوي الرسالة -->
+    <Style x:Key="MessageContainer" TargetType="Border">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource MediumMargin}"/>
+        <Setter Property="BorderThickness" Value="1,1,1,4"/>
+    </Style>
+    
+    <!-- رسالة النجاح -->
+    <Style x:Key="SuccessMessage" TargetType="Border" BasedOn="{StaticResource MessageContainer}">
+        <Setter Property="Background" Value="#F1F8E9"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    
+    <!-- رسالة التحذير -->
+    <Style x:Key="WarningMessage" TargetType="Border" BasedOn="{StaticResource MessageContainer}">
+        <Setter Property="Background" Value="#FFF3E0"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    
+    <!-- رسالة الخطأ -->
+    <Style x:Key="ErrorMessage" TargetType="Border" BasedOn="{StaticResource MessageContainer}">
+        <Setter Property="Background" Value="#FFEBEE"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    
+    <!-- رسالة المعلومات -->
+    <Style x:Key="InfoMessage" TargetType="Border" BasedOn="{StaticResource MessageContainer}">
+        <Setter Property="Background" Value="#E3F2FD"/>
+        <Setter Property="BorderBrush" Value="{StaticResource InfoBrush}"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات التحميل والانتظار ===================== -->
+    
+    <!-- حاوي التحميل -->
+    <Style x:Key="LoadingContainer" TargetType="Border">
+        <Setter Property="Background" Value="#80FFFFFF"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+    
+    <!-- مؤشر التحميل -->
+    <Style x:Key="LoadingIndicator" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- نص التحميل -->
+    <Style x:Key="LoadingText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,8,0,0"/>
+    </Style>
+    
+    <!-- ===================== تخطيطات الشاشات الفارغة ===================== -->
+    
+    <!-- حاوي الشاشة الفارغة -->
+    <Style x:Key="EmptyStateContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="{StaticResource ExtraLargeMargin}"/>
+    </Style>
+    
+    <!-- أيقونة الشاشة الفارغة -->
+    <Style x:Key="EmptyStateIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="FontSize" Value="64"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDisabledBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Text" Value="📄"/>
+    </Style>
+    
+    <!-- نص الشاشة الفارغة -->
+    <Style x:Key="EmptyStateText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSubheading}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,16,0,8"/>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,184 @@
+<Window x:Class="AccountingSystem.WPF.Views.AddCashierWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="إضافة كاشير جديد" 
+        Height="700" Width="900"
+        Style="{StaticResource StandardDialog}"
+        ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <!-- استخدام الأنماط الموحدة -->
+        <Style x:Key="CardStyle" TargetType="Border" BasedOn="{StaticResource StandardCard}"/>
+        <Style x:Key="HeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource SubHeaderTextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource SuccessButton}"/>
+    </Window.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <!-- العنوان الرئيسي -->
+            <TextBlock Text="إدارة الكاشير" 
+                       FontSize="24" FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{DynamicResource SuccessBrush}" Margin="0,15"/>
+
+            <!-- البيانات الأساسية -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="البيانات الأساسية" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- كود الكاشير -->
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="كود الكاشير *" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtCashierCode" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- الاسم -->
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,5,0,5">
+                            <TextBlock Text="الاسم *" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtName" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- الهاتف -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="الهاتف" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtPhone" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- البريد الإلكتروني -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,5,0,5">
+                            <TextBlock Text="البريد الإلكتروني" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtEmail" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- العنوان -->
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5">
+                            <TextBlock Text="العنوان" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtAddress" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- تاريخ التوظيف -->
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="تاريخ التوظيف *" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <DatePicker x:Name="dpHireDate" Height="35"/>
+                        </StackPanel>
+
+                        <!-- الراتب -->
+                        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,5,0,5">
+                            <TextBlock Text="الراتب" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtSalary" Height="35" Padding="10" Text="0"/>
+                        </StackPanel>
+
+                        <!-- الحالة -->
+                        <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="الحالة" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="cmbStatus" Height="35" Padding="10">
+                                <ComboBoxItem Content="نشط" IsSelected="True"/>
+                                <ComboBoxItem Content="متوقف"/>
+                                <ComboBoxItem Content="إجازة"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- نشط -->
+                        <StackPanel Grid.Row="4" Grid.Column="1" Margin="10,25,0,5">
+                            <CheckBox x:Name="chkIsActive" Content="نشط" FontWeight="Bold" IsChecked="True"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- بيانات تسجيل الدخول -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="بيانات تسجيل الدخول" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- اسم المستخدم -->
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="اسم المستخدم" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtUsername" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- كلمة المرور -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5">
+                            <TextBlock Text="كلمة المرور" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <PasswordBox x:Name="txtPassword" Height="35" Padding="10"/>
+                        </StackPanel>
+
+                        <!-- تأكيد كلمة المرور -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,5,0,5">
+                            <TextBlock Text="تأكيد كلمة المرور" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <PasswordBox x:Name="txtConfirmPassword" Height="35" Padding="10"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- الصلاحيات -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="الصلاحيات" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- الصلاحيات الأساسية -->
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,5">
+                            <CheckBox x:Name="chkCanApplyDiscounts" Content="يمكنه تطبيق خصومات" Margin="0,5" 
+                                      Checked="chkCanApplyDiscounts_Checked" Unchecked="chkCanApplyDiscounts_Unchecked"/>
+                            <CheckBox x:Name="chkCanViewReports" Content="يمكنه عرض التقارير" Margin="0,5"/>
+                            <CheckBox x:Name="chkCanAccessSettings" Content="يمكنه الوصول للإعدادات" Margin="0,5"/>
+                        </StackPanel>
+
+                        <!-- حدود الخصم -->
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,5,0,5">
+                            <TextBlock Text="نسبة الخصم الأقصى (%)" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtMaxDiscountPercent" Height="35" Padding="10" Text="0"/>
+                            
+                            <TextBlock Text="مبلغ الخصم الأقصى" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <TextBox x:Name="txtMaxDiscountAmount" Height="35" Padding="10" Text="0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- أزرار التحكم -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+                <Button x:Name="btnSave" Content="حفظ" Style="{StaticResource ButtonStyle}" 
+                        Width="120" Click="btnSave_Click"/>
+                <Button x:Name="btnCancel" Content="إلغاء" Style="{StaticResource ButtonStyle}" 
+                        Background="Gray" Width="120" Click="btnCancel_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

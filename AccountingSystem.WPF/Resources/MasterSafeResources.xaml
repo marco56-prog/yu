@@ -1,0 +1,280 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <!-- ===================== COLORS - الألوان الأساسية ===================== -->
+  <Color x:Key="MasterPrimaryColor">#FF2196F3</Color>
+  <Color x:Key="MasterPrimaryDarkColor">#FF1976D2</Color>
+  <Color x:Key="MasterPrimaryLightColor">#FFBBDEFB</Color>
+  <Color x:Key="MasterSecondaryColor">#FFFF5722</Color>
+  <Color x:Key="MasterBackgroundColor">#FFF5F5F5</Color>
+  <Color x:Key="MasterSurfaceColor">#FFFFFF</Color>
+  <Color x:Key="MasterBorderColor">#FFE0E0E0</Color>
+  <Color x:Key="MasterTextPrimaryColor">#FF212121</Color>
+  <Color x:Key="MasterTextSecondaryColor">#FF757575</Color>
+  <Color x:Key="MasterTextMutedColor">#FFBDBDBD</Color>
+  <Color x:Key="MasterSuccessColor">#FF4CAF50</Color>
+  <Color x:Key="MasterWarningColor">#FFFF9800</Color>
+  <Color x:Key="MasterErrorColor">#FFF44336</Color>
+  <Color x:Key="MasterInfoColor">#FF2196F3</Color>
+  <Color x:Key="MasterDangerColor">#FFF44336</Color>
+
+  <!-- ===================== BRUSHES - الفرش الأساسية ===================== -->
+  <SolidColorBrush x:Key="MasterPrimaryBrush" Color="{StaticResource MasterPrimaryColor}"/>
+  <SolidColorBrush x:Key="MasterPrimaryDarkBrush" Color="{StaticResource MasterPrimaryDarkColor}"/>
+  <SolidColorBrush x:Key="MasterPrimaryLightBrush" Color="{StaticResource MasterPrimaryLightColor}"/>
+  <SolidColorBrush x:Key="MasterSecondaryBrush" Color="{StaticResource MasterSecondaryColor}"/>
+  <SolidColorBrush x:Key="MasterBackgroundBrush" Color="{StaticResource MasterBackgroundColor}"/>
+  <SolidColorBrush x:Key="MasterSurfaceBrush" Color="{StaticResource MasterSurfaceColor}"/>
+  <SolidColorBrush x:Key="MasterBorderBrush" Color="{StaticResource MasterBorderColor}"/>
+  <SolidColorBrush x:Key="MasterTextPrimaryBrush" Color="{StaticResource MasterTextPrimaryColor}"/>
+  <SolidColorBrush x:Key="MasterTextSecondaryBrush" Color="{StaticResource MasterTextSecondaryColor}"/>
+  <SolidColorBrush x:Key="MasterTextMutedBrush" Color="{StaticResource MasterTextMutedColor}"/>
+  <SolidColorBrush x:Key="MasterSuccessBrush" Color="{StaticResource MasterSuccessColor}"/>
+  <SolidColorBrush x:Key="MasterWarningBrush" Color="{StaticResource MasterWarningColor}"/>
+  <SolidColorBrush x:Key="MasterErrorBrush" Color="{StaticResource MasterErrorColor}"/>
+  <SolidColorBrush x:Key="MasterInfoBrush" Color="{StaticResource MasterInfoColor}"/>
+  <SolidColorBrush x:Key="MasterDangerBrush" Color="{StaticResource MasterDangerColor}"/>
+
+  <!-- ===================== FONTS - الخطوط ===================== -->
+  <FontFamily x:Key="MasterPrimaryFont">Segoe UI, Tahoma, Arial</FontFamily>
+  <sys:Double x:Key="MasterFontSizeSmall">12</sys:Double>
+  <sys:Double x:Key="MasterFontSizeNormal">14</sys:Double>
+  <sys:Double x:Key="MasterFontSizeHeading">18</sys:Double>
+  <sys:Double x:Key="MasterFontSizeTitle">24</sys:Double>
+
+  <!-- ===================== SPACING - المسافات ===================== -->
+  <Thickness x:Key="MasterPaddingSmall">6,4</Thickness>
+  <Thickness x:Key="MasterPaddingNormal">12,8</Thickness>
+  <Thickness x:Key="MasterPaddingLarge">16,12</Thickness>
+  <Thickness x:Key="MasterMarginSmall">6,4</Thickness>
+  <Thickness x:Key="MasterMarginNormal">12,8</Thickness>
+  <Thickness x:Key="MasterMarginLarge">16,12</Thickness>
+
+  <!-- ===================== ICONS - الأيقونات ===================== -->
+  <sys:String x:Key="MenuIcon">☰</sys:String>
+
+  <!-- ===================== BUTTON STYLES - أنماط الأزرار ===================== -->
+  <Style x:Key="SafePrimaryButton" TargetType="Button">
+    <Setter Property="Background" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingNormal}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="border" Background="{TemplateBinding Background}" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="{TemplateBinding BorderThickness}" 
+                  CornerRadius="4">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="border" Property="Background" Value="{StaticResource MasterPrimaryDarkBrush}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="SafeSecondaryButton" TargetType="Button">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingNormal}"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+
+  <Style x:Key="OutlinedButton" TargetType="Button">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="Padding" Value="8,4"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="4">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="Background" Value="{StaticResource MasterPrimaryBrush}"/>
+              <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="SafeSidebarButton" TargetType="Button">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterTextPrimaryBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="15,8"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="Margin" Value="5,2"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+
+  <!-- ===================== TEXT STYLES - أنماط النصوص ===================== -->
+  <Style x:Key="SafeBodyText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeNormal}"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterTextPrimaryBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+
+  <Style x:Key="SafeHeaderText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeHeading}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterTextPrimaryBrush}"/>
+  </Style>
+
+  <Style x:Key="SafeTitleText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeTitle}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterPrimaryBrush}"/>
+  </Style>
+
+  <!-- ===================== CONTAINER STYLES - أنماط الحاويات ===================== -->
+  <Style x:Key="SafeCard" TargetType="Border">
+    <Setter Property="Background" Value="{StaticResource MasterSurfaceBrush}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingLarge}"/>
+    <Setter Property="Margin" Value="{StaticResource MasterMarginNormal}"/>
+    <Setter Property="UseLayoutRounding" Value="True"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="Effect">
+      <Setter.Value>
+        <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="4" ShadowDepth="2" Direction="270"/>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="SafeTextBox" TargetType="TextBox">
+    <Setter Property="BorderBrush" Value="{StaticResource MasterBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingSmall}"/>
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeNormal}"/>
+  </Style>
+
+  <!-- ===================== LAYOUT STYLES - أنماط التخطيط ===================== -->
+  <Style x:Key="TitleBarLayout" TargetType="Border">
+    <Setter Property="Background" Value="{StaticResource MasterPrimaryBrush}"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingLarge}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+  </Style>
+
+  <!-- ===================== WINDOW STYLES - أنماط النوافذ ===================== -->
+  <Style x:Key="StandardWindow" TargetType="Window">
+    <Setter Property="Background" Value="{StaticResource MasterBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{StaticResource MasterTextPrimaryBrush}"/>
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeNormal}"/>
+    <Setter Property="UseLayoutRounding" Value="True"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="FlowDirection" Value="RightToLeft"/>
+    <Setter Property="ResizeMode" Value="CanResize"/>
+    <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
+    <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+  </Style>
+
+  <!-- ===================== ALIASES - الأسماء البديلة للتوافق العكسي ===================== -->
+  <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="White"/>
+  <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource MasterPrimaryDarkColor}"/>
+  <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource MasterPrimaryLightColor}"/>
+  <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource MasterPrimaryColor}"/>
+  <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource MasterBackgroundColor}"/>
+  <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource MasterSurfaceColor}"/>
+  <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource MasterBorderColor}"/>
+  <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource MasterTextPrimaryColor}"/>
+  <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource MasterTextSecondaryColor}"/>
+  <SolidColorBrush x:Key="SecondaryTextBrush" Color="{StaticResource MasterTextSecondaryColor}"/>
+  <SolidColorBrush x:Key="MutedBrush" Color="{StaticResource MasterTextMutedColor}"/>
+  <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource MasterSuccessColor}"/>
+  <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource MasterDangerColor}"/>
+  <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource MasterInfoColor}"/>
+  <SolidColorBrush x:Key="ConsistentBorderBrush" Color="{StaticResource MasterBorderColor}"/>
+  <!-- بعض الشاشات تستخدم SurfaceColor كفرشاة -->
+  <SolidColorBrush x:Key="SurfaceColor" Color="{StaticResource MasterSurfaceColor}"/>
+
+  <Thickness x:Key="SmallPadding">6,4</Thickness>
+  <Thickness x:Key="SmallMargin">6,4</Thickness>
+  <sys:Double x:Key="FontSizeHeading">18</sys:Double>
+
+  <!-- Aliases مطلوبة بواسطة قواميس الأنماط المدموجة -->
+  <FontFamily x:Key="AppFontFamily">{StaticResource MasterPrimaryFont}</FontFamily>
+  <sys:Double x:Key="FontSizeSmall">12</sys:Double>
+  <sys:Double x:Key="FontSizeBody">14</sys:Double>
+  <sys:Double x:Key="FontSizeLarge">18</sys:Double>
+  <sys:Double x:Key="FontSizeDisplay">24</sys:Double>
+  <sys:Double x:Key="FontSizeCaption">12</sys:Double>
+
+  <!-- هوامش ومسافات إضافية مستخدمة في MainWindow -->
+  <Thickness x:Key="MediumMargin">12,8</Thickness>
+  <Thickness x:Key="LargeMargin">16,12</Thickness>
+  <Thickness x:Key="ExtraLargeMargin">24,16</Thickness>
+  <Thickness x:Key="MediumPadding">12,8</Thickness>
+  <Thickness x:Key="LargePadding">16,12</Thickness>
+
+  <!-- بدائل بسيطة للمفاتيح المستخدمة في MainWindow -->
+  <Style x:Key="BodyTextBlock" TargetType="TextBlock">
+    <Setter Property="Foreground" Value="{StaticResource MasterTextPrimaryBrush}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeNormal}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+
+  <Style x:Key="SearchBar" TargetType="Border">
+    <Setter Property="Background" Value="{StaticResource MasterSurfaceBrush}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="{StaticResource MasterPaddingSmall}"/>
+  </Style>
+
+  <Style x:Key="SidebarLayout" TargetType="Border">
+    <Setter Property="Background" Value="{StaticResource MasterSurfaceBrush}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource MasterBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+  </Style>
+
+  <Style x:Key="StandardTextBox" TargetType="TextBox">
+    <Setter Property="Padding" Value="6"/>
+    <Setter Property="FontFamily" Value="{StaticResource MasterPrimaryFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource MasterFontSizeNormal}"/>
+  </Style>
+
+  <!-- أيقونات نصية بسيطة -->
+  <sys:String x:Key="HomeIcon">🏠</sys:String>
+  <sys:String x:Key="SuccessIcon">✅</sys:String>
+  <sys:String x:Key="SettingsIcon">⚙️</sys:String>
+  <sys:String x:Key="RefreshIcon">🔄</sys:String>
+
+  <!-- بديل ModernTextBox في حال غيابه -->
+  <Style x:Key="ModernTextBox" TargetType="TextBox" BasedOn="{StaticResource SafeTextBox}"/>
+
+  <Style x:Key="SidebarButton" TargetType="Button" BasedOn="{StaticResource SafeSidebarButton}"/>
+  <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource SafePrimaryButton}"/>
+  <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource SafeSecondaryButton}"/>
+  <!-- توافق مع ButtonStyles.xaml: يوفر PrimaryButtonStyle المطلوب كقاعدة لأزرار سريعة -->
+  <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButton}"/>
+
+</ResourceDictionary>

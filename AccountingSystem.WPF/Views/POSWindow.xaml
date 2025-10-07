@@ -1,0 +1,400 @@
+﻿<Window x:Class="AccountingSystem.WPF.Views.POSWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ظ†ظ‚ط·ط© ط§ظ„ط¨ظٹط¹ ط§ظ„ط§ط­طھط±ط§ظپظٹط© - Point of Sale System" 
+        Height="900" Width="1400"
+        FlowDirection="RightToLeft"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        MinWidth="1200" MinHeight="700"
+        KeyDown="Window_KeyDown">
+
+    <Window.Resources>
+        <!-- ط§ط³طھط®ط¯ط§ظ… ط§ظ„ط£ظ†ظ…ط§ط· ط§ظ„ظ…ظˆط­ط¯ط© -->
+        <!-- ط£ط²ط±ط§ط± ط®ط§طµط© ط¨ظ†ظ‚ط·ط© ط§ظ„ط¨ظٹط¹ -->
+        <Style x:Key="CategoryToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="{StaticResource SpacingNormal}"/>
+            <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{StaticResource CornerRadiusNormal}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <!-- ط§ظ„ط´ط±ظٹط· ط§ظ„ط¹ظ„ظˆظٹ -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" BorderThickness="0,0,0,2" BorderBrush="{StaticResource PrimaryDarkColor}">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="ًں›’" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="ظ†ظ‚ط·ط© ط§ظ„ط¨ظٹط¹ ط§ظ„ط§ط­طھط±ط§ظپظٹط©" FontSize="18" FontWeight="Bold" 
+                               Foreground="White" VerticalAlignment="Center"/>
+                    <TextBlock Name="lblCurrentUser" Text="| ط§ظ„ظ…ط³طھط®ط¯ظ…: admin" FontSize="{StaticResource FontSizeSmall}" 
+                               Foreground="LightGray" Margin="20,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="ط§ظ„طھط§ط±ظٹط®: " Foreground="White" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,5,0"/>
+                    <TextBlock Name="lblCurrentDate" Text="2025/09/21" Foreground="LightGray" FontSize="{StaticResource FontSizeSmall}"/>
+                    <TextBlock Text=" | ط§ظ„ظˆظ‚طھ: " Foreground="White" FontSize="{StaticResource FontSizeSmall}" Margin="10,0,5,0"/>
+                    <TextBlock Name="lblCurrentTime" Text="12:30:45" Foreground="LightGray" FontSize="{StaticResource FontSizeSmall}"/>
+                </StackPanel>
+
+                <Button Grid.Column="2" Content="ًںڑھ ط®ط±ظˆط¬" Click="btnLogout_Click"
+                        Background="{StaticResource DangerBrush}" Foreground="White" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold"
+                        Padding="15,5" BorderThickness="0" Cursor="Hand"/>
+            </Grid>
+        </Border>
+
+        <!-- ط§ظ„ظ…ط­طھظˆظ‰ ط§ظ„ط±ط¦ظٹط³ظٹ -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ط§ظ„ظ…ظ†طھط¬ط§طھ ظˆط§ظ„ظپط¦ط§طھ -->
+            <Grid Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ط´ط±ظٹط· ط§ظ„ط¨ط­ط« -->
+                <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" 
+                        CornerRadius="5" Padding="15" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBox Name="txtProductSearch" Grid.Column="0" FontSize="{StaticResource FontSizeNormal}" Height="35"
+                                 Padding="10,5" BorderThickness="1" BorderBrush="{StaticResource BorderColor}"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="txtProductSearch_TextChanged"
+                                 ToolTip="Ctrl+F ظ„ظ„طھط±ظƒظٹط² ط¹ظ„ظ‰ ط§ظ„ط¨ط­ط«">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                                        <VisualBrush.Visual>
+                                                            <TextBlock Text="ًں”چ ط§ط¨ط­ط« ط¹ظ† ظ…ظ†طھط¬ (ط§ط³ظ…/ظƒظˆط¯)..." 
+                                                                       FontStyle="Italic" Foreground="Gray" 
+                                                                       Margin="10,0,0,0"/>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+
+                        <Button Grid.Column="1" Name="btnClearSearch" Content="ًں—‘ï¸ڈ" 
+                                Width="35" Height="35" Margin="5,0,0,0"
+                                Style="{StaticResource DangerButton}"
+                                Click="btnClearSearch_Click" ToolTip="ظ…ط³ط­ ط§ظ„ط¨ط­ط«"/>
+
+                        <Button Grid.Column="2" Name="btnBarcodeReader" Content="ًں“±" 
+                                Width="40" Height="35" Margin="5,0,0,0"
+                                Style="{StaticResource SecondaryButton}"
+                                Click="btnBarcodeReader_Click" ToolTip="ظپطھط­ ظ‚ط§ط±ط¦ ط§ظ„ط¨ط§ط±ظƒظˆط¯"/>
+                    </Grid>
+                </Border>
+
+                <!-- ط§ظ„ظپط¦ط§طھ -->
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Name="pnlCategories" Orientation="Horizontal" Margin="0,0,0,10"/>
+                </ScrollViewer>
+
+                <!-- ط§ظ„ظ…ظ†طھط¬ط§طھ -->
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel Name="pnlProducts" Orientation="Horizontal" 
+                               HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- ط§ظ„ظپط§طھظˆط±ط© -->
+            <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderColor}" BorderThickness="2,0,0,0">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- ط§ظ„ط¹ظ…ظٹظ„ -->
+                    <Border Grid.Row="0" Background="{StaticResource BackgroundBrush}" BorderBrush="{StaticResource SuccessColor}" BorderThickness="1"
+                            CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="ًں§‘ ظ…ط¹ظ„ظˆظ…ط§طھ ط§ظ„ط¹ظ…ظٹظ„" FontWeight="Bold" 
+                                       FontSize="{StaticResource FontSizeNormal}" Foreground="#2E7D32" Margin="0,0,0,5"/>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox Name="cmbCustomer" Grid.Column="0" Height="30" FontSize="{StaticResource FontSizeSmall}"
+                                          DisplayMemberPath="CustomerName"
+                                          SelectedValuePath="CustomerId"
+                                          IsEditable="True" IsTextSearchEnabled="True"
+                                          SelectionChanged="cmbCustomer_SelectionChanged"/>
+
+                                <Button Grid.Column="1" Name="btnNewCustomer" Content="â‍•" 
+                                        Width="30" Height="30" Margin="5,0,0,0"
+                                        Style="{StaticResource SuccessButton}"
+                                        Click="btnNewCustomer_Click" ToolTip="ط¹ظ…ظٹظ„ ط¬ط¯ظٹط¯"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- ط¬ط¯ظˆظ„ ط§ظ„ظپط§طھظˆط±ط© -->
+                    <Border Grid.Row="1" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" CornerRadius="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Background="{StaticResource SecondaryDarkBrush}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="ط§ظ„ظ…ظ†طھط¬" Foreground="White" FontWeight="Bold" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeSmall}"/>
+                                    <TextBlock Grid.Column="1" Text="ط§ظ„ظƒظ…ظٹط©" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeSmall}"/>
+                                    <TextBlock Grid.Column="2" Text="ط§ظ„ط³ط¹ط±" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeSmall}"/>
+                                    <TextBlock Grid.Column="3" Text="ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹ" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeSmall}"/>
+                                    <TextBlock Grid.Column="4" Text="âœ–" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeSmall}"/>
+                                </Grid>
+                            </Border>
+
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl Name="lstInvoiceItems">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1" Padding="5">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="40"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Text="{Binding ProductName}" 
+                                                               VerticalAlignment="Center" FontSize="11" Margin="5,0"/>
+
+                                                    <TextBox Grid.Column="1"
+                                                             Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                                             TextAlignment="Center" FontSize="11" Height="25"
+                                                             BorderBrush="{StaticResource BorderColor}" Margin="2"
+                                                             PreviewTextInput="Quantity_PreviewTextInput"
+                                                             DataObject.Pasting="Quantity_Pasting"/>
+
+                                                    <TextBlock Grid.Column="2" Text="{Binding UnitPrice, StringFormat=N2}" 
+                                                               TextAlignment="Center" VerticalAlignment="Center" FontSize="11"/>
+
+                                                    <TextBlock Grid.Column="3" Text="{Binding TotalPrice, StringFormat=N2}" 
+                                                               TextAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+
+                                                    <Button Grid.Column="4" Content="âœ–" Style="{StaticResource DangerButton}"
+                                                            Width="25" Height="25" FontSize="10" FontWeight="Bold"
+                                                            Click="btnRemoveItem_Click" Tag="{Binding}"
+                                                            ToolTip="ط­ط°ظپ ط§ظ„ط¹ظ†طµط±"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <!-- ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹط§طھ -->
+                    <Border Grid.Row="2" Background="{StaticResource BackgroundBrush}" BorderBrush="{StaticResource WarningColor}" BorderThickness="1"
+                            CornerRadius="5" Padding="15" Margin="0,10,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="140"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ط§ظ„ظ…ط¬ظ…ظˆط¹ ط§ظ„ظپط±ط¹ظٹ:" FontWeight="Bold" FontSize="{StaticResource FontSizeNormal}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Name="lblSubTotal" Text="0.00 ط¬.ظ…" 
+                                       FontWeight="Bold" FontSize="{StaticResource FontSizeNormal}" TextAlignment="Right"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="ط§ظ„ط¶ط±ظٹط¨ط© (14%):" FontSize="{StaticResource FontSizeSmall}" Margin="0,5,0,0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Name="lblTax" Text="0.00 ط¬.ظ…" 
+                                       FontSize="{StaticResource FontSizeSmall}" TextAlignment="Right" Margin="0,5,0,0"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="ط§ظ„ط®طµظ…:" FontSize="{StaticResource FontSizeSmall}" Margin="0,5,0,0"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Name="lblDiscount" Text="0.00 ط¬.ظ…" 
+                                       FontSize="{StaticResource FontSizeSmall}" TextAlignment="Right" Margin="0,5,0,0"/>
+
+                            <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="Gray" Margin="0,10"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ†ظ‡ط§ط¦ظٹ -->
+                                        <Border Grid.Row="3" Background="{StaticResource SuccessBrush}" CornerRadius="5" Padding="15" Margin="0,5,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="ًں’° ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ†ظ‡ط§ط¦ظٹ:" Foreground="White" 
+                                       FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Name="lblTotal" Text="0.00 ط¬.ظ…" Foreground="White"
+                                       FontWeight="Bold" FontSize="20" TextAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ط£ط²ط±ط§ط± ط§ظ„ط¯ظپط¹ ظˆط§ظ„ط¹ظ…ظ„ظٹط§طھ -->
+                    <Grid Grid.Row="4" Margin="0,15,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Name="btnCashPayment" Content="ًں’µ ط¯ظپط¹ ظ†ظ‚ط¯ظٹ (F9)" 
+                                    Style="{StaticResource POSButton}" Background="{StaticResource SuccessBrush}"
+                                    Click="btnCashPayment_Click" Height="50" FontSize="16"/>
+
+                            <Button Grid.Column="1" Name="btnCardPayment" Content="ًں’³ ط¯ظپط¹ ط¨ط§ظ„ظƒط§ط±طھ (F10)" 
+                                    Style="{StaticResource POSButton}" Background="{StaticResource PrimaryBrush}"
+                                    Click="btnCardPayment_Click" Height="50" FontSize="16"/>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Name="btnNewSale" Content="ًں†• ط¨ظٹط¹ط© ط¬ط¯ظٹط¯ط© (F2)" 
+                                    Style="{StaticResource POSButton}" Background="{StaticResource WarningBrush}"
+                                    Click="btnNewSale_Click"/>
+
+                            <Button Grid.Column="1" Name="btnHoldSale" Content="âڈ¸ï¸ڈ طھط¹ظ„ظٹظ‚ ط§ظ„ط¨ظٹط¹ط©" 
+                                    Style="{StaticResource POSButton}" Background="{StaticResource SecondaryBrush}"
+                                    Click="btnHoldSale_Click"/>
+
+                            <Button Grid.Column="2" Name="btnPrintReceipt" Content="ًں§¾ ط·ط¨ط§ط¹ط© ط¥ظٹطµط§ظ„" 
+                                    Style="{StaticResource POSButton}" Background="{StaticResource SecondaryDarkBrush}"
+                                    Click="btnPrintReceipt_Click"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ط´ط±ظٹط· ط§ظ„ط­ط§ظ„ط© -->
+        <Border Grid.Row="2" Background="{StaticResource SecondaryDarkBrush}" BorderThickness="0,1,0,0" BorderBrush="{StaticResource SecondaryColor}">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="ط¹ط¯ط¯ ط§ظ„ط£طµظ†ط§ظپ: " Foreground="White" FontSize="{StaticResource FontSizeSmall}"/>
+                    <TextBlock Name="lblItemCount" Text="0" Foreground="#4CAF50" FontWeight="Bold" FontSize="{StaticResource FontSizeSmall}"/>
+                    <TextBlock Text=" | ط§ظ„ظƒظ…ظٹط© ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹط©: " Foreground="White" FontSize="{StaticResource FontSizeSmall}" Margin="20,0,0,0"/>
+                    <TextBlock Name="lblTotalQuantity" Text="0" Foreground="#4CAF50" FontWeight="Bold" FontSize="{StaticResource FontSizeSmall}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="ًں”Œ ظ…طھطµظ„" Foreground="#4CAF50" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold" Margin="0,0,20,0"/>
+                    <TextBlock Text="ًں–¨ï¸ڈ ط¬ط§ظ‡ط²" Foreground="#4CAF50" FontSize="{StaticResource FontSizeSmall}" FontWeight="Bold"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="2" Name="lblVersion" Text="ط§ظ„ط¥طµط¯ط§ط± 2.1" 
+                           Foreground="LightGray" FontSize="11" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

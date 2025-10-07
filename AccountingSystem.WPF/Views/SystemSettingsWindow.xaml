@@ -1,0 +1,571 @@
+<Window x:Class="AccountingSystem.WPF.Views.SystemSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="إعدادات النظام" 
+        Height="600" Width="800" 
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI, Tahoma"
+        FontSize="14"
+        ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2E8B57"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3CB371"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="SectionStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        
+        <!-- HeaderStyle is provided centrally in Resources/UnifiedStyles.xaml to avoid duplicate resource keys.
+             Removed local definition to prevent XamlParseException when merging resource dictionaries. -->
+    </Window.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <!-- العنوان الرئيسي -->
+            <TextBlock Text="إعدادات النظام" 
+                       FontSize="24" FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="#2E8B57" Margin="0,15"/>
+
+            <!-- إعدادات الشركة -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="معلومات الشركة" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="اسم الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="txtCompanyName" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="عنوان الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="txtCompanyAddress" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="هاتف الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="txtCompanyPhone" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="بريد الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="txtCompanyEmail" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="موقع الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Name="txtCompanyWebsite" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="شعار الشركة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <Grid Grid.Row="5" Grid.Column="1" Margin="10,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" Name="txtCompanyLogo" Height="30" 
+                                     VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Button Grid.Column="1" Name="btnBrowseLogo" Content="اختر" 
+                                    Width="60" Height="30" Margin="5,0,0,0" 
+                                    Click="btnBrowseLogo_Click"/>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات المحاسبة -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات المحاسبة" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="نسبة الضريبة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="txtTaxRate" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"
+                                 PreviewTextInput="Numeric_PreviewTextInput"
+                                 DataObject.Pasting="Numeric_Pasting"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="%" 
+                                   VerticalAlignment="Center" FontWeight="Bold"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="العملة الأساسية:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Name="cmbCurrency" 
+                                  Height="30" Margin="10,5">
+                            <ComboBoxItem Content="جنيه مصري" IsSelected="True"/>
+                            <ComboBoxItem Content="درهم إماراتي"/>
+                            <ComboBoxItem Content="دولار أمريكي"/>
+                            <ComboBoxItem Content="يورو"/>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="السنة المالية:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="10,5">
+                            <DatePicker Name="dpFiscalYearStart" Width="150"/>
+                            <TextBlock Text=" إلى " VerticalAlignment="Center" Margin="10,0"/>
+                            <DatePicker Name="dpFiscalYearEnd" Width="150"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="رقم الضريبة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="txtTaxNumber" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="السجل التجاري:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Name="txtCommercialRegister" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="العملة الافتراضية:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" Name="cmbDefaultCurrency" 
+                                  Height="30" Margin="10,5">
+                            <ComboBoxItem Content="جنيه مصري" IsSelected="True"/>
+                            <ComboBoxItem Content="درهم إماراتي"/>
+                            <ComboBoxItem Content="دولار أمريكي"/>
+                            <ComboBoxItem Content="يورو"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات التسلسل -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات التسلسل التلقائي" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <DataGrid Name="dgNumberSequences" 
+                              AutoGenerateColumns="False" 
+                              CanUserAddRows="False"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              Height="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="نوع التسلسل" Binding="{Binding SequenceType}" Width="150" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="البادئة" Binding="{Binding Prefix}" Width="100"/>
+                            <DataGridTextColumn Header="الرقم الحالي" Binding="{Binding CurrentNumber}" Width="100"/>
+                            <DataGridTextColumn Header="اللاحقة" Binding="{Binding Suffix}" Width="100"/>
+                            <DataGridTextColumn Header="طول الرقم" Binding="{Binding NumberLength}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات الطباعة -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات الطباعة" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="الطابعة الافتراضية:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Name="cmbDefaultPrinter" 
+                                  Height="30" Margin="10,5"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="حجم ورق الفواتير:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Name="cmbPaperSize" 
+                                  Height="30" Margin="10,5">
+                            <ComboBoxItem Content="A4" IsSelected="True"/>
+                            <ComboBoxItem Content="A5"/>
+                            <ComboBoxItem Content="Letter"/>
+                            <ComboBoxItem Content="حجم مخصص"/>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="طابعة الإيصالات الحرارية:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Name="cmbThermalPrinter" 
+                                  Height="30" Margin="10,5"/>
+
+                        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkAutoPrint" Content="طباعة تلقائية للفواتير بعد الحفظ" 
+                                  Margin="0,10" FontWeight="Bold"/>
+                    </Grid>
+                    
+                    <!-- إعدادات طباعة متقدمة -->
+                    <Separator Margin="0,10"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <CheckBox Grid.Row="0" Grid.ColumnSpan="4" Name="chkPrintDirectly" 
+                                  Content="طباعة مباشرة بدون معاينة" Margin="0,5"/>
+                        <CheckBox Grid.Row="1" Grid.ColumnSpan="4" Name="chkPrintPreview" 
+                                  Content="إظهار معاينة الطباعة" Margin="0,5"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="حجم الورق:" VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="txtPrintPaperSize" Height="25" Margin="5"/>
+                        
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="الهوامش:" VerticalAlignment="Center" Margin="0,5"/>
+                        <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="5">
+                            <TextBox Name="txtPrintMarginTop" Width="50" Height="25" Margin="2"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            <TextBlock Text="علوي" VerticalAlignment="Center" Margin="2"/>
+                            <TextBox Name="txtPrintMarginBottom" Width="50" Height="25" Margin="2"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            <TextBlock Text="سفلي" VerticalAlignment="Center" Margin="2"/>
+                            <TextBox Name="txtPrintMarginLeft" Width="50" Height="25" Margin="2"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            <TextBlock Text="يسار" VerticalAlignment="Center" Margin="2"/>
+                            <TextBox Name="txtPrintMarginRight" Width="50" Height="25" Margin="2"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            <TextBlock Text="يمين" VerticalAlignment="Center" Margin="2"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات الأمان -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات الأمان" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <CheckBox Grid.Row="0" Grid.ColumnSpan="2" Name="chkPasswordExpiry" 
+                                  Content="انتهاء صلاحية كلمة المرور" Margin="0,5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="أيام انتهاء الصلاحية:" VerticalAlignment="Center" Margin="20,5,0,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="txtPasswordExpiryDays" Height="25" Width="100" HorizontalAlignment="Left" Margin="10,5"
+                                 PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                        
+                        <CheckBox Grid.Row="2" Grid.ColumnSpan="2" Name="chkAutoLogoff" 
+                                  Content="تسجيل الخروج التلقائي" Margin="0,5"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="دقائق عدم النشاط:" VerticalAlignment="Center" Margin="20,5,0,5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="txtAutoLogoffMinutes" Height="25" Width="100" HorizontalAlignment="Left" Margin="10,5"
+                                 PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                        
+                        <CheckBox Grid.Row="4" Grid.ColumnSpan="2" Name="chkAuditTrail" 
+                                  Content="تسجيل سجل المراجعة" Margin="0,5"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات التكامل -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات التكامل" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <!-- إعدادات البريد الإلكتروني -->
+                    <Expander Header="البريد الإلكتروني" IsExpanded="False" Margin="0,5">
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Name="chkEmailIntegration" 
+                                      Content="تفعيل البريد الإلكتروني" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="خادم SMTP:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="txtSMTPServer" Height="25" Margin="10,5"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="منفذ SMTP:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Name="txtSMTPPort" Height="25" Margin="10,5"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="اسم المستخدم:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Name="txtEmailUsername" Height="25" Margin="10,5"/>
+                            
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="كلمة المرور:" VerticalAlignment="Center" Margin="0,5"/>
+                            <PasswordBox Grid.Row="4" Grid.Column="1" Name="txtEmailPassword" Height="25" Margin="10,5"/>
+                            
+                            <Button Grid.Row="5" Grid.Column="2" Name="btnTestEmail" Content="اختبار" Height="30" Width="80" Margin="5" Click="btnTestEmail_Click"/>
+                        </Grid>
+                    </Expander>
+                    
+                    <!-- إعدادات الرسائل النصية -->
+                    <Expander Header="الرسائل النصية" IsExpanded="False" Margin="0,5">
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Name="chkSMSIntegration" 
+                                      Content="تفعيل الرسائل النصية" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="مزود الخدمة:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="txtSMSProvider" Height="25" Margin="10,5"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="مفتاح API:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Name="txtSMSAPIKey" Height="25" Margin="10,5"/>
+                            
+                            <Button Grid.Row="3" Grid.Column="2" Name="btnTestSMS" Content="اختبار" Height="30" Width="80" Margin="5" Click="btnTestSMS_Click"/>
+                        </Grid>
+                    </Expander>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات نقطة البيع -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات نقطة البيع" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkRequireCustomer" Content="مطالبة باختيار عميل في كل فاتورة" 
+                                  Margin="0,5" FontWeight="Bold"/>
+
+                        <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkAutoOpenCashDrawer" Content="فتح درج النقدية تلقائياً بعد البيع" 
+                                  Margin="0,5" FontWeight="Bold"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="عدد المنتجات المعروضة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="txtPOSProductsPerPage" 
+                                 Height="30" Margin="10,5" Text="50" VerticalContentAlignment="Center"
+                                 PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+
+                        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkShowProductImages" Content="عرض صور المنتجات في نقطة البيع" 
+                                  Margin="0,5" FontWeight="Bold"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات المخزون -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات المخزون" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkAllowNegativeStock" Content="السماح بالمخزون السالب" 
+                                  Margin="0,5" FontWeight="Bold"/>
+
+                        <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkStockWarnings" Content="تنبيهات المخزون الناقص" 
+                                  Margin="0,5" FontWeight="Bold" IsChecked="True"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="حد التنبيه للمخزون الناقص:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="txtMinStockWarning" 
+                                 Height="30" Margin="10,5" Text="10" VerticalContentAlignment="Center"
+                                 PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات الأمان -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات الأمان والحماية" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="مهلة انتهاء الجلسة:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10,5">
+                            <TextBox Name="txtSessionTimeout" Width="100" Height="30" Text="30" 
+                                     VerticalContentAlignment="Center"
+                                     PreviewTextInput="Numeric_PreviewTextInput" DataObject.Pasting="Numeric_Pasting"/>
+                            <TextBlock Text=" دقيقة" VerticalAlignment="Center" Margin="5,0"/>
+                        </StackPanel>
+
+                        <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkRequirePasswordForDelete" Content="مطالبة بكلمة مرور عند الحذف" 
+                                  Margin="0,5" FontWeight="Bold" IsChecked="True"/>
+
+                        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  Name="chkLogUserActions" Content="تسجيل عمليات المستخدمين" 
+                                  Margin="0,5" FontWeight="Bold" IsChecked="True"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- إعدادات النسخ الاحتياطي -->
+            <Border Style="{StaticResource SectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="إعدادات النسخ الاحتياطي" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="مجلد النسخ الاحتياطي:" 
+                                   VerticalAlignment="Center" Margin="0,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="txtBackupPath" 
+                                 Height="30" Margin="10,5" VerticalContentAlignment="Center"/>
+                        <Button Grid.Row="0" Grid.Column="2" Name="btnBrowseBackup" Content="استعراض" 
+                                Style="{StaticResource ButtonStyle}" Width="80" Height="30"
+                                Click="btnBrowseBackup_Click"/>
+
+                        <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+                                  Name="chkAutoBackup" Content="إنشاء نسخة احتياطية تلقائية يومياً" 
+                                  Margin="0,10" FontWeight="Bold"/>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,10">
+                            <Button Name="btnCreateBackup" Content="🗂️ إنشاء نسخة احتياطية الآن" 
+                                    Style="{StaticResource ButtonStyle}" Width="180"
+                                    Click="btnCreateBackup_Click"/>
+                            <Button Name="btnRestoreBackup" Content="🔄 استعادة من نسخة احتياطية" 
+                                    Style="{StaticResource ButtonStyle}" Width="180" Background="Orange"
+                                    Click="btnRestoreBackup_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- أزرار التحكم -->
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,20,0,15">
+                <Button Name="btnSave" Content="حفظ الإعدادات" 
+                        Style="{StaticResource ButtonStyle}" Width="120"
+                        Click="btnSave_Click"/>
+                <Button Name="btnCancel" Content="إلغاء" 
+                        Background="Gray" Foreground="White" 
+                        Padding="10,8" Margin="5" FontWeight="Bold"
+                        Width="100" Click="btnCancel_Click"/>
+                <Button Name="btnReset" Content="استعادة الافتراضي" 
+                        Background="Orange" Foreground="White" 
+                        Padding="10,8" Margin="5" FontWeight="Bold"
+                        Width="140" Click="btnReset_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

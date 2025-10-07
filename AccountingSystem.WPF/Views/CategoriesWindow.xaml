@@ -1,0 +1,125 @@
+<Window x:Class="AccountingSystem.WPF.Views.CategoriesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="إدارة الفئات"
+        Height="500" Width="750"
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized">
+
+    <Window.Resources>
+        <!-- تظليل الصف غير النشط -->
+        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                    <Setter Property="Opacity" Value="0.6"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Style="{StaticResource MainWindowLayout}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- شريط العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{StaticResource CategoryIcon}" 
+                           FontSize="24" 
+                           VerticalAlignment="Center" 
+                           Margin="{StaticResource SmallMargin}"/>
+                <TextBlock Text="إدارة فئات المنتجات" 
+                           Style="{StaticResource HeaderTextBlock}"
+                           Foreground="{StaticResource TextOnPrimaryBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- شريط أدوات + بحث -->
+        <DockPanel Grid.Row="1" Margin="10">
+            <!-- الأزرار -->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Button Content="إضافة فئة جديدة" Style="{StaticResource ButtonStyle}"
+                        Command="{Binding AddCommand}"/>
+                <Button Content="تعديل" Style="{StaticResource ButtonStyle}"
+                        Command="{Binding EditCommand}"
+                        CommandParameter="{Binding SelectedCategory}"/>
+                <Button Content="حذف" Style="{StaticResource ButtonStyle}"
+                        Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding SelectedCategory}"/>
+                <Button Content="تبديل حالة التفعيل" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding ToggleActiveCommand}"
+                        CommandParameter="{Binding SelectedCategory}"/>
+                <Button Content="تحديث" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding RefreshCommand}"/>
+            </StackPanel>
+
+            <!-- البحث والفلترة -->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                <TextBox Width="240" Margin="0,0,10,0" VerticalContentAlignment="Center"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="ابحث بالاسم أو الوصف"/>
+                <CheckBox Content="عرض غير النشطة"
+                          IsChecked="{Binding ShowInactiveOnly}"
+                          VerticalAlignment="Center"/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- جدول الفئات -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding CategoriesView}"
+                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  Margin="10"
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="رقم الفئة" Binding="{Binding CategoryId}" Width="90" IsReadOnly="True"/>
+                <DataGridTextColumn Header="اسم الفئة" Binding="{Binding CategoryName}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="الوصف" Binding="{Binding Description}" Width="2*" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="نشطة" Binding="{Binding IsActive}" Width="70" IsReadOnly="True"/>
+            </DataGrid.Columns>
+
+            <!-- قائمة سياقية على الصف -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="تعديل"
+                                          Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          CommandParameter="{Binding}"/>
+                                <MenuItem Header="حذف"
+                                          Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          CommandParameter="{Binding}"/>
+                                <Separator/>
+                                <MenuItem Header="تبديل حالة التفعيل"
+                                          Command="{Binding DataContext.ToggleActiveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!-- شريط الحالة -->
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="الإجمالي: "/><Run Text="{Binding TotalCount}"/>
+                    <Run Text=" | النشطة: "/><Run Text="{Binding ActiveCount}"/>
+                    <Run Text=" | غير النشطة: "/><Run Text="{Binding InactiveCount}"/>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

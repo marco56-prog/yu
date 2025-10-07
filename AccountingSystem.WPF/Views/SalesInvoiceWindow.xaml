@@ -1,0 +1,562 @@
+﻿<Window x:Class="AccountingSystem.WPF.Views.SalesInvoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="فاتورة بيع"
+        Height="800" Width="1600" MinHeight="700" MinWidth="1200"
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized"
+        Language="ar-EG"
+        FlowDirection="RightToLeft"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Loaded="Window_Loaded"
+        FocusManager.FocusedElement="{Binding ElementName=cmbProduct}">
+
+    <!-- اختصارات -->
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="S" Command="{x:Static ApplicationCommands.Save}"/>
+        <KeyBinding Modifiers="Control" Key="N" Command="{x:Static ApplicationCommands.New}"/>
+        <KeyBinding Key="Delete" Command="{x:Static ApplicationCommands.Delete}"/>
+        <KeyBinding Modifiers="Control" Key="P" Command="{x:Static ApplicationCommands.Print}"/>
+        <KeyBinding Modifiers="Control" Key="F" Command="{x:Static ApplicationCommands.Find}"/>
+        <KeyBinding Modifiers="Alt" Key="A" Command="{x:Static NavigationCommands.Refresh}" CommandParameter="AddItem"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <!-- أنماط آمنة حتى لو الموارد العامة ناقصة -->
+        <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlock}">
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource StandardTextBox}"/>
+        <Style x:Key="NumericTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource StandardTextBox}">
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource StandardComboBox}"/>
+
+        <!-- بطاقة ملخص صغيرة -->
+        <Style x:Key="SummaryPill" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="{StaticResource MediumPadding}"/>
+            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource SuccessBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect" Value="{StaticResource LightShadow}"/>
+        </Style>
+
+        <Style x:Key="KeyboardHint" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="Margin" Value="{StaticResource SmallMargin}"/>
+        </Style>
+
+        <!-- تفاصيل صف -->
+        <DataTemplate x:Key="ItemRowDetailsTemplate">
+            <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="6">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="آخر سعر بيع للعميل:" FontWeight="Bold" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding LastCustomerPrice, StringFormat=\{0:N2\}}" Margin="0,0,12,0"/>
+                    <TextBlock Text="متوسط الكلفة:" FontWeight="Bold" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding AverageCost, StringFormat=\{0:N2\}}" Margin="0,0,12,0"/>
+                    <TextBlock Text="رصيد المخزون الآن:" FontWeight="Bold" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding CurrentStock}"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="12" Background="{DynamicResource BackgroundBrush}"
+          KeyboardNavigation.TabNavigation="Cycle"
+          KeyboardNavigation.ControlTabNavigation="Cycle">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="فاتورة بيع جديدة"
+                           Style="{StaticResource HeaderTextBlock}"
+                           Foreground="{StaticResource TextOnPrimaryBrush}"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="رقم الفاتورة:" Style="{StaticResource BodyTextBlock}" Foreground="{StaticResource TextOnPrimaryBrush}" Margin="{StaticResource SmallMargin}"/>
+                    <TextBlock x:Name="lblInvoiceNumber"
+                               Text="جديد"
+                               Style="{StaticResource SubheaderTextBlock}"
+                               Foreground="{StaticResource PrimaryLightBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- بيانات العميل والملخص الجانبي -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2.2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- نموذج البيانات -->
+            <Border Grid.Column="0" Style="{StaticResource FormContainer}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- العميل / مستودع / مندوب -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="العميل:" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <ComboBox x:Name="cmbCustomer"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  DisplayMemberPath="CustomerName"
+                                  IsEditable="True"
+                                  TabIndex="1"
+                                  SelectionChanged="cmbCustomer_SelectionChanged"
+                                  PreviewTextInput="cmbCustomer_PreviewTextInput"
+                                  DropDownOpened="cmbCustomer_DropDownOpened"
+                                  KeyDown="cmbCustomer_KeyDown"
+                                  Margin="0,4,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource SmallMargin}">
+                            <Button x:Name="btnSearchCustomer" Style="{StaticResource SecondaryButton}" Click="btnSearchCustomer_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter Content="{StaticResource SearchIcon}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="عميل"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Text="F1" Style="{StaticResource KeyboardHint}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="المستودع:" Style="{StaticResource HeaderTextBlockStyle}" Margin="0,8,0,0"/>
+                        <ComboBox x:Name="cmbWarehouse"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  DisplayMemberPath="WarehouseName"
+                                  IsEditable="True"
+                                  TabIndex="2"
+                                  SelectionChanged="cmbWarehouse_SelectionChanged"
+                                  PreviewKeyDown="cmbWarehouse_PreviewKeyDown"
+                                  Margin="0,4,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource SmallMargin}">
+                            <Button x:Name="btnSelectWarehouse" Style="{StaticResource SecondaryButton}" Click="btnSelectWarehouse_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter Content="{StaticResource WarehouseIcon}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="مستودع"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Text="F1" Style="{StaticResource KeyboardHint}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="المندوب:" Style="{StaticResource HeaderTextBlockStyle}" Margin="{StaticResource MediumMargin}"/>
+                        <ComboBox x:Name="cmbRepresentative"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  DisplayMemberPath="RepresentativeName"
+                                  IsEditable="True"
+                                  TabIndex="3"
+                                  SelectionChanged="cmbRepresentative_SelectionChanged"
+                                  PreviewKeyDown="cmbRepresentative_PreviewKeyDown"
+                                  Margin="{StaticResource SmallMargin}"/>
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource SmallMargin}">
+                            <Button x:Name="btnSearchRepresentative" Style="{StaticResource SecondaryButton}" Click="btnSearchRepresentative_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter Content="{StaticResource SearchIcon}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="مندوب"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Text="F1" Style="{StaticResource KeyboardHint}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- التاريخ والملاحظات -->
+                    <StackPanel Grid.Column="1" Margin="{StaticResource LargeMargin}">
+                        <TextBlock Text="التاريخ:" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <DatePicker x:Name="dpInvoiceDate" Height="32" FontSize="{StaticResource FontSizeBody}" TabIndex="4" Margin="{StaticResource SmallMargin}"/>
+                        <CheckBox x:Name="chkIsTaxInclusive"
+                                  Content="الأسعار شاملة ضريبة"
+                                  Margin="{StaticResource SmallMargin}"/>
+                        <TextBlock Text="الملاحظات:" Style="{StaticResource HeaderTextBlockStyle}" Margin="{StaticResource MediumMargin}"/>
+                        <TextBox x:Name="txtInvoiceNotes"
+                                 Height="60"
+                                 Style="{StaticResource StandardTextBox}"
+                                 TabIndex="5"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 PreviewKeyDown="txtInvoiceNotes_PreviewKeyDown"
+                                 Margin="{StaticResource SmallMargin}"/>
+                    </StackPanel>
+
+                    <!-- رصيد سابق -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="الرصيد:" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <Border Style="{StaticResource SummaryPill}" Background="{StaticResource ErrorBrush}">
+                            <TextBlock x:Name="lblPreviousBalance"
+                                       Text="0.00 ج.م"
+                                       Style="{StaticResource BodyTextBlock}"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextOnPrimaryBrush}"
+                                       TextAlignment="Center"/>
+                        </Border>
+                        <CheckBox x:Name="chkAffectsBalance"
+                                  Content="ترحيل يؤثر على رصيد العميل"
+                                  Margin="{StaticResource SmallMargin}"
+                                  IsChecked="True"/>
+                    </StackPanel>
+
+                    <!-- طريقة الدفع -->
+                    <StackPanel Grid.Column="3" Margin="{StaticResource LargeMargin}">
+                        <TextBlock Text="طريقة الدفع:" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <ComboBox x:Name="cmbPaymentMethod"
+                                  Width="160"
+                                  Margin="{StaticResource SmallMargin}"
+                                  Style="{StaticResource StandardComboBox}">
+                            <ComboBoxItem Content="نقدي"/>
+                            <ComboBoxItem Content="شبكة"/>
+                            <ComboBoxItem Content="تحويل"/>
+                            <ComboBoxItem Content="آجل"/>
+                        </ComboBox>
+                        <CheckBox x:Name="chkPrintAfterSave" Content="طباعة بعد الحفظ" Margin="{StaticResource SmallMargin}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ملخص فوري -->
+            <Border Grid.Column="1" Style="{StaticResource StandardCard}" Margin="{StaticResource MediumMargin}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="ملخص سريع" Style="{StaticResource HeaderTextBlock}"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="{StaticResource SmallMargin}" VerticalAlignment="Center">
+                        <TextBlock Text="عدد الأصناف:" Style="{StaticResource BodyTextBlock}"/>
+                        <Border Style="{StaticResource SummaryPill}" Margin="{StaticResource SmallMargin}">
+                            <TextBlock x:Name="lblQuickItemsCount" Text="0" Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="{StaticResource SmallMargin}" VerticalAlignment="Center">
+                        <TextBlock Text="قيمة الخصم:" Style="{StaticResource BodyTextBlock}"/>
+                        <Border Style="{StaticResource SummaryPill}" Background="{StaticResource WarningBrush}" BorderBrush="{StaticResource WarningBrush}" Margin="{StaticResource SmallMargin}">
+                            <TextBlock x:Name="lblQuickDiscount" Text="0.00" Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="{StaticResource SmallMargin}" VerticalAlignment="Center">
+                        <TextBlock Text="صافي الفاتورة:" Style="{StaticResource SubheaderTextBlock}"/>
+                        <Border Style="{StaticResource SummaryPill}" Background="{StaticResource SuccessBrush}" BorderBrush="{StaticResource SuccessBrush}" Margin="{StaticResource SmallMargin}">
+                            <TextBlock x:Name="lblQuickNet" Text="0.00" Foreground="{StaticResource TextOnPrimaryBrush}" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- إدخال الأصناف + الجدول -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- شريط إدخال -->
+            <Border Grid.Row="0" Style="{StaticResource StandardCard}" Margin="{StaticResource MediumMargin}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.4*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="المنتج" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Grid.Column="1" Text="الوحدة" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Grid.Column="2" Text="الكمية" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Grid.Column="3" Text="السعر" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Grid.Column="4" Text="الخصم" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Grid.Column="5" Text="المتاح" Style="{StaticResource FieldLabel}"/>
+
+                    <!-- بحث سريع (باركود/كود/اسم) -->
+                    <Border Grid.Column="0" Style="{StaticResource SearchBar}" Margin="{StaticResource SmallMargin}" VerticalAlignment="Bottom">
+                        <TextBox x:Name="txtQuickSearch"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ToolTip="امسح الباركود/اكتب الكود أو جزء من الاسم ثم Enter"
+                                 KeyDown="txtQuickSearch_KeyDown"/>
+                    </Border>
+
+                    <ComboBox Grid.Column="0" x:Name="cmbProduct"
+                              Style="{StaticResource StandardComboBox}"
+                              DisplayMemberPath="ProductName"
+                              IsEditable="True"
+                              TabIndex="6"
+                              Margin="0,34,8,0"
+                              SelectionChanged="cmbProduct_SelectionChanged"
+                              PreviewTextInput="cmbProduct_PreviewTextInput"
+                              DropDownOpened="cmbProduct_DropDownOpened"
+                              KeyDown="cmbProduct_KeyDown"
+                              PreviewKeyDown="cmbProduct_PreviewKeyDown"
+                              GotKeyboardFocus="cmbProduct_GotKeyboardFocus"/>
+
+                    <ComboBox Grid.Column="1" x:Name="cmbUnit"
+                              Style="{StaticResource StandardComboBox}"
+                              DisplayMemberPath="UnitName"
+                              TabIndex="7"
+                              Margin="{StaticResource SmallMargin}"
+                              SelectionChanged="cmbUnit_SelectionChanged"
+                              GotKeyboardFocus="cmbUnit_GotKeyboardFocus"
+                              PreviewKeyDown="cmbUnit_PreviewKeyDown"/>
+
+                    <TextBox Grid.Column="2" x:Name="txtQuantity"
+                             Style="{StaticResource NumericTextBoxStyle}"
+                             Text="1"
+                             TabIndex="8"
+                             Margin="{StaticResource SmallMargin}"
+                             TextChanged="QuantityChanged"/>
+
+                    <TextBox Grid.Column="3" x:Name="txtUnitPrice"
+                             Style="{StaticResource NumericTextBoxStyle}"
+                             Text="0"
+                             TabIndex="9"
+                             Margin="{StaticResource SmallMargin}"
+                             TextChanged="UnitPriceChanged"/>
+
+                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                        <TextBox x:Name="txtDiscount"
+                                 Style="{StaticResource NumericTextBoxStyle}"
+                                 Text="0"
+                                 TabIndex="10"
+                                 Width="100"
+                                 Margin="{StaticResource SmallMargin}"
+                                 TextChanged="DiscountChanged"/>
+                        <ComboBox x:Name="cmbDiscountType" Style="{StaticResource StandardComboBox}" Width="80" SelectedIndex="0">
+                            <ComboBoxItem Content="%"/>
+                            <ComboBoxItem Content="ج.م"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <TextBox Grid.Column="5" x:Name="txtStock"
+                             Style="{StaticResource NumericTextBoxStyle}"
+                             IsReadOnly="True"
+                             Text="0"
+                             TabIndex="-1"
+                             Background="{StaticResource BackgroundBrush}"/>
+
+                    <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <Button x:Name="btnAddItem" Style="{StaticResource PrimaryButton}" TabIndex="11" Click="btnAddItem_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <ContentPresenter Content="{StaticResource AddIcon}" Margin="0,0,5,0"/>
+                                <TextBlock Text="إضافة"/>
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="Alt+A" Style="{StaticResource KeyboardHint}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- إجمالي السطر + بحث منتج -->
+                    <StackPanel Grid.ColumnSpan="7" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,28,0,0">
+                        <TextBlock Text="إجمالي:" Style="{StaticResource CaptionTextBlock}" VerticalAlignment="Center"/>
+                        <Border Style="{StaticResource SummaryPill}" Background="{StaticResource SuccessBrush}" Margin="{StaticResource SmallMargin}">
+                            <TextBlock x:Name="lblTotal" Text="0.00" FontWeight="Bold" Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                        </Border>
+                        <Button x:Name="btnSearchProduct" Content="{StaticResource SearchIcon}" Style="{StaticResource OutlinedButton}"
+                                Width="32" Height="32" Margin="{StaticResource MediumMargin}" Click="btnSearchProduct_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- جدول الأصناف -->
+            <Border Grid.Row="1" Style="{StaticResource TableContainer}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid x:Name="dgItems"
+                              Grid.Row="0"
+                              Style="{StaticResource StandardDataGrid}"
+                              RowDetailsVisibilityMode="Collapsed"
+                              RowDetailsTemplate="{StaticResource ItemRowDetailsTemplate}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="المنتج" Binding="{Binding Product.ProductName}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="الوحدة" Binding="{Binding Unit.UnitName}" Width="100" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="الكمية" Binding="{Binding Quantity}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="السعر" Binding="{Binding UnitPrice, StringFormat='{}{0:N2}'}" Width="100" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="الخصم" Binding="{Binding DiscountAmount, StringFormat='{}{0:N2}'}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="الإجمالي" Binding="{Binding NetAmount, StringFormat='{}{0:N2}'}" Width="120" IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="حذف" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{StaticResource DeleteIcon}"
+                                                Style="{StaticResource DangerButton}"
+                                                Click="btnDeleteItem_Click"
+                                                Tag="{Binding}"
+                                                IsTabStop="False"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="تفاصيل السطر" Click="ctxToggleRowDetails_Click"/>
+                                <Separator/>
+                                <MenuItem Header="حذف" Click="btnDeleteItem_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+
+                    <!-- ملخص الفاتورة -->
+                    <Border Grid.Row="1" Style="{StaticResource TableHeader}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="420"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="lblTotalItems" Text="عدد الأصناف: 0" Style="{StaticResource SubheaderTextBlock}" Margin="{StaticResource LargeMargin}"/>
+                                <TextBox x:Name="txtNotes" Width="300" Style="{StaticResource StandardTextBox}" Margin="{StaticResource MediumMargin}" VerticalAlignment="Center"/>
+                                <Button x:Name="btnSearchInvoices" Content="{StaticResource SearchIcon}" Style="{StaticResource OutlinedButton}" Width="32" Height="32" Click="btnSearchInvoices_Click"/>
+                            </StackPanel>
+
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="90"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="الإجمالي:" Style="{StaticResource BodyTextBlock}" FontWeight="Bold"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="lblSubTotal" Text="0.00" Style="{StaticResource BodyTextBlock}" FontWeight="Bold" TextAlignment="Right"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource SmallMargin}">
+                                    <TextBlock Text="خصم عام:" Style="{StaticResource BodyTextBlock}"/>
+                                    <ComboBox x:Name="cmbGlobalDiscountType" Width="60" Style="{StaticResource StandardComboBox}" Margin="{StaticResource SmallMargin}">
+                                        <ComboBoxItem Content="%"/>
+                                        <ComboBoxItem Content="ج.م"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtGlobalDiscount" Text="0" Style="{StaticResource StandardTextBox}" Height="32"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" x:Name="lblTotalDiscount" Text="0.00" Style="{StaticResource BodyTextBlock}" TextAlignment="Right"/>
+
+                                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource SmallMargin}">
+                                    <TextBlock Text="الضريبة %:" Style="{StaticResource BodyTextBlock}"/>
+                                    <TextBox x:Name="txtTaxRate" Width="60" Text="0" Style="{StaticResource StandardTextBox}" Margin="{StaticResource SmallMargin}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="lblTaxAmount" Text="0.00" Style="{StaticResource BodyTextBlock}" TextAlignment="Right"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="--" Visibility="Collapsed"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="صافي الفاتورة:" Style="{StaticResource SubheaderTextBlock}" Foreground="{StaticResource SuccessBrush}" Margin="{StaticResource SmallMargin}"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1" x:Name="lblNetTotal" Text="0.00" Style="{StaticResource SubheaderTextBlock}" TextAlignment="Right" Foreground="{StaticResource SuccessBrush}" Margin="{StaticResource SmallMargin}"/>
+
+                                <!-- مدفوع/متبقي (مخفيين حسب الحاجة) -->
+                                <TextBox x:Name="txtPaidAmount" Text="0" Visibility="Collapsed" TextChanged="txtPaidAmount_TextChanged"/>
+                                <TextBlock x:Name="lblRemainingAmount" Text="0.00" Visibility="Collapsed"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- معلومات المنتج المختار (مؤقتة) -->
+                    <Border x:Name="pnlProductInfo" Visibility="Collapsed" Background="{StaticResource WarningBrush}" Padding="5" Margin="0,2" Height="0">
+                        <StackPanel>
+                            <TextBlock x:Name="lblSelectedProductName" FontSize="10"/>
+                            <TextBlock x:Name="lblCurrentStock" FontSize="10"/>
+                            <TextBlock x:Name="lblLastPurchasePrice" FontSize="10"/>
+                            <TextBlock x:Name="lblLastCustomerPrice" FontSize="10"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- أزرار التحكم + الحالة -->
+        <DockPanel Grid.Row="3" LastChildFill="False" Margin="0,10,0,0">
+            <StackPanel DockPanel.Dock="Right" Style="{StaticResource HorizontalButtonGroup}">
+                <Button x:Name="btnPreviousInvoice" Style="{StaticResource SecondaryButton}" IsTabStop="False" Click="btnPreviousInvoice_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource BackIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="السابق"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnNextInvoice" Style="{StaticResource SecondaryButton}" IsTabStop="False" Click="btnNextInvoice_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource ForwardIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="التالي"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnEdit" Style="{StaticResource SecondaryButton}" Click="btnEdit_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource EditIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="تعديل"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnNew" Style="{StaticResource SecondaryButton}" Click="btnNew_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource AddIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="جديد"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Left" Style="{StaticResource HorizontalButtonGroup}">
+                <Button x:Name="btnSave" Style="{StaticResource PrimaryButton}" TabIndex="12" Click="btnSave_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource SaveIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="حفظ الفاتورة"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnPrint" Style="{StaticResource SecondaryButton}" IsTabStop="False" Click="btnPrint_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource PrintIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="طباعة"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnCancel" Style="{StaticResource WarningButton}" TabIndex="13" Click="btnCancel_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Content="{StaticResource CancelIcon}" Margin="0,0,5,0"/>
+                        <TextBlock Text="إغلاق"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <Border DockPanel.Dock="Bottom" Style="{StaticResource StatusBarLayout}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="lblStatus" Text="جاهز" Style="{StaticResource BodyTextBlock}"/>
+                    <TextBlock Grid.Column="1" Text="F2 تعديل | Ctrl+S حفظ | Ctrl+P طباعة" Style="{StaticResource CaptionTextBlock}"/>
+                </Grid>
+            </Border>
+        </DockPanel>
+
+        <!-- غطاء الانشغال -->
+        <Grid x:Name="BusyOverlay" Style="{StaticResource LoadingContainer}">
+            <Border Style="{StaticResource StandardCard}" Width="260" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Style="{StaticResource LoadingIndicator}">
+                    <TextBlock Text="جارٍ الحفظ/المعالجة..." Style="{StaticResource HeaderTextBlock}" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Height="4" Foreground="{StaticResource PrimaryBrush}" Margin="{StaticResource MediumMargin}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

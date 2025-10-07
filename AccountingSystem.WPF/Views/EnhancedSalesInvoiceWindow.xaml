@@ -1,0 +1,37 @@
+<Window x:Class="AccountingSystem.WPF.Views.EnhancedSalesInvoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="فاتورة البيع المحسنة" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2C3E50" Padding="15">
+            <TextBlock Text="فاتورة البيع المحسنة" Foreground="White" 
+                      FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </Border>
+        
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="المحتوى قيد التطوير..." HorizontalAlignment="Center" 
+                          FontSize="16" Foreground="Gray" Margin="20"/>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="#ECF0F1" Padding="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnSave" Content="حفظ" Width="100" Height="30" Margin="5"/>
+                <Button x:Name="btnCancel" Content="إلغاء" Width="100" Height="30" Margin="5" 
+                        Click="btnCancel_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

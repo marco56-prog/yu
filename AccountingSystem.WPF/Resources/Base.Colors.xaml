@@ -1,0 +1,33 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Base Colors - ثابتة وآمنة -->
+  <Color x:Key="Color.Primary">#FF1565C0</Color>
+  <Color x:Key="Color.PrimaryLight">#FF64B5F6</Color>
+  <Color x:Key="Color.PrimaryDark">#FF0D47A1</Color>
+  <Color x:Key="Color.Secondary">#FF2563EB</Color>
+  <Color x:Key="Color.Accent">#FF059669</Color>
+  <Color x:Key="Color.Success">#FF10B981</Color>
+  <Color x:Key="Color.Warning">#FFF59E0B</Color>
+  <Color x:Key="Color.Danger">#FFEF4444</Color>
+  <Color x:Key="Color.Info">#FF0EA5E9</Color>
+  
+  <!-- Surface Colors -->
+  <Color x:Key="Color.Surface">#FFFFFF</Color>
+  <Color x:Key="Color.Background">#FFF6F7FB</Color>
+  <Color x:Key="Color.Card">#FFFFFF</Color>
+  
+  <!-- Border & Divider Colors -->
+  <Color x:Key="Color.Border">#FFE5E7EB</Color>
+  <Color x:Key="Color.Divider">#FFD1D5DB</Color>
+  
+  <!-- Text Colors -->
+  <Color x:Key="Color.TextPrimary">#FF111827</Color>
+  <Color x:Key="Color.TextSecondary">#FF6B7280</Color>
+  <Color x:Key="Color.TextMuted">#FF9CA3AF</Color>
+  <Color x:Key="Color.TextOnPrimary">#FFFFFF</Color>
+  
+  <!-- Input Colors -->
+  <Color x:Key="Color.InputBackground">#FFFFFF</Color>
+  <Color x:Key="Color.InputBorder">#FFD1D5DB</Color>
+  <Color x:Key="Color.InputFocus">#FF2563EB</Color>
+</ResourceDictionary>

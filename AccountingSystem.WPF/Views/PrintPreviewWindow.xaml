@@ -1,0 +1,337 @@
+<Window x:Class="AccountingSystem.WPF.Views.PrintPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="معاينة الطباعة - نظام المحاسبة" 
+        Height="800" Width="1200"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI"
+        Background="#F8F9FA"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- رأس النافذة -->
+        <Border Grid.Row="0" Background="#2E86AB" Padding="15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="👁️" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="معاينة الطباعة" FontSize="20" FontWeight="Bold" 
+                              Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- شريط أدوات الطباعة -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="btnPrint" Content="🖨️ طباعة" Width="100" Height="35"
+                           Background="#28A745" Foreground="White" FontWeight="Bold" 
+                           Margin="5" Click="btnPrint_Click"/>
+                    
+                    <Button x:Name="btnSaveAsPdf" Content="📄 حفظ PDF" Width="100" Height="35"
+                           Background="#DC3545" Foreground="White" FontWeight="Bold" 
+                           Margin="5" Click="btnSaveAsPdf_Click"/>
+                    
+                    <Button x:Name="btnClose" Content="✖️ إغلاق" Width="100" Height="35"
+                           Background="#6C757D" Foreground="White" FontWeight="Bold" 
+                           Margin="5" Click="btnClose_Click"/>
+                </StackPanel>
+
+                <!-- معلومات القالب -->
+                <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Right">
+                    <TextBlock x:Name="lblTemplateName" Text="اسم القالب" 
+                              Foreground="White" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock x:Name="lblTemplateType" Text="نوع القالب" 
+                              Foreground="LightGray" FontSize="12"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- المحتوى الرئيسي -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- منطقة المعاينة -->
+            <Border Grid.Column="0" Background="White" Margin="10" 
+                   BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- شريط أدوات المعاينة -->
+                    <Border Grid.Row="0" Background="#F8F9FA" Padding="10" 
+                           BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="📋 معاينة المستند" 
+                                      FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                            <!-- أدوات التحكم في العرض -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="التكبير:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Slider x:Name="zoomSlider" Width="120" Minimum="0.25" Maximum="3.0" 
+                                       Value="1.0" VerticalAlignment="Center" 
+                                       TickPlacement="BottomRight" TickFrequency="0.25"/>
+                                <TextBlock Text="{Binding Value, ElementName=zoomSlider, StringFormat={}{0:P0}}" 
+                                          VerticalAlignment="Center" Margin="10,0,0,0" MinWidth="50"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- عارض المستند -->
+                    <ScrollViewer Grid.Row="1" x:Name="previewScrollViewer" 
+                                 HorizontalScrollBarVisibility="Auto" 
+                                 VerticalScrollBarVisibility="Auto" Padding="20">
+                        
+                        <Grid Background="#F5F5F5">
+                            <!-- تأثير الظل للصفحة -->
+                            <Border Background="#DDDDDD" CornerRadius="3" Margin="5,5,0,0"/>
+                            
+                            <!-- الصفحة الرئيسية -->
+                            <Border Background="White" BorderBrush="#CCCCCC" BorderThickness="1" 
+                                   CornerRadius="3" MinWidth="794" MinHeight="1123">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="3" Color="#AAAAAA" BlurRadius="8"/>
+                                </Border.Effect>
+                                
+                                <!-- منطقة عرض المحتوى -->
+                                <DocumentViewer x:Name="documentViewer" 
+                                               Background="Transparent" 
+                                               BorderThickness="0"/>
+                            </Border>
+                        </Grid>
+                        
+                        <ScrollViewer.LayoutTransform>
+                            <ScaleTransform ScaleX="{Binding Value, ElementName=zoomSlider}" 
+                                          ScaleY="{Binding Value, ElementName=zoomSlider}"/>
+                        </ScrollViewer.LayoutTransform>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- الشريط الجانبي - معلومات المعاينة -->
+            <Border Grid.Column="1" Background="White" Margin="0,10,10,10" 
+                   BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <!-- معلومات القالب -->
+                        <Border Background="#F8F9FA" Padding="15" CornerRadius="5" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="ℹ️ معلومات القالب" FontSize="16" FontWeight="Bold" 
+                                          HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                                
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="الاسم:" 
+                                              FontWeight="Bold" Margin="0,0,10,8"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="lblDetailTemplateName" 
+                                              TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="النوع:" 
+                                              FontWeight="Bold" Margin="0,0,10,8"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="lblDetailTemplateType" 
+                                              Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="حجم الصفحة:" 
+                                              FontWeight="Bold" Margin="0,0,10,8"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" x:Name="lblPageSize" 
+                                              Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="العناصر:" 
+                                              FontWeight="Bold" Margin="0,0,10,0"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" x:Name="lblElementsCount"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- إعدادات الطباعة -->
+                        <Border Background="#F8F9FA" Padding="15" CornerRadius="5" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="⚙️ إعدادات الطباعة" FontSize="14" FontWeight="Bold" 
+                                          HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                                <CheckBox Content="طباعة ملونة" IsChecked="True" Margin="0,0,0,10"/>
+                                <CheckBox Content="طباعة على الوجهين" Margin="0,0,0,10"/>
+                                <CheckBox Content="ملائمة للصفحة" Margin="0,0,0,10"/>
+
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock Text="عدد النسخ:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <TextBox x:Name="txtCopies" Text="1" Height="25" 
+                                            VerticalContentAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock Text="جودة الطباعة:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="cmbPrintQuality" Height="25">
+                                        <ComboBoxItem Content="عادية (150 DPI)" Tag="150"/>
+                                        <ComboBoxItem Content="عالية (300 DPI)" IsSelected="True" Tag="300"/>
+                                        <ComboBoxItem Content="عالية جداً (600 DPI)" Tag="600"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- إعدادات PDF -->
+                        <Border Background="#F8F9FA" Padding="15" CornerRadius="5" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="📄 إعدادات PDF" FontSize="14" FontWeight="Bold" 
+                                          HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                                <CheckBox x:Name="chkIncludeBookmarks" Content="تضمين العلامات المرجعية" Margin="0,0,0,8"/>
+                                <CheckBox x:Name="chkOptimizeForWeb" Content="تحسين للويب" IsChecked="True" Margin="0,0,0,8"/>
+                                <CheckBox x:Name="chkPasswordProtection" Content="حماية بكلمة مرور" Margin="0,0,0,8"/>
+
+                                <StackPanel x:Name="passwordPanel" Visibility="Collapsed" Margin="0,8,0,0">
+                                    <TextBlock Text="كلمة المرور:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <PasswordBox x:Name="txtPdfPassword" Height="25"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock Text="جودة الضغط:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="cmbPdfQuality" Height="25">
+                                        <ComboBoxItem Content="عالية الجودة" IsSelected="True"/>
+                                        <ComboBoxItem Content="متوسطة"/>
+                                        <ComboBoxItem Content="مضغوطة"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- إحصائيات المعاينة -->
+                        <Border Background="#E8F5E8" Padding="15" CornerRadius="5">
+                            <StackPanel>
+                                <TextBlock Text="📊 إحصائيات" FontSize="14" FontWeight="Bold" 
+                                          HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="الصفحات:" 
+                                              FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="1" 
+                                              HorizontalAlignment="Center" Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="العناصر:" 
+                                              FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="lblStatsElements" Text="0" 
+                                              HorizontalAlignment="Center" Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="النصوص:" 
+                                              FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" x:Name="lblStatsTexts" Text="0" 
+                                              HorizontalAlignment="Center" Margin="0,0,0,8"/>
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="الجداول:" 
+                                              FontWeight="Bold"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" x:Name="lblStatsTables" Text="0" 
+                                              HorizontalAlignment="Center"/>
+                                </Grid>
+
+                                <Separator Margin="0,15" Background="#CCCCCC"/>
+                                
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="حجم الملف المتوقع: " FontWeight="Bold"/>
+                                    <TextBlock Text="~125 KB" Foreground="#28A745"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- نصائح وإرشادات -->
+                        <Border Background="#FFF3CD" BorderBrush="#FFEAA7" BorderThickness="1" 
+                               Padding="15" CornerRadius="5" Margin="0,15,0,0">
+                            <StackPanel>
+                                <TextBlock Text="💡 نصائح" FontSize="12" FontWeight="Bold" 
+                                          HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                
+                                <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#856404">
+                                    <Run Text="• استخدم Ctrl+P للطباعة السريعة"/>
+                                    <LineBreak/>
+                                    <Run Text="• PDF أفضل للمشاركة والأرشفة"/>
+                                    <LineBreak/>
+                                    <Run Text="• تحقق من المعاينة قبل الطباعة"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- شريط الحالة -->
+        <StatusBar Grid.Row="2" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            
+            <StatusBarItem Grid.Column="0">
+                <TextBlock x:Name="lblStatus" Text="جاهز للمعاينة" Foreground="#6C757D"/>
+            </StatusBarItem>
+            
+            <StatusBarItem Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="آخر تحديث: " Foreground="#6C757D"/>
+                    <TextBlock x:Name="lblLastUpdate" Text="" FontWeight="Bold" Foreground="#2E86AB"/>
+                </StackPanel>
+            </StatusBarItem>
+            
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Text="معاينة الطباعة v1.0" Foreground="#6C757D"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+
+    <!-- اختصارات لوحة المفاتيح -->
+    <Window.InputBindings>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding PrintCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}"/>
+    </Window.InputBindings>
+</Window>

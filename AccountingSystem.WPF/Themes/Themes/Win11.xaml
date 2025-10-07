@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ========================================================= -->
+  <!--               Windows 11 Theme (Values Only)              -->
+  <!--          يغيّر القيم فقط - كل الستايلات في Base.xaml       -->
+  <!-- ========================================================= -->
+
+  <!-- قيم الألوان (Win11 Theme) -->
+  <Color x:Key="BackgroundColorValue">#F5F7FB</Color>
+  <Color x:Key="SurfaceColorValue">#FFFFFF</Color>
+  <Color x:Key="BorderColorValue">#E5E7EB</Color>
+  <Color x:Key="TextPrimaryColorValue">#111827</Color>
+  <Color x:Key="TextSecondaryColorValue">#6B7280</Color>
+  <Color x:Key="MutedColorValue">#9CA3AF</Color>
+
+  <!-- Elevation / Shadow -->
+  <Color x:Key="ShadowColor">#40000000</Color>
+
+  <!-- Radii & Spacing -->
+  <CornerRadius x:Key="RadiusS">6</CornerRadius>
+  <CornerRadius x:Key="RadiusM">10</CornerRadius>
+  <CornerRadius x:Key="RadiusL">16</CornerRadius>
+
+  <Thickness x:Key="BorderThin">1</Thickness>
+  <Thickness x:Key="BorderThick">2</Thickness>
+  <Thickness x:Key="PaddingS">8,6</Thickness>
+  <Thickness x:Key="PaddingM">12,8</Thickness>
+
+</ResourceDictionary>

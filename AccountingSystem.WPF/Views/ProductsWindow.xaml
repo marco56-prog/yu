@@ -1,0 +1,157 @@
+<Window x:Class="AccountingSystem.WPF.Views.ProductsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="إدارة المنتجات" 
+        Height="650" Width="1000" 
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized">
+    
+    <Window.Resources>
+    <!-- Using centralized Button styles from Resources/UnifiedStyles.xaml -->
+    </Window.Resources>
+
+    <Grid Style="{StaticResource MainWindowLayout}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- العنوان -->
+        <Border Grid.Row="0" Style="{StaticResource TitleBarLayout}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{StaticResource ProductsIcon}" 
+                           FontSize="24" 
+                           VerticalAlignment="Center" 
+                           Margin="{StaticResource SmallMargin}"/>
+                <TextBlock Text="إدارة المنتجات" 
+                           Style="{StaticResource HeaderTextBlock}"
+                           Foreground="{StaticResource TextOnPrimaryBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- أزرار التحكم -->
+        <Border Grid.Row="1" Style="{StaticResource StandardCard}" Margin="{StaticResource MediumMargin}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- الأزرار -->
+                <StackPanel Grid.Column="0" Style="{StaticResource HorizontalButtonGroup}">
+                    <Button Name="btnAdd" 
+                            Style="{StaticResource PrimaryButton}" 
+                            Click="btnAdd_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource AddIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="إضافة منتج جديد"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnEdit" 
+                            Style="{StaticResource SecondaryButton}" 
+                            Click="btnEdit_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource EditIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تعديل"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnDelete" 
+                            Style="{StaticResource DangerButton}" 
+                            Click="btnDelete_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource DeleteIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="حذف"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnRefresh" 
+                            Style="{StaticResource SecondaryButton}" 
+                            Click="btnRefresh_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource RefreshIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تحديث"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="btnStockAdjustment" 
+                            Style="{StaticResource WarningButton}" 
+                            Click="btnStockAdjustment_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter Content="{StaticResource StockIcon}" Margin="0,0,5,0"/>
+                            <TextBlock Text="تسوية مخزن"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <!-- شريط البحث والفلترة -->
+                <StackPanel Grid.Column="1" Style="{StaticResource FilterContainer}">
+                    <StackPanel Style="{StaticResource FilterGroup}">
+                        <TextBlock Text="بحث:" 
+                                   Style="{StaticResource BodyTextBlock}" 
+                                   VerticalAlignment="Center"/>
+                        <Border Style="{StaticResource SearchBar}">
+                            <TextBox Name="txtSearch" 
+                                     Width="200" 
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     TextChanged="txtSearch_TextChanged"/>
+                        </Border>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource FilterGroup}">
+                        <TextBlock Text="الفئة:" 
+                                   Style="{StaticResource BodyTextBlock}" 
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Name="cmbCategoryFilter" 
+                                  Width="150" 
+                                  Style="{StaticResource StandardComboBox}"
+                                  SelectionChanged="cmbCategoryFilter_SelectionChanged">
+                            <ComboBoxItem Content="جميع الفئات" IsSelected="True"/>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- جدول المنتجات -->
+        <Border Grid.Row="2" Style="{StaticResource TableContainer}">
+            <DataGrid Name="dgProducts" 
+                      Style="{StaticResource StandardDataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="كود المنتج" Binding="{Binding ProductCode}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="اسم المنتج" Binding="{Binding ProductName}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="الفئة" Binding="{Binding Category.CategoryName}" Width="120" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="الوحدة الأساسية" Binding="{Binding MainUnit.UnitName}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="المخزون الحالي" Binding="{Binding CurrentStock, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="الحد الأدنى" Binding="{Binding MinimumStock, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="سعر الشراء" Binding="{Binding PurchasePrice, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="سعر البيع" Binding="{Binding SalePrice, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+                    <DataGridCheckBoxColumn Header="نشط" Binding="{Binding IsActive}" Width="60" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- شريط الحالة -->
+        <Border Grid.Row="3" Style="{StaticResource StatusBarLayout}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" 
+                           Name="lblStatus" 
+                           Text="جاهز" 
+                           Style="{StaticResource BodyTextBlock}"/>
+                           
+                <Border Grid.Column="1" 
+                        Style="{StaticResource SummaryPill}" 
+                        Background="{StaticResource InfoBrush}">
+                    <TextBlock Name="lblCount" 
+                               Text="عدد المنتجات: 0" 
+                               Foreground="{StaticResource TextOnPrimaryBrush}"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

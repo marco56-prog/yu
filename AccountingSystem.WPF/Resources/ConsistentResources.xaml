@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- =============================================== -->
+    <!-- موارد ثابتة وموحدة لحل جميع التضاربات -->
+    <!-- =============================================== -->
+    
+    <!-- ألوان أساسية -->
+    <Color x:Key="ConsistentBorderColor">#E5E7EB</Color>
+    <Color x:Key="ConsistentShadowColor">#40000000</Color>
+    <Color x:Key="ConsistentLightShadowColor">#20000000</Color>
+    
+    <!-- فرش ثابتة -->
+    <SolidColorBrush x:Key="ConsistentBorderBrush" Color="{StaticResource ConsistentBorderColor}"/>
+    <SolidColorBrush x:Key="ConsistentShadowBrush" Color="{StaticResource ConsistentShadowColor}"/>
+    <SolidColorBrush x:Key="ConsistentLightShadowBrush" Color="{StaticResource ConsistentLightShadowColor}"/>
+    
+    <!-- تأثيرات الظلال -->
+    <DropShadowEffect x:Key="ConsistentLightShadow" 
+                      Color="{StaticResource ConsistentLightShadowColor}" 
+                      BlurRadius="6" 
+                      ShadowDepth="2" 
+                      Opacity="0.1"/>
+    
+    <DropShadowEffect x:Key="ConsistentNormalShadow" 
+                      Color="{StaticResource ConsistentShadowColor}" 
+                      BlurRadius="8" 
+                      ShadowDepth="3" 
+                      Opacity="0.15"/>
+    
+    <DropShadowEffect x:Key="ConsistentDeepShadow" 
+                      Color="{StaticResource ConsistentShadowColor}" 
+                      BlurRadius="12" 
+                      ShadowDepth="4" 
+                      Opacity="0.2"/>
+    
+</ResourceDictionary>

@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- إعدادات عامة -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- اتساق الأسماء داخل السوليوشن -->
+    <AssemblyName>AccountingSystem.Business</AssemblyName>
+    <RootNamespace>AccountingSystem.Business</RootNamespace>
+
+    <!-- جودة الكود -->
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+  </PropertyGroup>
+
+  <!-- Debug: مرن أثناء التطوير -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Release: صارم + توثيق -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- تجاهل تحذير نقص تعليقات XML في الإصدار النهائي -->
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- إعدادات مفيدة عند البناء على CI وسورس لينك (اختيارية بدون باكدج) -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <!-- مراجع المشاريع -->
+  <ItemGroup>
+    <ProjectReference Include="..\AccountingSystem.Data\AccountingSystem.Data.csproj" />
+    <ProjectReference Include="..\AccountingSystem.Models\AccountingSystem.Models.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

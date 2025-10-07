@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+  <!-- Spacing & Dimensions -->
+  <Thickness x:Key="Space.XS">2</Thickness>
+  <Thickness x:Key="Space.S">4</Thickness>
+  <Thickness x:Key="Space.SM">6</Thickness>
+  <Thickness x:Key="Space.M">8</Thickness>
+  <Thickness x:Key="Space.ML">12</Thickness>
+  <Thickness x:Key="Space.L">16</Thickness>
+  <Thickness x:Key="Space.XL">20</Thickness>
+  <Thickness x:Key="Space.XXL">24</Thickness>
+  
+  <!-- Alias Names for backward compatibility -->
+  <Thickness x:Key="SmallPadding">4</Thickness>
+  <Thickness x:Key="MediumPadding">8</Thickness>
+  <Thickness x:Key="LargePadding">16</Thickness>
+  <Thickness x:Key="ExtraLargePadding">24</Thickness>
+  
+  <Thickness x:Key="SmallMargin">4</Thickness>
+  <Thickness x:Key="MediumMargin">8</Thickness>
+  <Thickness x:Key="LargeMargin">16</Thickness>
+  <Thickness x:Key="ExtraLargeMargin">24</Thickness>
+  
+  <!-- Corner Radius -->
+  <CornerRadius x:Key="Radius.XS">2</CornerRadius>
+  <CornerRadius x:Key="Radius.S">4</CornerRadius>
+  <CornerRadius x:Key="Radius.M">6</CornerRadius>
+  <CornerRadius x:Key="Radius.L">8</CornerRadius>
+  <CornerRadius x:Key="Radius.XL">12</CornerRadius>
+  
+  <!-- Border Thickness -->
+  <Thickness x:Key="Border.Thin">1</Thickness>
+  <Thickness x:Key="Border.Medium">2</Thickness>
+  <Thickness x:Key="Border.Thick">3</Thickness>
+  
+  <!-- Shadow Depths -->
+  <system:Double x:Key="Shadow.Depth.S">2</system:Double>
+  <system:Double x:Key="Shadow.Depth.M">4</system:Double>
+  <system:Double x:Key="Shadow.Depth.L">8</system:Double>
+</ResourceDictionary>

@@ -1,0 +1,390 @@
+<Window x:Class="AccountingSystem.WPF.Views.ChartsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="النظام المحاسبي الشامل - لوحة الرسوم البيانية" 
+        Height="900" Width="1400"
+        Style="{StaticResource StandardWindow}"
+        WindowState="Maximized">
+
+    <Window.Resources>
+        <!-- ��� ������� (���� �� Linear Gradient(...) ) -->
+        <LinearGradientBrush x:Key="GradHeader" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradCardPurple" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradCardPinkRed" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f093fb" Offset="0"/>
+            <GradientStop Color="#f5576c" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradCardBlueCyan" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#4facfe" Offset="0"/>
+            <GradientStop Color="#00f2fe" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradCardGreenTeal" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#43e97b" Offset="0"/>
+            <GradientStop Color="#38f9d7" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- ����� �������� -->
+        <LinearGradientBrush x:Key="GradBtnPurple" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GradBtnPinkRed" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f093fb" Offset="0"/>
+            <GradientStop Color="#f5576c" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GradBtnBlueCyan" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#4facfe" Offset="0"/>
+            <GradientStop Color="#00f2fe" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GradBtnGreenTeal" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#43e97b" Offset="0"/>
+            <GradientStop Color="#38f9d7" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GradBtnRoseGold" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#fa709a" Offset="0"/>
+            <GradientStop Color="#fee140" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GradBtnAquaRose" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#a8edea" Offset="0"/>
+            <GradientStop Color="#fed6e3" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- ������� -->
+        <Style x:Key="ModernCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="2" BlurRadius="8" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="3" BlurRadius="12" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IconTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="StatLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <Style x:Key="StatValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.95"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="25,20" Background="{StaticResource GradHeader}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="??" FontSize="28" Foreground="White" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                    <StackPanel>
+                        <TextBlock Text="���� ��������� ������� ��������" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="������� ������ �������� ������� ���������" FontSize="14" Foreground="#E8E8E8" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+                    <TextBlock x:Name="txtLastUpdate" Text="��� �����: ���� �������..." FontSize="12" Foreground="#E8E8E8"/>
+                    <TextBlock x:Name="txtDataStatus" Text="���� ��������: ����" FontSize="12" Foreground="#90EE90" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <Button Content="??" ToolTip="����� ��������" Width="40" Height="40"
+                            Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
+                            FontSize="16" Margin="5,0" Click="btnRefreshData_Click"/>
+                    <Button Content="??" ToolTip="����� ��������" Width="40" Height="40"
+                            Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
+                            FontSize="16" Margin="5,0" Click="btnExportReports_Click"/>
+                    <Button Content="??" ToolTip="������� ��������" Width="40" Height="40"
+                            Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
+                            FontSize="16" Margin="5,0" Click="btnChartSettings_Click"/>
+                </StackPanel>
+
+                <Button Grid.Column="3" Content="?" Width="40" Height="40" Background="Transparent"
+                        Foreground="White" BorderBrush="White" BorderThickness="1.5"
+                        FontSize="18" FontWeight="Bold" Click="btnClose_Click" ToolTip="����� �������"/>
+            </Grid>
+        </Border>
+
+        <!-- ������� -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="15">
+            <StackPanel>
+
+                <!-- �������� -->
+                <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ���� �������� ��������"/>
+
+                            <ComboBox Grid.Column="1" x:Name="cmbTimePeriod" Width="150" SelectedIndex="0" SelectionChanged="cmbTimePeriod_SelectionChanged">
+                                <ComboBoxItem Content="�����"/>
+                                <ComboBoxItem Content="�������"/>
+                                <ComboBoxItem Content="����� ������"/>
+                                <ComboBoxItem Content="����� ������"/>
+                                <ComboBoxItem Content="����� �������"/>
+                                <ComboBoxItem Content="����"/>
+                            </ComboBox>
+                        </Grid>
+
+                        <UniformGrid Grid.Row="1" Columns="4" Rows="1">
+                            <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardPurple}">
+                                <StackPanel>
+                                    <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
+                                    <TextBlock Text="������ ��������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtSalesTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtSalesGrowth" Text="?? +12% �� ����� ������" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardPinkRed}">
+                                <StackPanel>
+                                    <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
+                                    <TextBlock Text="������ ���������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtPurchaseTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtPurchaseGrowth" Text="?? -5% �� ����� ������" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardBlueCyan}">
+                                <StackPanel>
+                                    <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
+                                    <TextBlock Text="���� �����" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtProfitTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtProfitMargin" Text="���� �����: 25%" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardGreenTeal}">
+                                <StackPanel>
+                                    <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
+                                    <TextBlock Text="������ ��������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtProductCount" Text="0" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtLowStockAlert" Text="?? 15 ���� ���� ��� ������" FontSize="10" Foreground="#FFE4B5" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <!-- ������ �������� -->
+                <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="400"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ������� �������� ��������"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <ComboBox x:Name="cmbChartType" Width="120" Margin="5,0" SelectedIndex="0" SelectionChanged="cmbChartType_SelectionChanged">
+                                    <ComboBoxItem Content="���"/>
+                                    <ComboBoxItem Content="�����"/>
+                                    <ComboBoxItem Content="�����"/>
+                                    <ComboBoxItem Content="�����"/>
+                                </ComboBox>
+
+                                <ComboBox x:Name="cmbDataType" Width="120" Margin="5,0" SelectedIndex="0" SelectionChanged="cmbDataType_SelectionChanged">
+                                    <ComboBoxItem Content="��������"/>
+                                    <ComboBoxItem Content="���������"/>
+                                    <ComboBoxItem Content="�������"/>
+                                    <ComboBoxItem Content="�������"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Margin="0,10,0,0">
+                            <Grid>
+                                <StackPanel x:Name="chartPlaceholder" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="??" FontSize="48" Foreground="#6C757D" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="���� ��� ����� ������� ���" FontSize="16" Foreground="#6C757D" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                                    <TextBlock Text="����� ����� ����� ������ �������� (LiveCharts)" FontSize="12" Foreground="#ADB5BD" HorizontalAlignment="Center"/>
+                                    <Button Content="����� �������� ���������" Style="{StaticResource ModernButtonStyle}" Margin="0,20,0,0" Click="btnLoadSampleData_Click"/>
+                                </StackPanel>
+
+                                <ContentControl x:Name="chartContainer" Visibility="Collapsed"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- �������� ������� -->
+                <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? �������� ���������� �������"/>
+
+                        <UniformGrid Grid.Row="1" Columns="3" Rows="2">
+                            <Button Content="?? ����� �������� �������" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnDailySalesReport_Click"/>
+                            <Button Content="?? ����� ������� ��������" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnSalesTrendsAnalysis_Click"/>
+                            <Button Content="?? ���� �������� ������" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnTopProductsReport_Click"/>
+                            <Button Content="?? ����� ���� �������" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnInventoryStatusReport_Click"/>
+                            <Button Content="?? ������� ������� �������" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnLowStockAlerts_Click"/>
+                            <Button Content="?? ����� ������� ��� ������" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnProductProfitabilityAnalysis_Click"/>
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <!-- ��������� �������� -->
+                <Border Style="{StaticResource ModernCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? ��������� �������� ���������"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Button Content="?? ����� ���� �������" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnCustomerBehaviorAnalysis_Click"/>
+                                <Button Content="?? ������ ������ ������" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnMonthlyPerformanceComparison_Click"/>
+                                <Button Content="?? ����� ��������� ��������" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSeasonalTrendsAnalysis_Click"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <Button Content="?? ������ ���������" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSalesForecast_Click"/>
+                                <Button Content="?? ����� ��������" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnDemandPlanning_Click"/>
+                                <Button Content="? ���� ������� �������" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnInteractiveDashboard_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ���� ������ -->
+        <Border Grid.Row="2" Background="{DynamicResource TextPrimaryBrush}" Padding="15,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="??" Foreground="#28A745" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="txtStatusMessage" Text="���� ��������� ���� - ���� �������� �����" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" x:Name="txtRecordCount" Text="������ �������: 1,234" Foreground="#6C757D" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
+                <TextBlock Grid.Column="2" x:Name="txtDbConnection" Text="?? ���� ������ ��������" Foreground="#28A745" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
+                <TextBlock Grid.Column="3" x:Name="txtCurrentDateTime" Text="2024-01-01 12:00:00" Foreground="#ADB5BD" FontSize="11" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,314 @@
+﻿<Window x:Class="AccountingSystem.WPF.Views.ItemEntryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ط¥ط¯ط®ط§ظ„/طھط¹ط¯ظٹظ„ طµظ†ظپ"
+        Height="460" Width="750" MinHeight="420" MinWidth="650"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI, Tahoma"
+        FontSize="{StaticResource FontSizeSmall}"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Loaded="Window_Loaded"
+        FocusManager.FocusedElement="{Binding ElementName=cmbProduct}">
+
+    <!-- ================= ط§ط®طھطµط§ط±ط§طھ ط§ظ„ظƒظٹط¨ظˆط±ط¯ ================= -->
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{x:Static ApplicationCommands.Find}"/>
+        <KeyBinding Key="F5" Command="NavigationCommands.PreviousPage"/>
+        <KeyBinding Key="F6" Command="NavigationCommands.NextPage"/>
+        <KeyBinding Modifiers="Control" Key="S" Command="{x:Static ApplicationCommands.Save}"/>
+        <KeyBinding Key="Escape" Command="{x:Static ApplicationCommands.Close}"/>
+    </Window.InputBindings>
+
+    <!-- ================= ظ…ظˆط§ط±ط¯ ظ…ط­ظ„ظٹط© ================= -->
+    <Window.Resources>
+        <!-- ط£ظ†ظ…ط§ط· ظ„ظ„ط­ظ‚ظˆظ„ -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeadingText}"/>
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource ModernTextBox}"/>
+        <Style x:Key="NumericTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource ModernTextBox}">
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource ModernComboBox}"/>
+
+        <!-- ط´ط§ط±ط© ظ…ط¹ظ„ظˆظ…ط§طھ طµط؛ظٹط±ط© -->
+        <Style x:Key="InfoBadge" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Background" Value="{StaticResource InfoBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource InfoBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- طھظ„ظ…ظٹط­ طµط؛ظٹط± -->
+        <Style x:Key="SmallHint" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+
+        <!-- ط£ظٹظ‚ظˆظ†ط© ط­ط§ظ„ط© -->
+        <Style x:Key="StatusIcon" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- ================= طھط®ط·ظٹط· ط§ظ„ظ†ط§ظپط°ط© ================= -->
+    <Grid Margin="12" Background="{DynamicResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ========== ط´ط±ظٹط· ط§ظ„ط¹ظ†ظˆط§ظ† ظ…ط¹ ط£ط²ط±ط§ط± طھظ†ظ‚ظ„ ========== -->
+        <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="8,8,0,0" Padding="12,8" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- ط§ظ„ط¹ظ†ظˆط§ظ† ظˆط§ظ„ط­ط§ظ„ط© -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock x:Name="lblTitle" Text="ط¥ط¶ط§ظپط© طµظ†ظپ ط¬ط¯ظٹط¯" FontSize="{StaticResource FontSizeNormal}" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="lblStatus" Text="â—ڈ" Style="{StaticResource StatusIcon}" Foreground="#4CAF50" ToolTip="ط¬ط§ظ‡ط²"/>
+                </StackPanel>
+
+                <!-- ط£ط²ط±ط§ط± ط§ظ„طھظ†ظ‚ظ„ -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button x:Name="btnPrevious" Content="â—€ ط§ظ„ط³ط§ط¨ظ‚" Style="{StaticResource SecondaryButton}" Click="btnPrevious_Click" IsTabStop="False"/>
+                    <Button x:Name="btnNext" Content="ط§ظ„طھط§ظ„ظٹ â–¶" Style="{StaticResource SecondaryButton}" Click="btnNext_Click" Margin="4,0,0,0" IsTabStop="False"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ========== ظ…ظ†ط·ظ‚ط© ط§ظ„ط¥ط¯ط®ط§ظ„ ط§ظ„ط±ط¦ظٹط³ظٹط© ========== -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- ط¨ط·ط§ظ‚ط© ط§ظ„ظ…ظ†طھط¬ ظˆط§ظ„ظˆط­ط¯ط© -->
+                <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ط§ط®طھظٹط§ط± ط§ظ„ظ…ظ†طھط¬ -->
+                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                            <DockPanel LastChildFill="False" Margin="0,0,0,4">
+                                <TextBlock Text="ط§ظ„ظ…ظ†طھط¬:" Style="{StaticResource HeaderTextStyle}"/>
+                                <TextBlock x:Name="lblProductRequired" Text="*" Foreground="{StaticResource DangerColor}" FontWeight="Bold" Margin="4,0,0,0"/>
+                            </DockPanel>
+                            <ComboBox x:Name="cmbProduct" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      DisplayMemberPath="ProductName"
+                                      IsEditable="True"
+                                      TabIndex="1"
+                                      SelectionChanged="cmbProduct_SelectionChanged"
+                                      PreviewTextInput="cmbProduct_PreviewTextInput"
+                                      DropDownOpened="cmbProduct_DropDownOpened"
+                                      KeyDown="cmbProduct_KeyDown"
+                                      GotKeyboardFocus="cmbProduct_GotKeyboardFocus"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <Button x:Name="btnSearchProduct" Content="ًں”ژ ط¨ط­ط« ظ…ظ†طھط¬" Style="{StaticResource SecondaryButtonStyle}" Click="btnSearchProduct_Click"/>
+                                <TextBlock Text="F1" Style="{StaticResource SmallHint}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- ط§ط®طھظٹط§ط± ط§ظ„ظˆط­ط¯ط© -->
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="ط§ظ„ظˆط­ط¯ط©:" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,4"/>
+                            <ComboBox x:Name="cmbUnit" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      DisplayMemberPath="UnitName"
+                                      TabIndex="2"
+                                      SelectionChanged="cmbUnit_SelectionChanged"
+                                      GotKeyboardFocus="cmbUnit_GotKeyboardFocus"
+                                      PreviewKeyDown="cmbUnit_PreviewKeyDown"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock x:Name="lblFactor" Text="ط§ظ„ظ…ط¹ط§ظ…ظ„: 1" FontSize="10" Foreground="{StaticResource MutedColor}"/>
+                                <TextBlock x:Name="lblStockStatus" Text="â—ڈ" Style="{StaticResource StatusIcon}" Foreground="#FF9800" ToolTip="ظ…طھط§ط­: 0" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ط¨ط·ط§ظ‚ط© ط§ظ„ظƒظ…ظٹط§طھ -->
+                <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ط§ظ„ظƒظ…ظٹط© ط§ظ„ظƒظ„ظٹط© -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <DockPanel LastChildFill="False" Margin="0,0,0,4">
+                                <TextBlock Text="ط§ظ„ظƒظ…ظٹط© (ظƒظ„ظٹ):" Style="{StaticResource HeaderTextStyle}"/>
+                                <TextBlock Text="*" Foreground="{StaticResource DangerColor}" FontWeight="Bold" Margin="4,0,0,0"/>
+                            </DockPanel>
+                            <TextBox x:Name="txtWholeQuantity"
+                                     Style="{StaticResource NumericTextBoxStyle}"
+                                     Text=""
+                                     TabIndex="3"
+                                     TextChanged="txtWholeQuantity_TextChanged"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                     PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"/>
+                            <TextBlock x:Name="lblWholeUnit" Text="ظˆط­ط¯ط© ط±ط¦ظٹط³ظٹط©" FontSize="10" Foreground="{StaticResource MutedColor}" Margin="0,2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- ط§ظ„ظƒظ…ظٹط© ط§ظ„ط¬ط²ط¦ظٹط© -->
+                        <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                            <TextBlock Text="ط§ظ„ظƒظ…ظٹط© (ط¬ط²ط،):" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,4"/>
+                            <TextBox x:Name="txtPartQuantity"
+                                     Style="{StaticResource NumericTextBoxStyle}"
+                                     Text="0"
+                                     TabIndex="4"
+                                     TextChanged="txtPartQuantity_TextChanged"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                     PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"/>
+                            <TextBlock x:Name="lblPartUnit" Text="ظˆط­ط¯ط© ظپط±ط¹ظٹط©" FontSize="10" Foreground="{StaticResource MutedColor}" Margin="0,2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- ظ…ط¹ظ„ظˆظ…ط§طھ ط§ظ„ط±طµظٹط¯ -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0">
+                            <Border Style="{StaticResource InfoBadge}">
+                                <StackPanel>
+                                    <TextBlock Text="ط§ظ„ظ…طھط§ط­" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="lblAvailableStock" Text="0" FontWeight="Bold" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ط¨ط·ط§ظ‚ط© ط§ظ„ط£ط³ط¹ط§ط± -->
+                <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ط§ظ„ط³ط¹ط± ط§ظ„ظƒظ„ظٹ -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="ط§ظ„ط³ط¹ط± (ظƒظ„ظٹ):" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,4"/>
+                            <TextBox x:Name="txtWholePrice"
+                                     Style="{StaticResource NumericTextBoxStyle}"
+                                     Text="0"
+                                     TabIndex="5"
+                                     TextChanged="txtWholePrice_TextChanged"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                     PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"/>
+                            <TextBlock x:Name="lblWholePriceInfo" Text="ط¢ط®ط± ط³ط¹ط± ظ„ظ„ط¹ظ…ظٹظ„" FontSize="10" Foreground="{StaticResource SuccessColor}" Margin="0,2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- ط§ظ„ط³ط¹ط± ط§ظ„ط¬ط²ط¦ظٹ -->
+                        <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                            <TextBlock Text="ط§ظ„ط³ط¹ط± (ط¬ط²ط،):" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,4"/>
+                            <TextBox x:Name="txtPartPrice"
+                                     Style="{StaticResource NumericTextBoxStyle}"
+                                     Text="0"
+                                     TabIndex="6"
+                                     TextChanged="txtPartPrice_TextChanged"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                     PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"/>
+                            <TextBlock Text="طھظ„ظ‚ط§ط¦ظٹ" FontSize="10" Foreground="{StaticResource MutedColor}" Margin="0,2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- ط§ظ„ط®طµظ… -->
+                        <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                            <TextBlock Text="ط®طµظ… ط§ظ„ط³ط·ط±:" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,4"/>
+                            <DockPanel>
+                                <ComboBox x:Name="cmbDiscountType" Style="{StaticResource ComboBoxStyle}" Width="60" DockPanel.Dock="Right" SelectedIndex="0" TabIndex="8">
+                                    <ComboBoxItem Content="%"/>
+                                    <ComboBoxItem Content="ط¬.ظ…"/>
+                                </ComboBox>
+                                <TextBox x:Name="txtDiscount"
+                                         Style="{StaticResource NumericTextBoxStyle}"
+                                         Text="0"
+                                         TabIndex="7"
+                                         TextChanged="txtDiscount_TextChanged"
+                                         GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"
+                                         Margin="0,0,4,0"/>
+                            </DockPanel>
+                            <TextBlock x:Name="lblDiscountAmount" Text="0.00 ط¬.ظ…" FontSize="10" Foreground="{StaticResource WarningColor}" Margin="0,2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ط¨ط·ط§ظ‚ط© ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹ ظˆط§ظ„طھط­ظ‚ظ‚ -->
+                <Border Grid.Row="3" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ط³ط·ط± -->
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                            <TextBlock Text="ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ط³ط·ط±" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="lblLineTotal" Text="0.00 ط¬.ظ…" FontSize="18" FontWeight="Bold" Foreground="{StaticResource SuccessColor}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- طھط­ط°ظٹط±ط§طھ ظˆظ…ظ„ط§ط­ط¸ط§طھ -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0">
+                            <TextBlock x:Name="lblValidationMessage" Text="" Foreground="{StaticResource DangerColor}" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="lblStockWarning" Text="" Foreground="{StaticResource WarningColor}" FontSize="10" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <!-- ظ…ط¹ظ„ظˆظ…ط§طھ ط¥ط¶ط§ظپظٹط© -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock x:Name="lblLastSaleDate" Text="" FontSize="10" Foreground="{StaticResource MutedColor}" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="lblMarginInfo" Text="" FontSize="10" Foreground="{StaticResource InfoColor}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- ========== ط£ط²ط±ط§ط± ط§ظ„طھط­ظƒظ… ========== -->
+        <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="0,10,0,0" Margin="0,10,0,0">
+            <DockPanel LastChildFill="False">
+                <!-- ط£ط²ط±ط§ط± ظٹط³ط§ط± -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button x:Name="btnCancel" Content="âœ— ط¥ظ„ط؛ط§ط،" Style="{StaticResource SecondaryButton}" Click="btnCancel_Click" TabIndex="11"/>
+                </StackPanel>
+
+                <!-- ط£ط²ط±ط§ط± ط±ط¦ظٹط³ظٹط© -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <Button x:Name="btnOK" Content="âœ… ظ…ظˆط§ظپظ‚" Style="{StaticResource PrimaryButtonStyle}" Click="btnOK_Click" TabIndex="9" IsDefault="True"/>
+                    <Button x:Name="btnAddAnother" Content="â‍• ط¥ط¶ط§ظپط© ط¢ط®ط±" Style="{StaticResource SecondaryButtonStyle}" Click="btnAddAnother_Click" TabIndex="10" Margin="8,0,0,0"/>
+                </StackPanel>
+
+                <!-- ط´ط±ظٹط· ط­ط§ظ„ط© -->
+                <TextBlock x:Name="lblStatusBar" DockPanel.Dock="Bottom" Text="ط§ط®طھط± ظ…ظ†طھط¬ ظˆظˆط­ط¯ط© ظ„ظ„ط¨ط¯ط،" FontSize="10" Foreground="{StaticResource MutedColor}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+            </DockPanel>
+        </Border>
+
+        <!-- ========== ط·ط¨ظ‚ط© ط§ظ„طھط­ظ…ظٹظ„ ========== -->
+        <Grid x:Name="BusyOverlay" Grid.RowSpan="3" Visibility="Collapsed" Background="#80000000">
+            <Border Background="White" Padding="18" CornerRadius="10" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="ط¬ط§ط±ظچ ط§ظ„ظ…ط¹ط§ظ„ط¬ط©..." FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Height="12" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

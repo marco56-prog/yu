@@ -1,0 +1,486 @@
+<Window x:Class="AccountingSystem.WPF.Views.PrintTemplateDesignerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="مصمم قوالب الطباعة - نظام المحاسبة" 
+        Height="900" Width="1400"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI"
+        Background="#F8F9FA"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+
+    <Window.Resources>
+        <!-- تعريف الأنماط -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2E86AB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2E86AB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3B9BC8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#6C757D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#6C757D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#7A868F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- رأس النافذة -->
+        <Border Grid.Row="0" Background="#2E86AB" Padding="15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="🎨" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="مصمم قوالب الطباعة" FontSize="20" FontWeight="Bold" 
+                              Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- شريط الأدوات الرئيسي -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="btnNewTemplate" Content="🆕 قالب جديد" 
+                           Style="{StaticResource PrimaryButtonStyle}"
+                           Click="btnNewTemplate_Click"/>
+                    <Button x:Name="btnSaveTemplate" Content="💾 حفظ" 
+                           Style="{StaticResource PrimaryButtonStyle}"
+                           Click="btnSaveTemplate_Click"/>
+                    <Button x:Name="btnPreview" Content="👁️ معاينة" 
+                           Style="{StaticResource SecondaryButtonStyle}"
+                           Click="btnPreview_Click"/>
+                    <Button x:Name="btnExportTemplate" Content="📤 تصدير" 
+                           Style="{StaticResource SecondaryButtonStyle}"
+                           Click="btnExportTemplate_Click"/>
+                    <Button x:Name="btnImportTemplate" Content="📥 استيراد" 
+                           Style="{StaticResource SecondaryButtonStyle}"
+                           Click="btnImportTemplate_Click"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock Text="عدد القوالب:" Foreground="White" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTemplatesCount" Text="0" Foreground="White" FontWeight="Bold" 
+                              VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- المحتوى الرئيسي -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- الشريط الجانبي الأيمن - قائمة القوالب -->
+            <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="15" 
+                   BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,10,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- رأس قائمة القوالب -->
+                    <Border Grid.Row="0" Background="#F8F9FA" Padding="10" CornerRadius="5" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="📋 القوالب المحفوظة" FontSize="16" FontWeight="Bold" 
+                                      HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Grid.Column="0" Text="النوع:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="cmbTemplateType" Grid.Column="1" Height="30" 
+                                         VerticalContentAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- قائمة القوالب -->
+                    <ListBox x:Name="lstTemplates" Grid.Row="1" 
+                            SelectionChanged="lstTemplates_SelectionChanged"
+                            BorderBrush="#E0E0E0" BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White" Padding="10" Margin="2" 
+                                       BorderBrush="#F0F0F0" BorderThickness="1" CornerRadius="5">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Text="{Binding Name}" 
+                                                  FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Grid.Row="1" Text="{Binding Type}" 
+                                                  FontSize="10" Foreground="#6C757D" Margin="0,2,0,0"/>
+                                        <TextBlock Grid.Row="2" Text="{Binding Description}" 
+                                                  FontSize="10" Foreground="#999" Margin="0,2,0,0"
+                                                  TextWrapping="Wrap"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- منطقة التصميم الرئيسية -->
+            <Border Grid.Column="1" Background="White" CornerRadius="8" 
+                   BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,10,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- شريط أدوات التصميم -->
+                    <Border Grid.Row="0" Background="#F8F9FA" Padding="15" 
+                           BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- معلومات القالب -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="اسم القالب:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox x:Name="txtTemplateName" Width="200" Height="30" 
+                                        VerticalContentAlignment="Center"/>
+                                
+                                <TextBlock Text="الوصف:" VerticalAlignment="Center" Margin="20,0,10,0"/>
+                                <TextBox x:Name="txtTemplateDescription" Width="250" Height="30" 
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- أدوات إضافة العناصر -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button x:Name="btnAddText" Content="📝 نص" Width="60" Height="35"
+                                       Style="{StaticResource SecondaryButtonStyle}"
+                                       Click="btnAddText_Click"/>
+                                <Button x:Name="btnAddImage" Content="🖼️ صورة" Width="70" Height="35"
+                                       Style="{StaticResource SecondaryButtonStyle}"
+                                       Click="btnAddImage_Click"/>
+                                <Button x:Name="btnAddLine" Content="📏 خط" Width="60" Height="35"
+                                       Style="{StaticResource SecondaryButtonStyle}"
+                                       Click="btnAddLine_Click"/>
+                                <Button x:Name="btnAddTable" Content="📊 جدول" Width="70" Height="35"
+                                       Style="{StaticResource SecondaryButtonStyle}"
+                                       Click="btnAddTable_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- منطقة التصميم -->
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" 
+                                 VerticalScrollBarVisibility="Auto" Padding="20">
+                        <Grid>
+                            <!-- خلفية التصميم -->
+                            <Border Background="#FAFAFA" BorderBrush="#CCCCCC" 
+                                   BorderThickness="2"
+                                   Width="800" Height="1000" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="3" Color="#CCCCCC" BlurRadius="10"/>
+                                </Border.Effect>
+                                
+                                <!-- لوحة التصميم -->
+                                <Canvas x:Name="designCanvas"
+                                       AllowDrop="True" Focusable="True">
+                                    
+                                    <!-- شبكة الإرشاد -->
+                                    <Canvas.Background>
+                                        <DrawingBrush TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,20,20">
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing>
+                                                    <GeometryDrawing.Geometry>
+                                                        <RectangleGeometry Rect="0,0,20,20"/>
+                                                    </GeometryDrawing.Geometry>
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="#F0F0F0" Thickness="0.5"/>
+                                                    </GeometryDrawing.Pen>
+                                                </GeometryDrawing>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Canvas.Background>
+                                    
+                                    <!-- العناصر المصممة ستظهر هنا -->
+                                </Canvas>
+                            </Border>
+
+                            <!-- مقياس الأحجام -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" 
+                                       VerticalAlignment="Bottom" Margin="0,0,20,20">
+                                <TextBlock Text="مقياس:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <Slider x:Name="zoomSlider" Width="100" Minimum="0.5" Maximum="2.0" 
+                                       Value="1.0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=zoomSlider, StringFormat={}{0:P0}}" 
+                                          VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- الشريط الجانبي الأيسر - خصائص العناصر -->
+            <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="15" 
+                   BorderBrush="#E0E0E0" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- رأس خصائص العناصر -->
+                    <Border Grid.Row="0" Background="#F8F9FA" Padding="10" CornerRadius="5" Margin="0,0,0,15">
+                        <TextBlock Text="⚙️ خصائص العنصر" FontSize="16" FontWeight="Bold" 
+                                  HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <!-- خصائص العنصر المحدد -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="propertiesPanel">
+                            
+                            <!-- خصائص الموضع -->
+                            <Border Background="#F8F9FA" Padding="10" Margin="0,0,0,10" CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="📍 الموضع والحجم" 
+                                              FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="X:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="txtElementX" Grid.Row="1" Grid.Column="1" Height="25" 
+                                            Margin="5,0,0,5" VerticalContentAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Y:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="txtElementY" Grid.Row="2" Grid.Column="1" Height="25" 
+                                            Margin="5,0,0,5" VerticalContentAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="العرض:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="txtElementWidth" Grid.Row="3" Grid.Column="1" Height="25" 
+                                            Margin="5,0,0,5" VerticalContentAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- خصائص النص -->
+                            <Border Background="#F8F9FA" Padding="10" Margin="0,0,0,10" CornerRadius="5">
+                                <StackPanel>
+                                    <TextBlock Text="🔤 خصائص النص" FontWeight="Bold" 
+                                              Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+                                    <TextBlock Text="المحتوى:" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="txtElementContent" Height="60" TextWrapping="Wrap" 
+                                            AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                            <TextBlock Text="الخط:" Margin="0,0,0,3"/>
+                                            <ComboBox x:Name="cmbFontFamily" Height="25">
+                                                <ComboBoxItem Content="Arial"/>
+                                                <ComboBoxItem Content="Times New Roman"/>
+                                                <ComboBoxItem Content="Tahoma"/>
+                                                <ComboBoxItem Content="Verdana"/>
+                                                <ComboBoxItem Content="Calibri"/>
+                                            </ComboBox>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                            <TextBlock Text="الحجم:" Margin="0,0,0,3"/>
+                                            <TextBox x:Name="txtFontSize" Height="25" 
+                                                    VerticalContentAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                            <CheckBox x:Name="chkBold" Content="غامق" Margin="0,0,0,5"/>
+                                            <CheckBox x:Name="chkItalic" Content="مائل"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                            <CheckBox x:Name="chkUnderline" Content="تحته خط" Margin="0,0,0,5"/>
+                                            <CheckBox x:Name="chkStrikethrough" Content="يتوسطه خط"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Margin="0,10,0,0">
+                                        <TextBlock Text="المحاذاة:" Margin="0,0,0,3"/>
+                                        <ComboBox x:Name="cmbTextAlign" Height="25">
+                                            <ComboBoxItem Content="يسار"/>
+                                            <ComboBoxItem Content="وسط"/>
+                                            <ComboBoxItem Content="يمين"/>
+                                            <ComboBoxItem Content="ضبط"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,10,0,0">
+                                        <TextBlock Text="اللون:" Margin="0,0,0,3"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <TextBox x:Name="txtTextColor" Grid.Column="0" Height="25" 
+                                                    VerticalContentAlignment="Center" Text="#000000"/>
+                                            <Border x:Name="colorPreview" Grid.Column="1" Background="Black" 
+                                                   Margin="5,0,0,0" CornerRadius="3"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- أزرار التحكم -->
+                            <Border Background="#F8F9FA" Padding="10" CornerRadius="5">
+                                <StackPanel>
+                                    <TextBlock Text="🛠️ إجراءات" FontWeight="Bold" 
+                                              Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                                    
+                                    <Button Content="تطبيق التغييرات" Height="35" Margin="0,0,0,5"
+                                           Style="{StaticResource PrimaryButtonStyle}"/>
+                                    
+                                    <Button Content="حذف العنصر" Height="35" Margin="0,0,0,5"
+                                           Background="#DC3545" BorderBrush="#DC3545" 
+                                           Foreground="White"/>
+                                    
+                                    <Button Content="نسخ العنصر" Height="35" 
+                                           Style="{StaticResource SecondaryButtonStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- معاينة العنصر -->
+                            <Border Background="#F8F9FA" Padding="10" Margin="0,10,0,0" CornerRadius="5">
+                                <StackPanel>
+                                    <TextBlock Text="👁️ معاينة" FontWeight="Bold" 
+                                              Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                                    
+                                    <Border Background="White" BorderBrush="#CCCCCC" 
+                                           BorderThickness="1" Height="60" Padding="5">
+                                        <TextBlock x:Name="elementPreview" Text="معاينة العنصر" 
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                  TextWrapping="Wrap"/>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- شريط الحالة -->
+        <StatusBar Grid.Row="2" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            
+            <StatusBarItem Grid.Column="0">
+                <TextBlock x:Name="lblStatus" Text="جاهز للتصميم" Foreground="#6C757D"/>
+            </StatusBarItem>
+            
+            <StatusBarItem Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="العناصر: " Foreground="#6C757D"/>
+                    <TextBlock x:Name="lblElementsCount" Text="0" FontWeight="Bold" Foreground="#2E86AB"/>
+                </StackPanel>
+            </StatusBarItem>
+            
+            <StatusBarItem Grid.Column="2">
+                <TextBlock x:Name="lblVersion" Text="الإصدار 1.0" Foreground="#6C757D"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

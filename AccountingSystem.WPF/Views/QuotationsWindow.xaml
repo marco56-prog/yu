@@ -1,0 +1,130 @@
+<Window x:Class="AccountingSystem.WPF.Views.QuotationsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="عروض الأسعار - نظام المحاسبة"
+        Height="600" Width="900"
+        Style="{StaticResource StandardWindow}">
+
+    <Window.Resources>
+        <!-- استخدام الأنماط الموحدة -->
+        <Style x:Key="CardStyle" TargetType="Border" BasedOn="{StaticResource StandardCard}"/>
+        <Style x:Key="ActionButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- الشريط العلوي -->
+        <Border Grid.Row="0" Background="#2196F3" Padding="20,15">
+            <Grid>
+                <StackPanel HorizontalAlignment="Right">
+                    <TextBlock Text="عروض الأسعار" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="إدارة وإنشاء عروض أسعار للعملاء" FontSize="14" Foreground="#BBDEFB" Margin="0,5,0,0"/>
+                </StackPanel>
+                
+                <Button Content="+ عرض أسعار جديد" 
+                        Style="{StaticResource ActionButtonStyle}"
+                        Background="#4CAF50"
+                        HorizontalAlignment="Left"
+                        Click="btnNewQuotation_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- المحتوى الرئيسي -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- شريط البحث والتصفية -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Name="txtSearch" 
+                             Text="البحث في عروض الأسعار..."
+                             FontSize="14" Padding="10"
+                             Foreground="Gray"
+                             GotFocus="txtSearch_GotFocus"
+                             LostFocus="txtSearch_LostFocus"/>
+
+                    <ComboBox Grid.Column="1" Name="cmbStatus" 
+                              Width="150" Margin="10,0"
+                              SelectedIndex="0">
+                        <ComboBoxItem Content="جميع الحالات"/>
+                        <ComboBoxItem Content="في الانتظار"/>
+                        <ComboBoxItem Content="مقبول"/>
+                        <ComboBoxItem Content="مرفوض"/>
+                        <ComboBoxItem Content="منتهي الصلاحية"/>
+                    </ComboBox>
+
+                    <Button Grid.Column="2" Content="تصدير Excel" 
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#4CAF50"/>
+                </Grid>
+
+                <!-- قائمة عروض الأسعار -->
+                <ListView Grid.Row="1" Name="lvQuotations">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="رقم العرض" Width="120" DisplayMemberBinding="{Binding QuotationNumber}"/>
+                            <GridViewColumn Header="اسم العميل" Width="180" DisplayMemberBinding="{Binding CustomerName}"/>
+                            <GridViewColumn Header="تاريخ العرض" Width="120" DisplayMemberBinding="{Binding Date}"/>
+                            <GridViewColumn Header="تاريخ انتهاء الصلاحية" Width="150" DisplayMemberBinding="{Binding ExpiryDate}"/>
+                            <GridViewColumn Header="المبلغ الإجمالي" Width="120" DisplayMemberBinding="{Binding TotalAmount}"/>
+                            <GridViewColumn Header="الحالة" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{Binding StatusColor}" CornerRadius="12" Padding="8,4">
+                                            <TextBlock Text="{Binding Status}" Foreground="White" FontWeight="Bold" 
+                                                       FontSize="11" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="الإجراءات" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="👁️" ToolTip="عرض" Width="30" Height="25" 
+                                                    Background="#2196F3" Foreground="White" BorderThickness="0"
+                                                    Margin="2" Cursor="Hand"/>
+                                            <Button Content="✏️" ToolTip="تحرير" Width="30" Height="25"
+                                                    Background="#FF9800" Foreground="White" BorderThickness="0"
+                                                    Margin="2" Cursor="Hand"/>
+                                            <Button Content="🗑️" ToolTip="حذف" Width="30" Height="25"
+                                                    Background="#F44336" Foreground="White" BorderThickness="0"
+                                                    Margin="2" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- رسالة عندما لا توجد بيانات -->
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Name="pnlNoData" Visibility="Visible">
+                    <TextBlock Text="📄" FontSize="64" HorizontalAlignment="Center" Opacity="0.3"/>
+                    <TextBlock Text="لا توجد عروض أسعار حتى الآن" 
+                               FontSize="18" HorizontalAlignment="Center" 
+                               Foreground="#666" Margin="0,10"/>
+                    <TextBlock Text="انقر على 'عرض أسعار جديد' لإنشاء عرض أسعار" 
+                               FontSize="14" HorizontalAlignment="Center" 
+                               Foreground="#999" Margin="0,5"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

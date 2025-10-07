@@ -56,13 +56,13 @@ namespace AccountingSystem.Business
         public async Task<Result<Product>> GetProductByCodeAsync(string code)
         {
             code = (code ?? string.Empty).Trim();
-            if (code == "") return Result<Product>.Failure("كود المنتج فارغ");
+            if (code == "") return Result.Failure<Product>("كود المنتج فارغ");
 
             var product = await _unitOfWork.Repository<Product>()
                 .SingleOrDefaultAsync(p => p.ProductCode == code && p.IsActive);
 
-            if (product == null) return Result<Product>.Failure("لم يتم العثور على المنتج");
-            return Result<Product>.Success(product);
+            if (product == null) return Result.Failure<Product>("لم يتم العثور على المنتج");
+            return Result.Success(product);
         }
 
     public async Task<Result<Product>> CreateProductAsync(Product product)
@@ -70,7 +70,7 @@ namespace AccountingSystem.Business
             // Validate product name
             var name = (product.ProductName ?? string.Empty).Trim();
             if (string.IsNullOrEmpty(name))
-                return Result<Product>.Failure("اسم المنتج مطلوب");
+                return Result.Failure<Product>("اسم المنتج مطلوب");
 
             product.ProductName = name;
 
@@ -101,7 +101,7 @@ namespace AccountingSystem.Business
 
             await _unitOfWork.Repository<Product>().AddAsync(product);
             await _unitOfWork.SaveChangesAsync();
-            return Result<Product>.Success(product);
+            return Result.Success(product);
         }
 
     public async Task<Product> UpdateProductAsync(Product product)
@@ -302,18 +302,18 @@ namespace AccountingSystem.Business
             try
             {
                 var product = await _unitOfWork.Repository<Product>().GetByIdAsync(productId);
-                if (product == null) return Result<bool>.Failure("المنتج غير موجود");
+                if (product == null) return Result.Failure<bool>("المنتج غير موجود");
 
                 product.CurrentStock = quantity;
 
                 _unitOfWork.Repository<Product>().Update(product);
                 await _unitOfWork.SaveChangesAsync();
 
-                return Result<bool>.Success(true);
+                return Result.Success(true);
             }
             catch (Exception ex)
             {
-                return Result<bool>.Failure(ex.Message);
+                return Result.Failure<bool>(ex.Message);
             }
         }
 
@@ -328,11 +328,11 @@ namespace AccountingSystem.Business
                     .FindAsync(p => p.IsActive && p.CurrentStock <= p.MinimumStock);
 
                 var ordered = products.OrderBy(p => p.CurrentStock);
-                return Result<IEnumerable<Product>>.Success(ordered);
+                return Result.Success<IEnumerable<Product>>(ordered);
             }
             catch (Exception ex)
             {
-                return Result<IEnumerable<Product>>.Failure(ex.Message);
+                return Result.Failure<IEnumerable<Product>>(ex.Message);
             }
         }
 

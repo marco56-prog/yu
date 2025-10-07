@@ -31,7 +31,7 @@ namespace AccountingSystem.Data.Extensions
                         // تعيين طول افتراضي مناسب
                         if (property.GetMaxLength() == null)
                         {
-                            var columnName = property.Name.ToLower();
+                            var columnName = property.Name.ToLowerInvariant();
                             if (columnName.Contains("name") || columnName.Contains("title"))
                             {
                                 builder.HasMaxLength(200);

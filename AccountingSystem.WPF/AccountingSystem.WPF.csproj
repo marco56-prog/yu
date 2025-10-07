@@ -10,6 +10,7 @@
     <EnableDefaultApplicationDefinition>true</EnableDefaultApplicationDefinition>
     <StartupObject>AccountingSystem.WPF.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <!-- تم ترقية جميع المكتبات لتتوافق مع .NET 8 -->
   </PropertyGroup>
 

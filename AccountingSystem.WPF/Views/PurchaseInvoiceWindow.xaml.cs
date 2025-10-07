@@ -22,6 +22,7 @@ namespace AccountingSystem.WPF.Views
         private readonly IPurchaseInvoiceService _purchaseInvoiceService;
         private readonly ISupplierService _supplierService;
         private readonly IProductService _productService;
+        private readonly ISecurityService _securityService;
         private readonly AccountingDbContext _context;
 
         private readonly ObservableCollection<PurchaseInvoiceItem> _invoiceDetails;
@@ -51,6 +52,7 @@ namespace AccountingSystem.WPF.Views
                 _purchaseInvoiceService = serviceProvider.GetRequiredService<IPurchaseInvoiceService>();
                 _supplierService = serviceProvider.GetRequiredService<ISupplierService>();
                 _productService  = serviceProvider.GetRequiredService<IProductService>();
+                _securityService = serviceProvider.GetRequiredService<ISecurityService>();
                 _context         = serviceProvider.GetRequiredService<AccountingDbContext>();
 
                 _invoiceDetails       = new ObservableCollection<PurchaseInvoiceItem>();
@@ -542,6 +544,8 @@ namespace AccountingSystem.WPF.Views
                 var netTotal     = subTotal + taxAmount - _invoiceDetails.Sum(d => d.DiscountAmount);
                 TryParseDecimal(txtPaidAmount.Text, out var paidAmount);
 
+                var currentUser = await _securityService.GetCurrentUserAsync();
+
                 var invoice = new PurchaseInvoice
                 {
                     InvoiceDate        = dpInvoiceDate.SelectedDate ?? DateTime.Now,
@@ -554,7 +558,7 @@ namespace AccountingSystem.WPF.Views
                     RemainingAmount    = Math.Max(0, netTotal - paidAmount),
                     Notes              = txtNotes.Text,
                     Status             = InvoiceStatus.Draft,
-                    CreatedBy          = "system",
+                    CreatedBy          = currentUser?.UserName ?? "system",
                     Items= _invoiceDetails.ToList()
                 };
 

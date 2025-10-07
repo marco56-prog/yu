@@ -31,7 +31,7 @@ namespace AccountingSystem.Business
     /// </summary>
     public class RestoreOptions
     {
-        public bool OverwriteExisting { get; set; } = false;
+        public bool OverwriteExisting { get; set; }
         public bool RestoreData { get; set; } = true;
         public bool RestoreSchema { get; set; } = true;
         public List<string> TablesToRestore { get; set; } = new();
@@ -202,7 +202,7 @@ namespace AccountingSystem.Business
                     FileSize = fileInfo.Length,
                     CreatedAt = startTime,
                     Duration = DateTime.Now - startTime,
-                    TablesBackedUp = await GetTableCountAsync(),
+                    TablesBackedUp = GetTableCount(),
                     RecordsBackedUp = await GetTotalRecordsAsync()
                 };
 
@@ -550,7 +550,7 @@ namespace AccountingSystem.Business
             return "غير متاح";
         }
 
-        private async Task<int> GetTableCountAsync()
+        private static int GetTableCount()
         {
             // حساب عدد الجداول المدعومة
             return 5; // Customers, Suppliers, Products, SalesInvoices, PurchaseInvoices

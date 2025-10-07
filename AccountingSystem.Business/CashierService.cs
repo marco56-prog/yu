@@ -382,13 +382,13 @@ namespace AccountingSystem.Business
     public class CashierPermissions
     {
         public bool CanOpenCashDrawer { get; set; } = true;
-        public bool CanProcessReturns { get; set; } = false;
-        public bool CanApplyDiscounts { get; set; } = false;
-        public bool CanVoidTransactions { get; set; } = false;
-        public bool CanViewReports { get; set; } = false;
-        public bool CanManageInventory { get; set; } = false;
-        public decimal MaxDiscountPercent { get; set; } = 0;
-        public decimal MaxDiscountAmount { get; set; } = 0;
+        public bool CanProcessReturns { get; set; }
+        public bool CanApplyDiscounts { get; set; }
+        public bool CanVoidTransactions { get; set; }
+        public bool CanViewReports { get; set; }
+        public bool CanManageInventory { get; set; }
+        public decimal MaxDiscountPercent { get; set; }
+        public decimal MaxDiscountAmount { get; set; }
     }
 
     /// <summary>

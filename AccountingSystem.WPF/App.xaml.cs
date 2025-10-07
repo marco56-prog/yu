@@ -189,9 +189,9 @@ namespace AccountingSystem.WPF
                 InitializeThemeManager();
                 SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ✅ Theme Manager initialized{Environment.NewLine}");
 
-                // 8) Show main window directly without diagnostic window
-                ShowMainWindowDirectly();
-                SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ✅ MainWindow shown directly{Environment.NewLine}");
+                // 8) Show Login Window, then Main Window on success
+                ShowLoginAndThenMainWindow();
+                SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ✅ Login flow initiated.{Environment.NewLine}");
 
                 base.OnStartup(e);
                 SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ✅ Startup done{Environment.NewLine}");
@@ -495,6 +495,7 @@ namespace AccountingSystem.WPF
             // services.AddScoped<HealthCheckRunner>();
 
             // Windows
+            services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();
             services.AddTransient<DashboardWindow>();
             services.AddTransient<CustomersWindow>();
@@ -598,28 +599,42 @@ namespace AccountingSystem.WPF
             }
         }
 
-        private void ShowMainWindowDirectly()
+        private async void ShowLoginAndThenMainWindow()
         {
             if (_mainWindowShown) return;
 
             try
             {
-                // محاولة إنشاء MainWindow الأصلية
-                var main = _serviceProvider!.GetRequiredService<MainWindow>();
-                MainWindow = main;
+                using var scope = _serviceProvider!.CreateScope();
+                var securityService = scope.ServiceProvider.GetRequiredService<ISecurityService>();
+
+                // 1. Try to login with a saved token
+                var tokenLoginResult = await securityService.LoginWithTokenAsync();
+                if (tokenLoginResult.IsSuccess)
+                {
+                    SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Auto-login successful for user '{tokenLoginResult.User?.UserName}'. Showing MainWindow.{Environment.NewLine}");
+                    ShowMainWindow();
+                    return;
+                }
                 
-                // التأكد من أن النافذة تظهر بشكل صحيح
-                main.Show();
-                main.WindowState = WindowState.Maximized;
-                main.Activate();
-                main.Focus();
-                
-                _mainWindowShown = true;
-                SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] MainWindow shown successfully.{Environment.NewLine}");
+                // 2. If token login fails, show the manual login window
+                SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Auto-login failed. Reason: {tokenLoginResult.Message}. Showing manual login.{Environment.NewLine}");
+                var loginWindow = scope.ServiceProvider.GetRequiredService<LoginWindow>();
+                var loginResult = loginWindow.ShowDialog();
+
+                if (loginResult == true && loginWindow.LoginSuccessful)
+                {
+                    SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Manual login successful. Showing MainWindow.{Environment.NewLine}");
+                    ShowMainWindow();
+                }
+                else
+                {
+                    SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Manual login failed or cancelled. Shutting down.{Environment.NewLine}");
+                    Shutdown();
+                }
             }
             catch (Exception ex)
             {
-                // تشخيص مفصل للـ XAML Parse Exception
                 string detailedError = ex.Message;
                 if (ex is System.Windows.Markup.XamlParseException xamlEx)
                 {
@@ -629,22 +644,27 @@ namespace AccountingSystem.WPF
                         detailedError += $"\nInner Exception: {xamlEx.InnerException.Message}";
                     }
                 }
-                
-                SafeAppend(StartupErrorLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] MainWindow creation failed: {detailedError}{Environment.NewLine}");
+
+                SafeAppend(StartupErrorLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] UI flow failed: {detailedError}{Environment.NewLine}");
                 SafeAppend(StartupErrorLogPath, $"Stack trace: {ex.StackTrace}{Environment.NewLine}");
                 
-                // عرض رسالة خطأ مفيدة للمستخدم
                 MessageBox.Show(
-                    "حدث خطأ في تحميل النافذة الرئيسية:\n\n" + 
-                    detailedError + "\n\n" +
-                    "تم تحسين رسائل الخطأ للتشخيص الدقيق.",
-                    "خطأ في النظام", 
-                    MessageBoxButton.OK, 
+                    "حدث خطأ في تحميل واجهة المستخدم:\n\n" + detailedError,
+                    "خطأ في النظام",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                
-                // إغلاق التطبيق بدلاً من استخدام نافذة بديلة
+
                 Current.Shutdown(1);
             }
+        }
+
+        private void ShowMainWindow()
+        {
+            var main = _serviceProvider!.GetRequiredService<MainWindow>();
+            MainWindow = main;
+            main.Show();
+            main.WindowState = WindowState.Maximized;
+            _mainWindowShown = true;
         }
 
         private static void ShowCriticalError(string title, Exception ex)

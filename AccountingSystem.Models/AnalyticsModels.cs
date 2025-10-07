@@ -289,7 +289,7 @@ public class CustomReport
 
     public string? ChartDefinitions { get; set; } // JSON للرسوم البيانية
 
-    public bool IsPublic { get; set; } = false;
+    public bool IsPublic { get; set; }
     public bool IsActive { get; set; } = true;
 
     [StringLength(50)]

@@ -44,198 +44,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Base.xaml"/>
                 <ResourceDictionary Source="Styles/SideNav.xaml"/>
+                <ResourceDictionary Source="Styles/ComponentStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <!-- محول الرؤية -->
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            
-            <!-- ألوان التطبيق الحديثة -->
-            <SolidColorBrush x:Key="PrimaryBlue" Color="#0078D4"/>
-            <SolidColorBrush x:Key="PrimaryDark" Color="#106EBE"/>
-            <SolidColorBrush x:Key="AccentGreen" Color="#16C60C"/>
-            <SolidColorBrush x:Key="AccentOrange" Color="#FF8C00"/>
-            <SolidColorBrush x:Key="AccentRed" Color="#D13438"/>
-            <SolidColorBrush x:Key="AccentPurple" Color="#8E44AD"/>
-            <SolidColorBrush x:Key="ModernWhite" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="ModernGray" Color="#6C757D"/>
-            <SolidColorBrush x:Key="ModernLight" Color="#F3F2F1"/>
-            <SolidColorBrush x:Key="SidebarBackground" Color="#323130"/>
-            <SolidColorBrush x:Key="SidebarHover" Color="#484644"/>
-            <SolidColorBrush x:Key="CardShadow" Color="#E1DFDD"/>
-            
-            <!-- خلفية متدرجة للشريط العلوي -->
-            <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
-                <GradientStop Color="#0078D4" Offset="0"/>
-                <GradientStop Color="#106EBE" Offset="1"/>
-            </LinearGradientBrush>
-            
-            <!-- أسلوب البطاقات الإحصائية -->
-            <Style x:Key="StatsCard" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource ModernWhite}"/>
-                <Setter Property="CornerRadius" Value="12"/>
-                <Setter Property="Padding" Value="20"/>
-                <Setter Property="Margin" Value="8"/>
-                <Setter Property="Width" Value="220"/>
-                <Setter Property="Height" Value="140"/>
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect ShadowDepth="2" BlurRadius="12" Opacity="0.08" Color="#000000"/>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Effect">
-                            <Setter.Value>
-                                <DropShadowEffect ShadowDepth="4" BlurRadius="20" Opacity="0.15" Color="#000000"/>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            
-            <!-- أزرار العمليات السريعة -->
-            <Style x:Key="QuickActionCard" TargetType="Button">
-                <Setter Property="Background" Value="{StaticResource ModernWhite}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush" Value="{StaticResource CardShadow}"/>
-                <Setter Property="Padding" Value="25,20"/>
-                <Setter Property="Margin" Value="8"/>
-                <Setter Property="FontFamily" Value="Segoe UI, Tahoma"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Width" Value="180"/>
-                <Setter Property="Height" Value="120"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="CardBorder" 
-                                  Background="{TemplateBinding Background}"
-                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                  BorderThickness="{TemplateBinding BorderThickness}"
-                                  CornerRadius="10"
-                                  RenderTransformOrigin="0.5,0.5">
-                                <Border.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform x:Name="CardScaleTransform"/>
-                                        <TranslateTransform x:Name="CardTranslateTransform"/>
-                                    </TransformGroup>
-                                </Border.RenderTransform>
-                                <Border.Effect>
-                                    <DropShadowEffect ShadowDepth="2" BlurRadius="12" Opacity="0.08" Color="#000000"/>
-                                </Border.Effect>
-                                <ContentPresenter HorizontalAlignment="Center" 
-                                                VerticalAlignment="Center" 
-                                                Margin="{TemplateBinding Padding}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="CardBorder" Property="BorderBrush" Value="{StaticResource PrimaryBlue}"/>
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="CardScaleTransform" 
-                                                               Storyboard.TargetProperty="ScaleX" 
-                                                               To="1.03" Duration="0:0:0.2">
-                                                    <DoubleAnimation.EasingFunction>
-                                                        <CubicEase EasingMode="EaseOut"/>
-                                                    </DoubleAnimation.EasingFunction>
-                                                </DoubleAnimation>
-                                                <DoubleAnimation Storyboard.TargetName="CardScaleTransform" 
-                                                               Storyboard.TargetProperty="ScaleY" 
-                                                               To="1.03" Duration="0:0:0.2">
-                                                    <DoubleAnimation.EasingFunction>
-                                                        <CubicEase EasingMode="EaseOut"/>
-                                                    </DoubleAnimation.EasingFunction>
-                                                </DoubleAnimation>
-                                                <DoubleAnimation Storyboard.TargetName="CardTranslateTransform" 
-                                                               Storyboard.TargetProperty="Y" 
-                                                               To="-2" Duration="0:0:0.2"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="CardScaleTransform" 
-                                                               Storyboard.TargetProperty="ScaleX" 
-                                                               To="1.0" Duration="0:0:0.2"/>
-                                                <DoubleAnimation Storyboard.TargetName="CardScaleTransform" 
-                                                               Storyboard.TargetProperty="ScaleY" 
-                                                               To="1.0" Duration="0:0:0.2"/>
-                                                <DoubleAnimation Storyboard.TargetName="CardTranslateTransform" 
-                                                               Storyboard.TargetProperty="Y" 
-                                                               To="0" Duration="0:0:0.2"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="CardBorder" Property="Opacity" Value="0.8"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            
-            <!-- أزرار القائمة الجانبية -->
-            <Style x:Key="SidebarMenuButton" TargetType="Button">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="FontFamily" Value="Segoe UI, Tahoma"/>
-                <Setter Property="FontSize" Value="13"/>
-                <Setter Property="FontWeight" Value="Normal"/>
-                <Setter Property="Padding" Value="20,12"/>
-                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                <Setter Property="HorizontalContentAlignment" Value="Right"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="ButtonBorder" 
-                                  Background="{TemplateBinding Background}"
-                                  CornerRadius="6"
-                                  Margin="5,1">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                VerticalAlignment="Center" 
-                                                Margin="{TemplateBinding Padding}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource SidebarHover}"/>
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="ButtonBorder" 
-                                                               Storyboard.TargetProperty="Opacity" 
-                                                               To="0.9" Duration="0:0:0.15"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="ButtonBorder" 
-                                                               Storyboard.TargetProperty="Opacity" 
-                                                               To="1.0" Duration="0:0:0.15"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource PrimaryDark}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             
             <!-- أنيميشن القائمة الجانبية -->
             <Storyboard x:Key="ShowSidebar">
@@ -444,6 +257,7 @@
                     <MenuItem Header="📝 الفواتير المؤجلة" Click="mnuDraftInvoices_Click"/>
                     <Separator/>
                     <MenuItem Header="↩️ مرتجعات المبيعات" Click="mnuSalesReturns_Click"/>
+                    <MenuItem Header="🔄 إدارة المرتجعات" Click="mnuReturnsManagement_Click"/>
                     <MenuItem Header="📊 عروض الأسعار" Click="mnuQuotations_Click"/>
                     <Separator/>
                     <MenuItem Header="🏷️ إدارة الخصومات" Click="mnuDiscountManagement_Click"/>
@@ -458,6 +272,7 @@
                     <MenuItem Header="📑 أوامر الشراء" Click="mnuPurchaseOrders_Click"/>
                     <Separator/>
                     <MenuItem Header="↩️ مرتجعات المشتريات" Click="mnuPurchaseReturns_Click"/>
+                    <MenuItem Header="🔄 إدارة المرتجعات" Click="mnuReturnsManagement_Click"/>
                 </MenuItem>
 
                 <!-- المخزون والجرد -->
@@ -478,6 +293,7 @@
                     <Separator/>
                     <MenuItem Header="📥 سندات القبض" Click="mnuReceiptVouchers_Click"/>
                     <MenuItem Header="📤 سندات الصرف" Click="mnuPaymentVouchers_Click"/>
+                    <MenuItem Header="↔️ تحويل نقدي" Click="mnuCashTransfer_Click"/>
                     <Separator/>
                     <MenuItem Header="🏛️ الحسابات البنكية" Click="mnuBankAccounts_Click"/>
                     <MenuItem Header="💳 الشيكات" Click="mnuChecks_Click"/>
@@ -503,6 +319,7 @@
                     <MenuItem Header="🖨️ الطباعة الحرارية" Click="mnuThermalPrinting_Click"/>
                     <Separator/>
                     <MenuItem Header="💾 النسخ والاستعادة" Click="mnuBackupRestore_Click"/>
+                    <MenuItem Header="🔄 استيراد/تصدير بيانات" Click="mnuImportExport_Click"/>
                     <MenuItem Header="🔧 صيانة قاعدة البيانات" Click="mnuDatabaseMaintenance_Click"/>
                 </MenuItem>
 

@@ -41,12 +41,12 @@
   <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColorValue}"/>
 
   <!-- Text on color brushes -->
-  <SolidColorBrush x:Key="TextOnPrimaryColor" Color="{StaticResource TextOnPrimaryColorValue}"/>
-  <SolidColorBrush x:Key="TextOnSurfaceColor" Color="{StaticResource TextOnSurfaceColorValue}"/>
-  <SolidColorBrush x:Key="TextOnSuccessColor" Color="{StaticResource TextOnSuccessColorValue}"/>
-  <SolidColorBrush x:Key="TextOnDangerColor" Color="{StaticResource TextOnDangerColorValue}"/>
-  <SolidColorBrush x:Key="TextOnWarningColor" Color="{StaticResource TextOnWarningColorValue}"/>
-  <SolidColorBrush x:Key="TextOnInfoColor" Color="{StaticResource TextOnInfoColorValue}"/>
+  <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="{StaticResource TextOnPrimaryColorValue}"/>
+  <SolidColorBrush x:Key="TextOnSurfaceBrush" Color="{StaticResource TextOnSurfaceColorValue}"/>
+  <SolidColorBrush x:Key="TextOnSuccessBrush" Color="{StaticResource TextOnSuccessColorValue}"/>
+  <SolidColorBrush x:Key="TextOnDangerBrush" Color="{StaticResource TextOnDangerColorValue}"/>
+  <SolidColorBrush x:Key="TextOnWarningBrush" Color="{StaticResource TextOnWarningColorValue}"/>
+  <SolidColorBrush x:Key="TextOnInfoBrush" Color="{StaticResource TextOnInfoColorValue}"/>
 
   <!-- Accent (لو عايزه) -->
   <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource PrimaryColorValue}"/>
@@ -58,11 +58,6 @@
   <SolidColorBrush x:Key="AccentHoverBrush" Color="#1D4ED8"/>
   <SolidColorBrush x:Key="AccentPressedBrush" Color="#1E40AF"/>
   <SolidColorBrush x:Key="DisabledTextBrush" Color="#9CA3AF"/>
-  
-  <!-- موارد للتوافق مع النوافذ -->
-  <SolidColorBrush x:Key="SecondaryColor" Color="{StaticResource SurfaceColorValue}"/>
-  <SolidColorBrush x:Key="CardBackground" Color="{StaticResource SurfaceColorValue}"/>
-  <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextPrimaryColorValue}"/>
 
   <!-- Typography -->
   <FontFamily x:Key="AppFontFamily">Segoe UI, Tahoma, Arial</FontFamily>
@@ -91,9 +86,6 @@
       </Setter.Value>
     </Setter>
   </Style>
-
-  <!-- CardStyle (مطلوب للنوافذ) -->
-  <Style x:Key="CardStyle" TargetType="Border" BasedOn="{StaticResource Card}"/>
 
   <!-- Buttons -->
   <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -128,10 +120,6 @@
   </Style>
   <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}"/>
   
-  <!-- أسماء بديلة مطلوبة -->
-  <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}"/>
-  <Style x:Key="ModernButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}"/>
-
   <!-- TextBox -->
   <Style x:Key="ModernTextBox" TargetType="TextBox">
     <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>

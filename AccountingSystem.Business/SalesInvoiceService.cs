@@ -90,14 +90,16 @@ namespace AccountingSystem.Business
 
             // تحقق شامل
             if (invoice.Items == null || invoice.Items.Count == 0)
-                return Result<SalesInvoice>.Failure("يجب إدخال تفاصيل الفاتورة");
+                return Result.Failure<SalesInvoice>("يجب إدخال تفاصيل الفاتورة");
 
             // سريع: تحقق من توفر المخزون لكل بند قبل المتابعة
             foreach (var d in invoice.Items)
             {
                 var product = await _unitOfWork.Repository<Product>().GetByIdAsync(d.ProductId);
-                if (product == null || !product.IsActive)
-                    return Result<SalesInvoice>.Failure($"المنتج رقم {d.ProductId} غير موجود أو غير نشط");
+                if (product == null)
+                    return Result.Failure<SalesInvoice>($"المنتج رقم {d.ProductId} غير موجود");
+                if(!product.IsActive)
+                    return Result.Failure<SalesInvoice>($"المنتج {(product.ProductName ?? "[اسم غير معروف]")} غير نشط");
 
                 var unitId = d.UnitId ?? product.MainUnitId;
                 decimal qtyInMain = d.Quantity;
@@ -106,12 +108,12 @@ namespace AccountingSystem.Business
                     var productUnit = await _unitOfWork.Repository<ProductUnit>()
                         .SingleOrDefaultAsync(pu => pu.ProductId == product.ProductId && pu.UnitId == unitId && pu.IsActive);
                     if (productUnit == null || productUnit.ConversionFactor <= 0)
-                        return Result<SalesInvoice>.Failure("معامل التحويل للوحدة غير محدد أو غير صالح لهذا المنتج.");
+                        return Result.Failure<SalesInvoice>("معامل التحويل للوحدة غير محدد أو غير صالح لهذا المنتج.");
                     qtyInMain = d.Quantity * productUnit.ConversionFactor;
                 }
 
                 if (product.CurrentStock < qtyInMain)
-                    return Result<SalesInvoice>.Failure("المخزون غير كافي");
+                    return Result.Failure<SalesInvoice>("المخزون غير كافي");
             }
 
             try
@@ -120,7 +122,7 @@ namespace AccountingSystem.Business
             }
             catch (Exception ex)
             {
-                return Result<SalesInvoice>.Failure(ex.Message);
+                return Result.Failure<SalesInvoice>(ex.Message);
             }
 
             // حساب الإجماليات
@@ -148,7 +150,12 @@ namespace AccountingSystem.Business
                     {
                         foreach (var detail in details)
                         {
-                            var unitId = detail.UnitId ?? (await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId))!.MainUnitId;
+                            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId);
+                            if (product == null)
+                            {
+                                throw new InvalidOperationException($"المنتج رقم {detail.ProductId} المرتبط بالفاتورة غير موجود.");
+                            }
+                            var unitId = detail.UnitId ?? product.MainUnitId;
 
                             // Use product service to update stock (will manage transactions appropriately per provider)
                             await _productService.UpdateProductStockAsync(
@@ -179,7 +186,7 @@ namespace AccountingSystem.Business
                 }
 
                 await _unitOfWork.CommitTransactionAsync();
-                return Result<SalesInvoice>.Success(invoice);
+                return Result.Success(invoice);
             }
             catch
             {
@@ -309,8 +316,10 @@ namespace AccountingSystem.Business
                     if (detail.Quantity <= 0)
                         throw new InvalidOperationException("الكمية يجب أن تكون أكبر من صفر");
 
-                    var unitId = detail.UnitId
-                                 ?? (await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId))!.MainUnitId;
+                var product = await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId)
+                    ?? throw new InvalidOperationException($"المنتج رقم {detail.ProductId} المرتبط بالفاتورة غير موجود.");
+
+                var unitId = detail.UnitId ?? product.MainUnitId;
 
                     await _productService.UpdateProductStockAsync(
                         detail.ProductId,
@@ -366,8 +375,10 @@ namespace AccountingSystem.Business
                 // إعادة المخزون
                 foreach (var detail in details)
                 {
-                    var unitId = detail.UnitId
-                                 ?? (await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId))!.MainUnitId;
+                    var product = await _unitOfWork.Repository<Product>().GetByIdAsync(detail.ProductId)
+                        ?? throw new InvalidOperationException($"المنتج رقم {detail.ProductId} المرتبط بالفاتورة الملغاة غير موجود.");
+
+                    var unitId = detail.UnitId ?? product.MainUnitId;
 
                     await _productService.UpdateProductStockAsync(
                         detail.ProductId,
@@ -432,9 +443,10 @@ namespace AccountingSystem.Business
 
             foreach (var d in invoice.Items)
             {
-                var product = await _unitOfWork.Repository<Product>().GetByIdAsync(d.ProductId);
-                if (product == null || !product.IsActive)
-                    throw new InvalidOperationException($"المنتج رقم {d.ProductId} غير موجود أو غير نشط");
+                var product = await _unitOfWork.Repository<Product>().GetByIdAsync(d.ProductId)
+                    ?? throw new InvalidOperationException($"المنتج رقم {d.ProductId} غير موجود");
+                if (!product.IsActive)
+                    throw new InvalidOperationException($"المنتج {(product.ProductName ?? "[اسم غير معروف]")} غير نشط");
 
                 var unitId = d.UnitId ?? product.MainUnitId;
                 var unit = await _unitOfWork.Repository<Unit>().GetByIdAsync(unitId);
@@ -472,6 +484,16 @@ namespace AccountingSystem.Business
 
         private static void CalculateInvoiceTotals(SalesInvoice invoice)
         {
+            if (invoice.Items is null)
+            {
+                invoice.SubTotal = 0;
+                invoice.DiscountAmount = 0;
+                invoice.TaxAmount = 0;
+                invoice.NetTotal = 0;
+                invoice.RemainingAmount = 0;
+                invoice.TotalAmount = 0;
+                return;
+            }
             foreach (var d in invoice.Items)
             {
                 d.TotalPrice = d.Quantity * d.UnitPrice;
@@ -553,7 +575,7 @@ namespace AccountingSystem.Business
             }
             catch
             {
-                return Result<SalesInvoice>.Failure("فشل في حفظ المسودة");
+                return Result.Failure<SalesInvoice>("فشل في حفظ المسودة");
             }
         }
 
@@ -566,11 +588,11 @@ namespace AccountingSystem.Business
             {
                 var list = await _unitOfWork.Repository<SalesInvoice>()
                     .FindAsync(s => s.InvoiceDate >= fromDate && s.InvoiceDate <= toDate);
-                return Result<IEnumerable<SalesInvoice>>.Success(list);
+                return Result.Success(list);
             }
             catch
             {
-                return Result<IEnumerable<SalesInvoice>>.Failure("فشل في جلب الفواتير") ;
+                return Result.Failure<IEnumerable<SalesInvoice>>("فشل في جلب الفواتير") ;
             }
         }
 

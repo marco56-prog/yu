@@ -185,7 +185,7 @@ public class NumberSequence
     [StringLength(20), Unicode(false)]
     public string? Prefix { get; set; } // بادئة
 
-    public int CurrentNumber { get; set; } = 0;
+    public int CurrentNumber { get; set; }
 
     [StringLength(20), Unicode(false)]
     public string? Suffix { get; set; } // لاحقة
@@ -229,7 +229,7 @@ public partial class User
     public DateTime? LastLoginDate { get; set; }
 
     // حقول القفل الأمني الدائم
-    public int FailedAccessCount { get; set; } = 0;
+    public int FailedAccessCount { get; set; }
 
     public DateTime? LockoutEnd { get; set; }
 

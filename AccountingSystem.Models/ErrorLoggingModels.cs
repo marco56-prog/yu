@@ -314,12 +314,12 @@ namespace AccountingSystem.Models
         /// <summary>
         /// هل تم إرسال تنبيه للمطورين؟
         /// </summary>
-        public bool NotificationSent { get; set; }
+    public bool NotificationSent { get; set; }
 
         /// <summary>
         /// هل الخطأ محل إهتمام؟
         /// </summary>
-        public bool IsStarred { get; set; }
+    public bool IsStarred { get; set; }
 
         /// <summary>
         /// ملاحظات إضافية

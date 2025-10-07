@@ -14,7 +14,7 @@ using AccountingSystem.Models;
 namespace AccountingSystem.Business
 {
     // =============================
-    // إدارة RememberMe Token آمن مع DPAPI
+    // إدارة RememberMe Token آمن باستخدام AES (متوافق مع مختلف المنصات)
     // =============================
     public static class SecureTokenManager
     {
@@ -24,6 +24,15 @@ namespace AccountingSystem.Business
             "rememberme.dat"
         );
 
+        // IMPORTANT: In a real-world application, this key should be stored securely
+        // (e.g., using Azure Key Vault, AWS KMS, or other secret management tools)
+        // and not hardcoded. For this exercise, we use a hardcoded key to ensure
+        // cross-platform compatibility without external dependencies.
+        private static readonly byte[] MasterKey = Encoding.UTF8.GetBytes("DefaultMasterKeyForAesEncryption!");
+        private static readonly byte[] Salt = Encoding.UTF8.GetBytes("SaltyBytesGoHere");
+        private const int KeySize = 256;
+        private const int Iterations = 100_000;
+
         private sealed class TokenPayload
         {
             public string Token { get; set; } = string.Empty;
@@ -31,7 +40,54 @@ namespace AccountingSystem.Business
             public string SavedAt { get; set; } = string.Empty; // ISO-8601
         }
 
-        /// <summary>حفظ Token مع تشفير DPAPI للمستخدم الحالي فقط</summary>
+        private static string Encrypt(string plainText)
+        {
+            using var aes = Aes.Create();
+            using var keyDerivation = new Rfc2898DeriveBytes(MasterKey, Salt, Iterations, HashAlgorithmName.SHA256);
+
+            aes.Key = keyDerivation.GetBytes(KeySize / 8);
+            aes.GenerateIV(); // Generate a new IV for each encryption
+
+            using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+            using var ms = new MemoryStream();
+
+            // Prepend IV to the stream
+            ms.Write(aes.IV, 0, aes.IV.Length);
+
+            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+            {
+                using var sw = new StreamWriter(cs);
+                sw.Write(plainText);
+            }
+
+            return Convert.ToBase64String(ms.ToArray());
+        }
+
+        private static string Decrypt(string cipherText)
+        {
+            var fullCipher = Convert.FromBase64String(cipherText);
+
+            using var aes = Aes.Create();
+            var iv = new byte[aes.BlockSize / 8];
+            var cipher = new byte[fullCipher.Length - iv.Length];
+
+            // Extract IV from the beginning of the cipher text
+            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
+            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length);
+
+            using var keyDerivation = new Rfc2898DeriveBytes(MasterKey, Salt, Iterations, HashAlgorithmName.SHA256);
+            aes.Key = keyDerivation.GetBytes(KeySize / 8);
+            aes.IV = iv;
+
+            using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            using var ms = new MemoryStream(cipher);
+            using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
+            using var sr = new StreamReader(cs);
+
+            return sr.ReadToEnd();
+        }
+
+        /// <summary>حفظ Token مع تشفير AES-256 المتوافق مع مختلف المنصات</summary>
         public static bool SaveToken(string token, string username)
         {
             try
@@ -47,22 +103,13 @@ namespace AccountingSystem.Business
                 };
 
                 var json = JsonSerializer.Serialize(payload);
-                var plainBytes = Encoding.UTF8.GetBytes(json);
-
-                // optional entropy لزيادة صلابة التشفير (مشتق من اسم المستخدم)
-                var entropy = Encoding.UTF8.GetBytes($"Entropy::{username}");
-
-                var encryptedBytes = ProtectedData.Protect(
-                    plainBytes,
-                    entropy,
-                    DataProtectionScope.CurrentUser
-                );
+                var encryptedJson = Encrypt(json);
 
                 var dir = Path.GetDirectoryName(TokenFileName);
                 if (!string.IsNullOrEmpty(dir))
                     Directory.CreateDirectory(dir);
 
-                File.WriteAllBytes(TokenFileName, encryptedBytes);
+                File.WriteAllText(TokenFileName, encryptedJson, Encoding.UTF8);
                 return true;
             }
             catch
@@ -71,7 +118,7 @@ namespace AccountingSystem.Business
             }
         }
 
-        /// <summary>قراءة Token مع فك التشفير DPAPI</summary>
+        /// <summary>قراءة Token مع فك تشفير AES-256</summary>
         public static (bool Success, string Token, string Username) LoadToken()
         {
             try
@@ -79,29 +126,11 @@ namespace AccountingSystem.Business
                 if (!File.Exists(TokenFileName))
                     return (false, string.Empty, string.Empty);
 
-                var encryptedBytes = File.ReadAllBytes(TokenFileName);
-
-                // لا نعرف اسم المستخدم مسبقًا لاشتقاق entropy؛ نجرب بدون ثم نحاول استخراجه
-                // في الحفظ استخدمنا entropy من اسم المستخدم، لذا نحتاج المحاولة بكلا الشكلين:
-                // 1) بدون entropy (للإصدارات الأقدم)
-                // 2) بمحاولة فك JSON بسيط ثم إعادة القراءة (لن نستطيع الثانية بدون username)
-                // الحل البسيط: جرب قائمة احتمالات شائعة (لا تتوفر لدينا هنا) — سنستخدم نفس entropy
-                // مع أسماء شائعة غير مجدية. لذلك سنفترض أن الملف تم إنشاؤه بهذه النسخة (entropy من username).
-                // لتجنب الفشل، سنحاول أولاً بدون entropy، ثم بقراءات بديهية:
-                byte[] plainBytes;
-                try
-                {
-                    plainBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
-                }
-                catch
-                {
-                    // لو فشل: لا نعرف username، لا يمكننا بناء entropy الصحيح.
-                    // نعيد فشل ونحذف الملف المتضرر.
-                    ClearToken();
+                var encryptedJson = File.ReadAllText(TokenFileName, Encoding.UTF8);
+                if(string.IsNullOrWhiteSpace(encryptedJson))
                     return (false, string.Empty, string.Empty);
-                }
 
-                var json = Encoding.UTF8.GetString(plainBytes);
+                var json = Decrypt(encryptedJson);
                 var payload = JsonSerializer.Deserialize<TokenPayload>(json);
 
                 if (payload == null || string.IsNullOrWhiteSpace(payload.Username))
@@ -110,9 +139,6 @@ namespace AccountingSystem.Business
                     return (false, string.Empty, string.Empty);
                 }
 
-                // لو كنا حفظنا بالنسخة الجديدة مع entropy، القراءة أعلاه كانت ستفشل،
-                // لكن أعلاه نجحت بدون entropy => الملف غالبًا قديم. لا مشكلة.
-                // مخرجات:
                 return (true, payload.Token ?? string.Empty, payload.Username ?? string.Empty);
             }
             catch
@@ -169,88 +195,88 @@ namespace AccountingSystem.Business
     // =============================
     public static class Permissions
     {
-        public const string CUSTOMERS_VIEW   = "customers.view";
-        public const string CUSTOMERS_CREATE = "customers.create";
-        public const string CUSTOMERS_EDIT   = "customers.edit";
-        public const string CUSTOMERS_DELETE = "customers.delete";
+        public const string CustomersView = "customers.view";
+        public const string CustomersCreate = "customers.create";
+        public const string CustomersEdit = "customers.edit";
+        public const string CustomersDelete = "customers.delete";
 
-        public const string SUPPLIERS_VIEW   = "suppliers.view";
-        public const string SUPPLIERS_CREATE = "suppliers.create";
-        public const string SUPPLIERS_EDIT   = "suppliers.edit";
-        public const string SUPPLIERS_DELETE = "suppliers.delete";
+        public const string SuppliersView = "suppliers.view";
+        public const string SuppliersCreate = "suppliers.create";
+        public const string SuppliersEdit = "suppliers.edit";
+        public const string SuppliersDelete = "suppliers.delete";
 
-        public const string PRODUCTS_VIEW    = "products.view";
-        public const string PRODUCTS_CREATE  = "products.create";
-        public const string PRODUCTS_EDIT    = "products.edit";
-        public const string PRODUCTS_DELETE  = "products.delete";
+        public const string ProductsView = "products.view";
+        public const string ProductsCreate = "products.create";
+        public const string ProductsEdit = "products.edit";
+        public const string ProductsDelete = "products.delete";
 
-        public const string SALES_INVOICES_VIEW   = "sales_invoices.view";
-        public const string SALES_INVOICES_CREATE = "sales_invoices.create";
-        public const string SALES_INVOICES_EDIT   = "sales_invoices.edit";
-        public const string SALES_INVOICES_DELETE = "sales_invoices.delete";
-        public const string SALES_INVOICES_POST   = "sales_invoices.post";
+        public const string SalesInvoicesView = "sales.invoices.view";
+        public const string SalesInvoicesCreate = "sales.invoices.create";
+        public const string SalesInvoicesEdit = "sales.invoices.edit";
+        public const string SalesInvoicesDelete = "sales.invoices.delete";
+        public const string SalesInvoicesPost = "sales.invoices.post";
 
-        public const string REPORTS_SALES     = "reports.sales";
-        public const string REPORTS_INVENTORY = "reports.inventory";
-        public const string REPORTS_PROFIT    = "reports.profit";
-        public const string REPORTS_CUSTOMERS = "reports.customers";
+        public const string ReportsSales = "reports.sales";
+        public const string ReportsInventory = "reports.inventory";
+        public const string ReportsProfit = "reports.profit";
+        public const string ReportsCustomers = "reports.customers";
 
-        public const string SYSTEM_SETTINGS = "system.settings";
-        public const string USER_MANAGEMENT = "user.management";
-        public const string BACKUP_RESTORE  = "backup.restore";
+        public const string SystemSettings = "system.settings";
+        public const string UserManagement = "user.management";
+        public const string BackupRestore = "backup.restore";
     }
 
     public static class Roles
     {
-        public const string ADMIN      = "admin";
-        public const string MANAGER    = "manager";
+        public const string ADMIN = "admin";
+        public const string MANAGER = "manager";
         public const string ACCOUNTANT = "accountant";
-        public const string CASHIER    = "cashier";
-        public const string VIEWER     = "viewer";
+        public const string CASHIER = "cashier";
+        public const string VIEWER = "viewer";
 
         public static readonly Dictionary<string, List<string>> RolePermissions =
             new(StringComparer.OrdinalIgnoreCase)
             {
                 [ADMIN] = new List<string>
                 {
-                    Permissions.CUSTOMERS_VIEW, Permissions.CUSTOMERS_CREATE, Permissions.CUSTOMERS_EDIT, Permissions.CUSTOMERS_DELETE,
-                    Permissions.SUPPLIERS_VIEW, Permissions.SUPPLIERS_CREATE, Permissions.SUPPLIERS_EDIT, Permissions.SUPPLIERS_DELETE,
-                    Permissions.PRODUCTS_VIEW, Permissions.PRODUCTS_CREATE, Permissions.PRODUCTS_EDIT, Permissions.PRODUCTS_DELETE,
-                    Permissions.SALES_INVOICES_VIEW, Permissions.SALES_INVOICES_CREATE, Permissions.SALES_INVOICES_EDIT,
-                    Permissions.SALES_INVOICES_DELETE, Permissions.SALES_INVOICES_POST,
-                    Permissions.REPORTS_SALES, Permissions.REPORTS_INVENTORY, Permissions.REPORTS_PROFIT, Permissions.REPORTS_CUSTOMERS,
-                    Permissions.SYSTEM_SETTINGS, Permissions.USER_MANAGEMENT, Permissions.BACKUP_RESTORE
+                    Permissions.CustomersView, Permissions.CustomersCreate, Permissions.CustomersEdit, Permissions.CustomersDelete,
+                    Permissions.SuppliersView, Permissions.SuppliersCreate, Permissions.SuppliersEdit, Permissions.SuppliersDelete,
+                    Permissions.ProductsView, Permissions.ProductsCreate, Permissions.ProductsEdit, Permissions.ProductsDelete,
+                    Permissions.SalesInvoicesView, Permissions.SalesInvoicesCreate, Permissions.SalesInvoicesEdit,
+                    Permissions.SalesInvoicesDelete, Permissions.SalesInvoicesPost,
+                    Permissions.ReportsSales, Permissions.ReportsInventory, Permissions.ReportsProfit, Permissions.ReportsCustomers,
+                    Permissions.SystemSettings, Permissions.UserManagement, Permissions.BackupRestore
                 },
                 [MANAGER] = new List<string>
                 {
-                    Permissions.CUSTOMERS_VIEW, Permissions.CUSTOMERS_CREATE, Permissions.CUSTOMERS_EDIT,
-                    Permissions.SUPPLIERS_VIEW, Permissions.SUPPLIERS_CREATE, Permissions.SUPPLIERS_EDIT,
-                    Permissions.PRODUCTS_VIEW, Permissions.PRODUCTS_CREATE, Permissions.PRODUCTS_EDIT,
-                    Permissions.SALES_INVOICES_VIEW, Permissions.SALES_INVOICES_CREATE, Permissions.SALES_INVOICES_EDIT,
-                    Permissions.SALES_INVOICES_POST,
-                    Permissions.REPORTS_SALES, Permissions.REPORTS_INVENTORY, Permissions.REPORTS_PROFIT, Permissions.REPORTS_CUSTOMERS
+                    Permissions.CustomersView, Permissions.CustomersCreate, Permissions.CustomersEdit,
+                    Permissions.SuppliersView, Permissions.SuppliersCreate, Permissions.SuppliersEdit,
+                    Permissions.ProductsView, Permissions.ProductsCreate, Permissions.ProductsEdit,
+                    Permissions.SalesInvoicesView, Permissions.SalesInvoicesCreate, Permissions.SalesInvoicesEdit,
+                    Permissions.SalesInvoicesPost,
+                    Permissions.ReportsSales, Permissions.ReportsInventory, Permissions.ReportsProfit, Permissions.ReportsCustomers
                 },
                 [ACCOUNTANT] = new List<string>
                 {
-                    Permissions.CUSTOMERS_VIEW, Permissions.CUSTOMERS_CREATE, Permissions.CUSTOMERS_EDIT,
-                    Permissions.SUPPLIERS_VIEW, Permissions.SUPPLIERS_CREATE, Permissions.SUPPLIERS_EDIT,
-                    Permissions.SALES_INVOICES_VIEW, Permissions.SALES_INVOICES_CREATE, Permissions.SALES_INVOICES_EDIT,
-                    Permissions.SALES_INVOICES_POST,
-                    Permissions.REPORTS_SALES, Permissions.REPORTS_INVENTORY, Permissions.REPORTS_PROFIT, Permissions.REPORTS_CUSTOMERS
+                    Permissions.CustomersView, Permissions.CustomersCreate, Permissions.CustomersEdit,
+                    Permissions.SuppliersView, Permissions.SuppliersCreate, Permissions.SuppliersEdit,
+                    Permissions.SalesInvoicesView, Permissions.SalesInvoicesCreate, Permissions.SalesInvoicesEdit,
+                    Permissions.SalesInvoicesPost,
+                    Permissions.ReportsSales, Permissions.ReportsInventory, Permissions.ReportsProfit, Permissions.ReportsCustomers
                 },
                 [CASHIER] = new List<string>
                 {
-                    Permissions.CUSTOMERS_VIEW,
-                    Permissions.PRODUCTS_VIEW,
-                    Permissions.SALES_INVOICES_VIEW, Permissions.SALES_INVOICES_CREATE
+                    Permissions.CustomersView,
+                    Permissions.ProductsView,
+                    Permissions.SalesInvoicesView, Permissions.SalesInvoicesCreate
                 },
                 [VIEWER] = new List<string>
                 {
-                    Permissions.CUSTOMERS_VIEW,
-                    Permissions.SUPPLIERS_VIEW,
-                    Permissions.PRODUCTS_VIEW,
-                    Permissions.SALES_INVOICES_VIEW,
-                    Permissions.REPORTS_SALES, Permissions.REPORTS_INVENTORY, Permissions.REPORTS_CUSTOMERS
+                    Permissions.CustomersView,
+                    Permissions.SuppliersView,
+                    Permissions.ProductsView,
+                    Permissions.SalesInvoicesView,
+                    Permissions.ReportsSales, Permissions.ReportsInventory, Permissions.ReportsCustomers
                 }
             };
     }

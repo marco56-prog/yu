@@ -16,7 +16,7 @@ public class Role
     [StringLength(200)]
     public string? Description { get; set; }
 
-    public bool IsSystemRole { get; set; } = false; // الأدوار الأساسية للنظام
+    public bool IsSystemRole { get; set; } // الأدوار الأساسية للنظام
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -29,11 +29,11 @@ public class Role
 
     // العلاقات
     public virtual ICollection<User> Users { get; set; } = new List<User>();
-    public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+    public virtual ICollection<RolePermissionLink> RolePermissions { get; set; } = new List<RolePermissionLink>();
 }
 
 // نموذج الصلاحيات
-public class Permission
+public class PermissionEntity
 {
     [Key]
     public int PermissionId { get; set; }
@@ -50,7 +50,7 @@ public class Permission
     [StringLength(50)]
     public string Category { get; set; } = "General"; // Sales, Inventory, Reports, etc.
 
-    public bool IsSystemPermission { get; set; } = false;
+    public bool IsSystemPermission { get; set; }
 
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
@@ -58,12 +58,12 @@ public class Permission
     public byte[] RowVersion { get; set; } = default!;
 
     // العلاقات
-    public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+    public virtual ICollection<RolePermissionLink> RolePermissions { get; set; } = new List<RolePermissionLink>();
 }
 
 // ربط الأدوار بالصلاحيات
 [Index(nameof(RoleId), nameof(PermissionId), IsUnique = true)]
-public class RolePermission
+public class RolePermissionLink
 {
     [Key]
     public int RolePermissionId { get; set; }
@@ -86,7 +86,7 @@ public class RolePermission
     public virtual Role Role { get; set; } = null!;
 
     [ForeignKey(nameof(PermissionId))]
-    public virtual Permission Permission { get; set; } = null!;
+    public virtual PermissionEntity Permission { get; set; } = null!;
 }
 
 // نموذج سجل العمليات (Audit Log)
@@ -175,7 +175,7 @@ public class UserSession
     public string? MachineName { get; set; }
 
     public bool IsActive { get; set; } = true;
-    public bool ForceLogout { get; set; } = false;
+    public bool ForceLogout { get; set; }
 
     [StringLength(200)]
     public string? LogoutReason { get; set; }
@@ -239,7 +239,7 @@ public class BackupInfo
     public string BackupType { get; set; } = "Full"; // Full, Incremental, Differential
 
     public bool IsCompressed { get; set; } = true;
-    public bool IsEncrypted { get; set; } = false;
+    public bool IsEncrypted { get; set; }
 
     [StringLength(500)]
     public string? Description { get; set; }
@@ -252,7 +252,7 @@ public class BackupInfo
     [StringLength(50)]
     public string CreatedBy { get; set; } = string.Empty;
 
-    public bool IsDeleted { get; set; } = false;
+    public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
 
     // إحصائيات النسخة الاحتياطية
@@ -285,8 +285,8 @@ public class SecuritySettings
     [StringLength(50)]
     public string Category { get; set; } = "General"; // Password, Session, Backup, etc.
 
-    public bool IsSystemSetting { get; set; } = false;
-    public bool RequiresRestart { get; set; } = false;
+    public bool IsSystemSetting { get; set; }
+    public bool RequiresRestart { get; set; }
 
     public DateTime UpdatedDate { get; set; } = DateTime.Now;
 
@@ -323,7 +323,7 @@ public class SecurityIncident
     [StringLength(50)]
     public string Severity { get; set; } = "Medium"; // Low, Medium, High, Critical
 
-    public bool IsResolved { get; set; } = false;
+    public bool IsResolved { get; set; }
     public DateTime? ResolvedDate { get; set; }
 
     [StringLength(50)]
@@ -342,9 +342,9 @@ public partial class User
     public int? RoleId { get; set; }
 
     public DateTime? LastPasswordChange { get; set; }
-    public bool MustChangePassword { get; set; } = false;
+    public bool MustChangePassword { get; set; }
 
-    public bool TwoFactorEnabled { get; set; } = false;
+    public bool TwoFactorEnabled { get; set; }
 
     [StringLength(100)]
     public string? TwoFactorSecret { get; set; }

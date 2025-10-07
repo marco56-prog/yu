@@ -260,7 +260,7 @@ namespace AccountingSystem.Business
         private async Task<Result<Product>> GetProductByCodeInternalAsync(string code)
         {
             code = (code ?? string.Empty).Trim();
-            if (code == "") return Result<Product>.Failure("كود المنتج فارغ");
+            if (code == "") return Result.Failure<Product>("كود المنتج فارغ");
 
             var codeNorm = code.ToLowerInvariant();
 
@@ -268,8 +268,8 @@ namespace AccountingSystem.Business
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductCode.Equals(codeNorm, StringComparison.OrdinalIgnoreCase));
 
-            if (product == null) return Result<Product>.Failure("لم يتم العثور على المنتج");
-            return Result<Product>.Success(product);
+            if (product == null) return Result.Failure<Product>("لم يتم العثور على المنتج");
+            return Result.Success(product);
         }
 
         // If a consumer expects a nullable Product (legacy), they can call GetProductByCodeInternalAsync and

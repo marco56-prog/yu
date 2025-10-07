@@ -26,55 +26,55 @@ public interface IRepository<T> where T : class
 // تنفيذ المستودع العام
 public class Repository<T> : IRepository<T> where T : class
 {
-    protected readonly AccountingDbContext _context;
-    protected readonly DbSet<T> _dbSet;
+    protected AccountingDbContext Context { get; }
+    protected DbSet<T> DbSet { get; }
 
     public Repository(AccountingDbContext context)
     {
-        _context = context;
-        _dbSet = context.Set<T>();
+        Context = context;
+        DbSet = context.Set<T>();
     }
 
     // ملاحظة: FindAsync يعيد كيان متعقَّب من EF، وهو مناسب للتحديث لاحقًا
     public virtual async Task<T?> GetByIdAsync(int id)
-        => await _dbSet.FindAsync(id);
+        => await DbSet.FindAsync(id);
 
     // قراءات بدون تتبّع للأداء؛ استخدم Update/Attach للتعديل
     public virtual async Task<IEnumerable<T>> GetAllAsync()
-        => await _dbSet.AsNoTracking().ToListAsync();
+        => await DbSet.AsNoTracking().ToListAsync();
 
     public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        => await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+        => await DbSet.AsNoTracking().Where(predicate).ToListAsync();
 
     public virtual async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
-        => await _dbSet.AsNoTracking().SingleOrDefaultAsync(predicate);
+        => await DbSet.AsNoTracking().SingleOrDefaultAsync(predicate);
 
     public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
-        => await _dbSet.AnyAsync(predicate);
+        => await DbSet.AnyAsync(predicate);
 
     public virtual async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
-        => predicate == null ? await _dbSet.CountAsync() : await _dbSet.CountAsync(predicate);
+        => predicate == null ? await DbSet.CountAsync() : await DbSet.CountAsync(predicate);
 
     public virtual async Task AddAsync(T entity)
-        => await _dbSet.AddAsync(entity);
+        => await DbSet.AddAsync(entity);
 
     public virtual async Task AddRangeAsync(IEnumerable<T> entities)
-        => await _dbSet.AddRangeAsync(entities);
+        => await DbSet.AddRangeAsync(entities);
 
     public virtual void Update(T entity)
-        => _dbSet.Update(entity);
+        => DbSet.Update(entity);
 
     public virtual void UpdateRange(IEnumerable<T> entities)
-        => _dbSet.UpdateRange(entities);
+        => DbSet.UpdateRange(entities);
 
     public virtual void Remove(T entity)
-        => _dbSet.Remove(entity);
+        => DbSet.Remove(entity);
 
     public virtual void RemoveRange(IEnumerable<T> entities)
-        => _dbSet.RemoveRange(entities);
+        => DbSet.RemoveRange(entities);
 
     public virtual IQueryable<T> Where(Expression<Func<T, bool>> predicate)
-        => _dbSet.Where(predicate);
+        => DbSet.Where(predicate);
 }
 
 // واجهة وحدة العمل مع جميع الخصائص المطلوبة

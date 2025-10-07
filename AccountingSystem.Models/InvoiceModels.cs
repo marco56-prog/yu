@@ -66,7 +66,7 @@ namespace AccountingSystem.Models
 
         public InvoiceStatus Status { get; set; } = InvoiceStatus.Draft;
 
-        public bool IsPosted { get; set; } = false;
+        public bool IsPosted { get; set; }
 
         [StringLength(500)]
         public string Notes { get; set; } = string.Empty;

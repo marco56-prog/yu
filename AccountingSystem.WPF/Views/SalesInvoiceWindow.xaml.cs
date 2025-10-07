@@ -27,6 +27,7 @@ namespace AccountingSystem.WPF.Views
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
         private readonly IPriceHistoryService _priceHistoryService;
+        private readonly ISecurityService _securityService;
         private readonly AccountingDbContext _context;
         private readonly IServiceProvider _serviceProvider;
 
@@ -67,6 +68,7 @@ namespace AccountingSystem.WPF.Views
             _customerService     = _serviceProvider.GetRequiredService<ICustomerService>();
             _productService      = _serviceProvider.GetRequiredService<IProductService>();
             _priceHistoryService = _serviceProvider.GetRequiredService<IPriceHistoryService>();
+            _securityService     = _serviceProvider.GetRequiredService<ISecurityService>();
             _context             = _serviceProvider.GetRequiredService<AccountingDbContext>();
 
             _customersView = CollectionViewSource.GetDefaultView(_customers);
@@ -659,6 +661,8 @@ namespace AccountingSystem.WPF.Views
                     NetAmount      = d.NetAmount
                 }).ToList();
 
+                var currentUser = await _securityService.GetCurrentUserAsync();
+
                 var invoice = new SalesInvoice
                 {
                     InvoiceDate         = dpInvoiceDate.SelectedDate ?? DateTime.Now,
@@ -671,7 +675,7 @@ namespace AccountingSystem.WPF.Views
                     RemainingAmount     = Math.Max(0, netTotal - paidAmount),
                     Notes               = txtNotes.Text,
                     Status              = InvoiceStatus.Draft,
-                    CreatedBy           = "system",
+                    CreatedBy           = currentUser?.UserName ?? "system",
                     Items               = detailsForSave
                 };
 
@@ -1115,17 +1119,39 @@ namespace AccountingSystem.WPF.Views
 
         private void cmbCustomer_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // Handle customer combobox key navigation
+            if (e.Key == Key.Enter)
+            {
+                if (sender is ComboBox cb && cb.IsDropDownOpen)
+                {
+                    if (cb.SelectedIndex < 0 && cb.Items.Count > 0) cb.SelectedIndex = 0;
+                    cb.IsDropDownOpen = false;
+                }
+                MoveFocusToNextAndSelect();
+                e.Handled = true;
+            }
         }
 
         private void txtInvoiceNotes_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // Handle invoice notes key navigation
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
+            {
+                MoveFocusToNextAndSelect();
+                e.Handled = true;
+            }
         }
 
         private void cmbProduct_KeyDown(object sender, KeyEventArgs e)
         {
-            // Handle product combobox key navigation
+            if (e.Key == Key.Enter)
+            {
+                if (sender is ComboBox cb && cb.IsDropDownOpen)
+                {
+                    if (cb.SelectedIndex < 0 && cb.Items.Count > 0) cb.SelectedIndex = 0;
+                    cb.IsDropDownOpen = false;
+                }
+                MoveFocusToNextAndSelect();
+                e.Handled = true;
+            }
         }
 
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

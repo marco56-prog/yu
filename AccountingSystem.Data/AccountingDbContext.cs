@@ -101,8 +101,8 @@ public class AccountingDbContext : DbContext
 
     // نماذج الأمان المتقدم
     public DbSet<Role> Roles { get; set; }
-    public DbSet<Permission> Permissions { get; set; }
-    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<PermissionEntity> Permissions { get; set; }
+    public DbSet<RolePermissionLink> RolePermissions { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
     public DbSet<DataSecurity> DataSecurities { get; set; }

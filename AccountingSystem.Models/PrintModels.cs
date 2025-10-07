@@ -39,7 +39,7 @@ namespace AccountingSystem.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
         
-        public bool IsDefault { get; set; } = false;
+        public bool IsDefault { get; set; }
         public bool IsActive { get; set; } = true;
         
         [StringLength(100)]
@@ -71,8 +71,8 @@ namespace AccountingSystem.Models
         public string Content { get; set; } = string.Empty;
         
         // موضع العنصر (بالمليمتر من الأعلى والشمال)
-        public double X { get; set; } = 0;
-        public double Y { get; set; } = 0;
+        public double X { get; set; }
+        public double Y { get; set; }
         public double Width { get; set; } = 100;
         public double Height { get; set; } = 20;
         
@@ -96,7 +96,7 @@ namespace AccountingSystem.Models
         public string BackgroundColor { get; set; } = "Transparent";
         [StringLength(10)]
         public string BorderColor { get; set; } = "#000000";
-        public double BorderWidth { get; set; } = 0;
+        public double BorderWidth { get; set; }
         
         // خصائص خاصة للجداول
         public int? ColumnCount { get; set; }
@@ -115,12 +115,12 @@ namespace AccountingSystem.Models
         public string BarcodeFormat { get; set; } = "CODE128"; // CODE128, QR_CODE, EAN13, etc.
         
         // خصائص عامة
-        public int ZIndex { get; set; } = 0;
+        public int ZIndex { get; set; }
         public bool IsVisible { get; set; } = true;
-        public bool IsLocked { get; set; } = false;
+        public bool IsLocked { get; set; }
         
         // التدوير بالدرجات
-        public double Rotation { get; set; } = 0;
+        public double Rotation { get; set; }
         
         // الشفافية (0-100)
         public double Opacity { get; set; } = 100;
@@ -156,10 +156,10 @@ namespace AccountingSystem.Models
         public bool IsColorPrint { get; set; } = true;
         
         // طباعة على وجهين
-        public bool IsDuplexPrint { get; set; } = false;
+        public bool IsDuplexPrint { get; set; }
         
         // حفظ كـ PDF تلقائياً
-        public bool AutoSaveAsPdf { get; set; } = false;
+        public bool AutoSaveAsPdf { get; set; }
         [StringLength(500)]
         public string PdfSavePath { get; set; } = string.Empty;
         
@@ -169,7 +169,7 @@ namespace AccountingSystem.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
         
-        public bool IsDefault { get; set; } = false;
+        public bool IsDefault { get; set; }
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ namespace AccountingSystem.Models
         
         // معلومات إضافية
         public int PageCount { get; set; } = 1;
-        public decimal PrintCost { get; set; } = 0;
+        public decimal PrintCost { get; set; }
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ namespace AccountingSystem.Models
             Fields[key] = value;
         }
         
-        public T GetField<T>(string key, T defaultValue = default)
+        public T? GetField<T>(string key, T? defaultValue = default)
         {
             if (Fields.TryGetValue(key, out var value) && value is T typedValue)
             {

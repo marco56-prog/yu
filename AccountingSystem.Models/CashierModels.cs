@@ -48,18 +48,18 @@ namespace AccountingSystem.Models
 
         // الصلاحيات
         public bool CanOpenCashDrawer { get; set; } = true;
-        public bool CanProcessReturns { get; set; } = false;
-        public bool CanApplyDiscounts { get; set; } = false;
-        public bool CanVoidTransactions { get; set; } = false;
-        public bool CanViewReports { get; set; } = false;
-        public bool CanManageInventory { get; set; } = false;
-        public bool CanAccessSettings { get; set; } = false;
+        public bool CanProcessReturns { get; set; }
+        public bool CanApplyDiscounts { get; set; }
+        public bool CanVoidTransactions { get; set; }
+        public bool CanViewReports { get; set; }
+        public bool CanManageInventory { get; set; }
+        public bool CanAccessSettings { get; set; }
 
         [Column(TypeName = "decimal(5,2)")]
-        public decimal MaxDiscountPercent { get; set; } = 0;
+        public decimal MaxDiscountPercent { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal MaxDiscountAmount { get; set; } = 0;
+        public decimal MaxDiscountAmount { get; set; }
 
         // معلومات التدقيق
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -86,31 +86,31 @@ namespace AccountingSystem.Models
         public DateTime? EndTime { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal OpeningBalance { get; set; } = 0;
+        public decimal OpeningBalance { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal ClosingBalance { get; set; } = 0;
+        public decimal ClosingBalance { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal ExpectedClosingBalance { get; set; } = 0;
+        public decimal ExpectedClosingBalance { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal CashSalesTotal { get; set; } = 0;
+        public decimal CashSalesTotal { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal CardSalesTotal { get; set; } = 0;
+        public decimal CardSalesTotal { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalSales { get; set; } = 0;
+        public decimal TotalSales { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalReturns { get; set; } = 0;
+        public decimal TotalReturns { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalDiscounts { get; set; } = 0;
+        public decimal TotalDiscounts { get; set; }
 
-        public int TransactionsCount { get; set; } = 0;
-        public int ReturnsCount { get; set; } = 0;
+        public int TransactionsCount { get; set; }
+        public int ReturnsCount { get; set; }
 
         [MaxLength(50)]
         public string Status { get; set; } = "مفتوحة"; // مفتوحة، مغلقة، معلقة
@@ -118,7 +118,7 @@ namespace AccountingSystem.Models
         [MaxLength(500)]
         public string? Notes { get; set; }
 
-        public bool IsClosed { get; set; } = false;
+    public bool IsClosed { get; set; }
 
         // العلاقات
         [ForeignKey("CashierId")]
@@ -187,8 +187,8 @@ namespace AccountingSystem.Models
         [MaxLength(500)]
         public string? Notes { get; set; }
 
-        public bool IsPrinted { get; set; } = false;
-        public bool IsVoided { get; set; } = false;
+    public bool IsPrinted { get; set; }
+    public bool IsVoided { get; set; }
         public DateTime? VoidedAt { get; set; }
         public string? VoidReason { get; set; }
 
@@ -343,7 +343,7 @@ namespace AccountingSystem.Models
         public string DiscountType { get; set; } = "نسبة"; // نسبة، مبلغ ثابت
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal DiscountValue { get; set; } = 0;
+        public decimal DiscountValue { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal? MinimumAmount { get; set; }
@@ -362,10 +362,10 @@ namespace AccountingSystem.Models
         public int? ProductId { get; set; }
         public int? CategoryId { get; set; }
 
-        public int UsageLimit { get; set; } = 0; // 0 = بلا حدود
-        public int TimesUsed { get; set; } = 0;
+        public int UsageLimit { get; set; } // 0 = بلا حدود
+        public int TimesUsed { get; set; }
 
-        public bool RequiresApproval { get; set; } = false;
+        public bool RequiresApproval { get; set; }
 
         // العلاقات
         [ForeignKey("ProductId")]
@@ -420,9 +420,9 @@ namespace AccountingSystem.Models
         [Required]
         public int LoyaltyProgramId { get; set; }
 
-        public int PointsEarned { get; set; } = 0;
-        public int PointsRedeemed { get; set; } = 0;
-        public int PointsBalance { get; set; } = 0;
+        public int PointsEarned { get; set; }
+        public int PointsRedeemed { get; set; }
+        public int PointsBalance { get; set; }
 
         public DateTime LastEarnedDate { get; set; } = DateTime.Now;
         public DateTime? LastRedeemedDate { get; set; }
@@ -452,7 +452,7 @@ namespace AccountingSystem.Models
         [MaxLength(50)]
         public string TransactionType { get; set; } = "كسب"; // كسب، استبدال، انتهاء
 
-        public int Points { get; set; } = 0;
+        public int Points { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal? MonetaryValue { get; set; }

@@ -33,7 +33,7 @@ public class DiscountRule
     public DateTime ValidTo { get; set; } = DateTime.Now.AddYears(1);
 
     public bool IsActive { get; set; } = true;
-    public bool ApplyToAllProducts { get; set; } = false;
+    public bool ApplyToAllProducts { get; set; }
 
     [StringLength(50)]
     public string CreatedBy { get; set; } = string.Empty;
@@ -67,7 +67,7 @@ public class PriceLevel
     [Column(TypeName = "decimal(18,2)")]
     public decimal MinimumOrderAmount { get; set; }
 
-    public bool IsDefault { get; set; } = false;
+    public bool IsDefault { get; set; }
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedDate { get; set; } = DateTime.Now;

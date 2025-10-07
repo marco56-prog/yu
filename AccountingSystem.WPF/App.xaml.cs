@@ -486,10 +486,15 @@ namespace AccountingSystem.WPF
             // Cash Drawer Service - استخدام التنفيذ المؤقت لمنع أخطاء الحقن
             services.AddScoped<ICashDrawerService, AccountingSystem.Business.Services.NullCashDrawerService>();
 
-            // Enhanced
+            // Enhanced Services
             services.AddScoped<IAdvancedAnalyticsService, AdvancedAnalyticsService>();
             services.AddScoped<IAdvancedReportsService, AdvancedReportsService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            
+            // Infrastructure Services - NEW
+            services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
+            services.AddScoped<IDatabaseConnectionResilienceService, DatabaseConnectionResilienceService>();
+            services.AddScoped<IGlobalExceptionHandler, GlobalExceptionHandler>();
 
             // Diagnostics System (temporarily disabled)
             // services.AddScoped<HealthCheckRunner>();

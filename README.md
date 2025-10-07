@@ -7,6 +7,35 @@
 ![WPF](https://img.shields.io/badge/WPF-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 ![Arabic](https://img.shields.io/badge/Arabic_RTL-00A86B?style=for-the-badge&logo=language&logoColor=white)
+![Version](https://img.shields.io/badge/Version-2.1.0-blue?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Production_Ready-success?style=for-the-badge)
+
+**نظام محاسبة شامل وكامل الميزات مصمم خصيصاً للسوق العربي**  
+**Complete, Feature-Rich Accounting System Designed for Arabic Markets**
+
+[المميزات](#-features) • [التثبيت](#-installation) • [الاستخدام](#-usage) • [التوثيق](#-documentation) • [الدعم](#-support)
+
+</div>
+
+---
+
+## 🎯 **نظرة عامة | Overview**
+
+نظام محاسبي متكامل مبني على أحدث تقنيات Microsoft (.NET 8, WPF, Entity Framework Core) مع دعم كامل للغة العربية ونظام RTL، مصمم خصيصاً لتلبية احتياجات الشركات والمؤسسات في الدول العربية.
+
+A comprehensive accounting system built with the latest Microsoft technologies (.NET 8, WPF, Entity Framework Core) with full Arabic language and RTL support, specifically designed to meet the needs of companies and institutions in Arabic countries.
+
+### ✨ **ما الجديد في الإصدار 2.1.0**
+
+- ✅ **Database Health Monitoring** - مراقبة صحة قاعدة البيانات
+- ✅ **Connection Resilience** - مرونة الاتصال مع إعادة محاولة تلقائية
+- ✅ **Global Exception Handler** - معالج عام للاستثناءات مع رسائل واضحة
+- ✅ **Enhanced Error Logging** - تسجيل محسّن للأخطاء مع Deduplication
+- ✅ **Performance Improvements** - تحسينات الأداء والتكوين
+- 📝 [CHANGELOG.md](CHANGELOG.md) - سجل التغييرات الكامل
+- 🔧 [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - دليل استكشاف الأخطاء
+
+---
 
 **نظام محاسبة متكامل باللغة العربية مع دعم كامل للنصوص من اليمين لليسار**
 

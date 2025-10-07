@@ -742,7 +742,7 @@ namespace AccountingSystem.Business
         /// <summary>
         /// تسجيل شامل لكافة العمليات المحاسبية (ليس فقط الأخطاء)
         /// </summary>
-        public static async Task LogBusinessOperationAsync(string operation, string details, 
+        public static Task LogBusinessOperationAsync(string operation, string details, 
             int? userId = null, string? username = null, bool isSuccess = true)
         {
             try
@@ -768,12 +768,14 @@ namespace AccountingSystem.Business
             {
                 Log.Error(ex, "فشل في تسجيل العملية المحاسبية: {Operation}", operation);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// تسجيل شامل لعمليات قاعدة البيانات
         /// </summary>
-        public static async Task LogDatabaseOperationAsync(string operation, string tableName, 
+        public static Task LogDatabaseOperationAsync(string operation, string tableName, 
             string? details = null, int? recordId = null, bool isSuccess = true)
         {
             try
@@ -799,12 +801,14 @@ namespace AccountingSystem.Business
             {
                 Log.Error(ex, "فشل في تسجيل عملية قاعدة البيانات: {Operation}", operation);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// تسجيل شامل لعمليات المستخدمين
         /// </summary>
-        public static async Task LogUserOperationAsync(string operation, string username, 
+        public static Task LogUserOperationAsync(string operation, string username, 
             int? userId = null, string? details = null, bool isSuccess = true)
         {
             try
@@ -830,12 +834,14 @@ namespace AccountingSystem.Business
             {
                 Log.Error(ex, "فشل في تسجيل عملية المستخدم: {Operation} للمستخدم: {Username}", operation, username);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// تسجيل شامل لعمليات الأمان
         /// </summary>
-        public static async Task LogSecurityOperationAsync(string operation, string? username = null, 
+        public static Task LogSecurityOperationAsync(string operation, string? username = null, 
             string? ipAddress = null, string? details = null, bool isSuccess = true, 
             SecurityEventType eventType = SecurityEventType.General)
         {
@@ -863,6 +869,8 @@ namespace AccountingSystem.Business
             {
                 Log.Error(ex, "فشل في تسجيل عملية الأمان: {Operation}", operation);
             }
+
+            return Task.CompletedTask;
         }
     }
 

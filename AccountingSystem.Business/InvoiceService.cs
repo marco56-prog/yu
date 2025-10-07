@@ -221,7 +221,15 @@ namespace AccountingSystem.Business
                 catch (Exception ex)
                 {
                     TryWriteInvoiceLog(ex);
-                    try { await tx.RollbackAsync(); } catch { /* ignore */ }
+                    try 
+                    { 
+                        await tx.RollbackAsync(); 
+                    } 
+                    catch (Exception rollbackEx) 
+                    { 
+                        // تسجيل فشل التراجع - نتجاهله ونستمر
+                        System.Diagnostics.Debug.WriteLine($"فشل التراجع: {rollbackEx.Message}");
+                    }
                     return false;
                 }
             });

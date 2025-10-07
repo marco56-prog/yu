@@ -232,10 +232,13 @@ namespace AccountingSystem.Business
                     .FindAsync(d => d.SalesInvoiceId == existing.SalesInvoiceId);
                 _unitOfWork.Repository<SalesInvoiceItem>().RemoveRange(oldDetails);
 
-                foreach (var detail in invoice.Items)
+                if (invoice.Items != null)
                 {
-                    detail.SalesInvoiceId = existing.SalesInvoiceId;
-                    await _unitOfWork.Repository<SalesInvoiceItem>().AddAsync(detail);
+                    foreach (var detail in invoice.Items)
+                    {
+                        detail.SalesInvoiceId = existing.SalesInvoiceId;
+                        await _unitOfWork.Repository<SalesInvoiceItem>().AddAsync(detail);
+                    }
                 }
 
                 _unitOfWork.Repository<SalesInvoice>().Update(existing);

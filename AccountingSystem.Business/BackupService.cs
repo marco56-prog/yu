@@ -550,10 +550,10 @@ namespace AccountingSystem.Business
             return "غير متاح";
         }
 
-        private async Task<int> GetTableCountAsync()
+        private Task<int> GetTableCountAsync()
         {
             // حساب عدد الجداول المدعومة
-            return 5; // Customers, Suppliers, Products, SalesInvoices, PurchaseInvoices
+            return Task.FromResult(5); // Customers, Suppliers, Products, SalesInvoices, PurchaseInvoices
         }
 
         private async Task<int> GetTotalRecordsAsync()

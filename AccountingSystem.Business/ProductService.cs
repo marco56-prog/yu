@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using AccountingSystem.Data;
 using AccountingSystem.Models;
+using AccountingSystem.Business.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountingSystem.Business
@@ -177,14 +178,17 @@ namespace AccountingSystem.Business
             string referenceType = "",
             int? referenceId = null)
         {
-            if (quantity < 0)
-                throw new InvalidOperationException("الكمية يجب أن تكون موجبة.");
+            ValidationHelpers.EnsureValidId(productId, nameof(productId));
+            ValidationHelpers.EnsureNonNegative(quantity, nameof(quantity));
+            ValidationHelpers.EnsureValidId(unitId, nameof(unitId));
 
-            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(productId)
-                          ?? throw new InvalidOperationException("المنتج غير موجود.");
+            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(productId);
+            if (product == null)
+                throw new Exceptions.EntityNotFoundException(typeof(Product), productId);
 
-            var unit = await _unitOfWork.Repository<Unit>().GetByIdAsync(unitId)
-                       ?? throw new InvalidOperationException("الوحدة غير موجودة.");
+            var unit = await _unitOfWork.Repository<Unit>().GetByIdAsync(unitId);
+            if (unit == null)
+                throw new Exceptions.EntityNotFoundException("الوحدة", unitId);
 
             _unitOfWork.BeginTransaction();
             try
@@ -201,7 +205,11 @@ namespace AccountingSystem.Business
 
                     case StockMovementType.Out:
                         if (product.CurrentStock < qtyInMain)
-                            throw new InvalidOperationException("الكمية المطلوبة غير متوفرة في المخزن.");
+                            throw new Exceptions.InsufficientStockException(
+                                productId, 
+                                product.ProductName, 
+                                qtyInMain, 
+                                product.CurrentStock);
                         product.CurrentStock -= qtyInMain;
                         break;
 
@@ -222,7 +230,11 @@ namespace AccountingSystem.Business
                     if (_securityService != null)
                         userId = (await _securityService.GetCurrentUserAsync())?.UserId ?? 1;
                 }
-                catch { /* fallback to 1 */ }
+                catch
+                {
+                    // استخدام القيمة الافتراضية في حالة الفشل - تسجيل التحذير
+                    // نتجاهل الخطأ ونستمر بالقيمة الافتراضية
+                }
 
                 // حركة مخزون: نخزّن كما أدخلها المستخدم + المكافئ بالأساسية
                 var movement = new StockMovement

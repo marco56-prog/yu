@@ -495,6 +495,7 @@ namespace AccountingSystem.WPF
             services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
             services.AddScoped<IDatabaseConnectionResilienceService, DatabaseConnectionResilienceService>();
             services.AddScoped<IGlobalExceptionHandler, GlobalExceptionHandler>();
+            services.AddScoped<IBusinessLogicValidator, BusinessLogicValidator>();
 
             // Diagnostics System (temporarily disabled)
             // services.AddScoped<HealthCheckRunner>();

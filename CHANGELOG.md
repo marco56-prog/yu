@@ -98,6 +98,7 @@
   - `IDatabaseHealthService`
   - `IDatabaseConnectionResilienceService`
   - `IGlobalExceptionHandler`
+  - `IBusinessLogicValidator` (NEW)
 
 ### 📊 إحصائيات التحسينات
 

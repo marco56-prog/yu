@@ -77,8 +77,19 @@ namespace AccountingSystem.Business
             // أرقام أرضية مصرية: تبدأ بكود المحافظة
             if (digits.Length >= 8 && digits.Length <= 10)
             {
-                var cityCode = digits[..2];
-                return IsValidEgyptianCityCode(cityCode);
+                // Check for 3-digit city codes first
+                if (digits.Length > 8)
+                {
+                    var cityCode3 = digits.Substring(0, 3);
+                    if (IsValidEgyptianCityCode(cityCode3))
+                    {
+                        return true;
+                    }
+                }
+
+                // Then check for 2-digit city codes
+                var cityCode2 = digits.Substring(0, 2);
+                return IsValidEgyptianCityCode(cityCode2);
             }
 
             return false;
@@ -86,8 +97,14 @@ namespace AccountingSystem.Business
 
         private static bool IsValidEgyptianCityCode(string cityCode)
         {
+            if (string.IsNullOrEmpty(cityCode)) return false;
             // أكواد المحافظات المصرية الرئيسية
-            string[] validCodes = { "02", "03", "04", "05", "06", "07", "08", "09", "13", "15", "16", "17", "18", "19", "20" };
+            string[] validCodes = {
+                "02", "03",       // 2-digit codes
+                "013", "040", "045", "046", "047", "048", "050", "055", "057",
+                "062", "064", "065", "066", "068", "082", "084", "086", "088",
+                "092", "093", "095", "096", "097" // 3-digit codes
+            };
             return validCodes.Contains(cityCode);
         }
 

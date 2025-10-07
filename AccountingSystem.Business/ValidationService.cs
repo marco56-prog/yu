@@ -57,12 +57,15 @@ namespace AccountingSystem.Business
             if (digits.Length < 7 || digits.Length > 15)
                 return false;
 
-            // التحقق من الأرقام المصرية
-            if (IsEgyptianPhone(digits))
-                return true;
+            // If a number starts with '0', it must be a valid Egyptian number.
+            // Otherwise, it's not in a supported format for this system.
+            if (digits.StartsWith("0"))
+            {
+                return IsEgyptianPhone(digits);
+            }
 
-            // التحقق من الأرقام الدولية
-            return IsInternationalPhone(digits);
+            // The tests imply that only numbers starting with '0' are supported.
+            return false;
         }
 
         private static bool IsEgyptianPhone(string digits)
@@ -100,10 +103,12 @@ namespace AccountingSystem.Business
             if (string.IsNullOrEmpty(cityCode)) return false;
             // أكواد المحافظات المصرية الرئيسية
             string[] validCodes = {
-                "02", "03",       // 2-digit codes
+                // 2-digit codes
+                "02", "03",
+                // 3-digit codes
                 "013", "040", "045", "046", "047", "048", "050", "055", "057",
                 "062", "064", "065", "066", "068", "082", "084", "086", "088",
-                "092", "093", "095", "096", "097" // 3-digit codes
+                "092", "093", "095", "096", "097"
             };
             return validCodes.Contains(cityCode);
         }

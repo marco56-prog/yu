@@ -74,7 +74,7 @@ namespace AccountingSystem.Business
                     // التحقق من كل بند
                     for (int i = 0; i < invoice.Items.Count; i++)
                     {
-                        var item = invoice.Items.ElementAt(i);
+                        var item = invoice.Items[i];
 
                         if (item.ProductId <= 0)
                         {
@@ -91,19 +91,19 @@ namespace AccountingSystem.Business
                             result.AddError($"البند {i + 1}: سعر الوحدة لا يمكن أن يكون سالباً", $"Items[{i}].UnitPrice");
                         }
 
-                        if (item.DiscountPercentage < 0 || item.DiscountPercentage > 100)
+                        if (item.DiscountPercent < 0 || item.DiscountPercent > 100)
                         {
-                            result.AddError($"البند {i + 1}: نسبة الخصم يجب أن تكون بين 0 و 100", $"Items[{i}].DiscountPercentage");
+                            result.AddError($"البند {i + 1}: نسبة الخصم يجب أن تكون بين 0 و 100", $"Items[{i}].DiscountPercent");
                         }
 
                         // التحقق من الحسابات
                         var expectedTotal = item.Quantity * item.UnitPrice;
-                        var expectedDiscount = expectedTotal * (item.DiscountPercentage / 100);
+                        var expectedDiscount = expectedTotal * (item.DiscountPercent / 100);
                         var expectedNet = expectedTotal - expectedDiscount;
 
-                        if (Math.Abs(item.LineTotal - expectedTotal) > 0.01m)
+                        if (Math.Abs(item.TotalAmount - expectedTotal) > 0.01m)
                         {
-                            result.AddWarning($"البند {i + 1}: إجمالي المبلغ غير صحيح", $"Items[{i}].LineTotal");
+                            result.AddWarning($"البند {i + 1}: إجمالي المبلغ غير صحيح", $"Items[{i}].TotalAmount");
                         }
 
                         if (Math.Abs(item.DiscountAmount - expectedDiscount) > 0.01m)
@@ -129,9 +129,9 @@ namespace AccountingSystem.Business
                     result.AddError("مبلغ الخصم لا يمكن أن يكون سالباً", "DiscountAmount");
                 }
 
-                if (invoice.NetTotal < 0)
+                if (invoice.NetAmount < 0)
                 {
-                    result.AddWarning("صافي الفاتورة سالب - تحقق من الحسابات", "NetTotal");
+                    result.AddWarning("صافي الفاتورة سالب - تحقق من الحسابات", "NetAmount");
                 }
 
                 // التحقق من المدفوع
@@ -140,7 +140,7 @@ namespace AccountingSystem.Business
                     result.AddError("المبلغ المدفوع لا يمكن أن يكون سالباً", "PaidAmount");
                 }
 
-                if (invoice.PaidAmount > invoice.NetTotal)
+                if (invoice.PaidAmount > invoice.NetAmount)
                 {
                     result.AddWarning("المبلغ المدفوع أكبر من صافي الفاتورة", "PaidAmount");
                 }
@@ -193,7 +193,7 @@ namespace AccountingSystem.Business
                 {
                     for (int i = 0; i < invoice.Items.Count; i++)
                     {
-                        var item = invoice.Items.ElementAt(i);
+                        var item = invoice.Items[i];
 
                         if (item.ProductId <= 0)
                             result.AddError($"البند {i + 1}: يجب تحديد المنتج", $"Items[{i}].ProductId");
@@ -201,8 +201,8 @@ namespace AccountingSystem.Business
                         if (item.Quantity <= 0)
                             result.AddError($"البند {i + 1}: الكمية يجب أن تكون أكبر من صفر", $"Items[{i}].Quantity");
 
-                        if (item.UnitCost < 0)
-                            result.AddError($"البند {i + 1}: سعر الوحدة لا يمكن أن يكون سالباً", $"Items[{i}].UnitCost");
+                        if (item.UnitPrice < 0)
+                            result.AddError($"البند {i + 1}: سعر الوحدة لا يمكن أن يكون سالباً", $"Items[{i}].UnitPrice");
                     }
                 }
 

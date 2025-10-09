@@ -1,7 +1,7 @@
-ï»؟<Window x:Class="AccountingSystem.WPF.Views.AdvancedUserManagementWindow"
+﻿<Window x:Class="AccountingSystem.WPF.Views.AdvancedUserManagementWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€  ط·آ§ط¸â€‍ط¸â€¦ط·ع¾ط¸â€ڑط·آ¯ط¸â€¦ط·آ© - Advanced User Management"
+        Title="ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ط§ظ„ظ…طھظ‚ط¯ظ…ط© - Advanced User Management"
         Height="900" Width="1600"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
@@ -10,7 +10,7 @@
         FontFamily="Segoe UI, Tahoma">
 
     <Window.Resources>
-        <!-- ط·آ§ط·آ³ط·ع¾ط·آ®ط·آ¯ط·آ§ط¸â€¦ ط·آ§ط¸â€‍ط¸â€¦ط¸ث†ط·آ§ط·آ±ط·آ¯ ط·آ§ط¸â€‍ط¸â€¦ط¸ث†ط·آ­ط·آ¯ط·آ© -->
+        <!-- ط§ط³طھط®ط¯ط§ظ… ط§ظ„ظ…ظˆط§ط±ط¯ ط§ظ„ظ…ظˆط­ط¯ط© -->
 
         <Style x:Key="ModernButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
@@ -73,7 +73,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ط·آ§ط¸â€‍ط·آ¹ط¸â€ ط¸ث†ط·آ§ط¸â€  ط·آ§ط¸â€‍ط·آ±ط·آ¦ط¸ظ¹ط·آ³ط¸ظ¹ -->
+        <!-- ط§ظ„ط¹ظ†ظˆط§ظ† ط§ظ„ط±ط¦ظٹط³ظٹ -->
         <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="20,20,20,10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -82,11 +82,11 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="ظ‹ع؛â€کآ¥ ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€  ط¸ث†ط·آ§ط¸â€‍ط·آµط¸â€‍ط·آ§ط·آ­ط¸ظ¹ط·آ§ط·ع¾ ط·آ§ط¸â€‍ط¸â€¦ط·ع¾ط¸â€ڑط·آ¯ط¸â€¦ط·آ©"
+                    <TextBlock Text="ًں‘¥ ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ظˆط§ظ„طµظ„ط§ط­ظٹط§طھ ط§ظ„ظ…طھظ‚ط¯ظ…ط©"
                                FontSize="{StaticResource FontSizeTitle}" 
                                FontWeight="Bold" 
                                Foreground="{StaticResource TextBrush}"/>
-                    <TextBlock Text="ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ´ط·آ§ط¸â€¦ط¸â€‍ط·آ© ط¸â€‍ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€ ط·إ’ ط·آ§ط¸â€‍ط·آ£ط·آ¯ط¸ث†ط·آ§ط·آ±ط·إ’ ط·آ§ط¸â€‍ط·آµط¸â€‍ط·آ§ط·آ­ط¸ظ¹ط·آ§ط·ع¾ط·إ’ ط¸ث†ط·آ£ط¸â€¦ط·آ§ط¸â€  ط·آ§ط¸â€‍ط¸â€ ط·آ¸ط·آ§ط¸â€¦"
+                    <TextBlock Text="ط¥ط¯ط§ط±ط© ط´ط§ظ…ظ„ط© ظ„ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†طŒ ط§ظ„ط£ط¯ظˆط§ط±طŒ ط§ظ„طµظ„ط§ط­ظٹط§طھطŒ ظˆط£ظ…ط§ظ† ط§ظ„ظ†ط¸ط§ظ…"
                                FontSize="{StaticResource FontSizeNormal}" 
                                Foreground="{StaticResource TextSecondaryColor}" 
                                Margin="0,5,0,0"/>
@@ -95,81 +95,81 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource AccentBrush}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="أ¢â€چâ€¢" FontSize="{StaticResource FontSizeMedium}" Margin="0,0,5,0"/>
-                            <TextBlock Text="ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط·آ¬ط·آ¯ط¸ظ¹ط·آ¯"/>
+                            <TextBlock Text="â‍•" FontSize="{StaticResource FontSizeMedium}" Margin="0,0,5,0"/>
+                            <TextBlock Text="ظ…ط³طھط®ط¯ظ… ط¬ط¯ظٹط¯"/>
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource SecondaryBrush}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="ظ‹ع؛â€؛طŒأ¯آ¸عˆ" FontSize="{StaticResource FontSizeMedium}" Margin="0,0,5,0"/>
-                            <TextBlock Text="ط·آ¯ط¸ث†ط·آ± ط·آ¬ط·آ¯ط¸ظ¹ط·آ¯"/>
+                            <TextBlock Text="ًں›،ï¸ڈ" FontSize="{StaticResource FontSizeMedium}" Margin="0,0,5,0"/>
+                            <TextBlock Text="ط¯ظˆط± ط¬ط¯ظٹط¯"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- ط·آ¥ط·آ­ط·آµط·آ§ط·آ¦ط¸ظ¹ط·آ§ط·ع¾ ط·آ³ط·آ±ط¸ظ¹ط·آ¹ط·آ© -->
+        <!-- ط¥ط­طµط§ط¦ظٹط§طھ ط³ط±ظٹط¹ط© -->
         <UniformGrid Grid.Row="1" Columns="5" Margin="20,0,20,10">
             <Border Style="{StaticResource SmallCardStyle}" Background="{StaticResource PrimaryBrush}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="ظ‹ع؛â€کآ¨أ¢â‚¬ع†ظ‹ع؛â€™آ¼" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBlock Text="ًں‘¨â€چًں’¼" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                     <TextBlock Text="24" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" 
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
-                    <TextBlock Text="ط·آ¥ط·آ¬ط¸â€¦ط·آ§ط¸â€‍ط¸ظ¹ ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€ " FontSize="{StaticResource FontSizeSmall}"
+                    <TextBlock Text="ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
             
             <Border Style="{StaticResource SmallCardStyle}" Background="{StaticResource AccentBrush}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="ظ‹ع؛ع؛آ¢" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBlock Text="ًںں¢" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                     <TextBlock Text="18" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" 
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
-                    <TextBlock Text="ط¸â€¦ط·ع¾ط·آµط¸â€‍ ط·آ­ط·آ§ط¸â€‍ط¸ظ¹ط·آ§ط¸â€¹" FontSize="{StaticResource FontSizeSmall}"
+                    <TextBlock Text="ظ…طھطµظ„ ط­ط§ظ„ظٹط§ظ‹" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
             
             <Border Style="{StaticResource SmallCardStyle}" Background="{StaticResource WarningBrush}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="ظ‹ع؛â€؛طŒأ¯آ¸عˆ" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBlock Text="ًں›،ï¸ڈ" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                     <TextBlock Text="8" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" 
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
-                    <TextBlock Text="ط·آ§ط¸â€‍ط·آ£ط·آ¯ط¸ث†ط·آ§ط·آ± ط·آ§ط¸â€‍ط¸â€ ط·آ´ط·آ·ط·آ©" FontSize="{StaticResource FontSizeSmall}"
+                    <TextBlock Text="ط§ظ„ط£ط¯ظˆط§ط± ط§ظ„ظ†ط´ط·ط©" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
             
             <Border Style="{StaticResource SmallCardStyle}" Background="{StaticResource DangerBrush}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="أ¢ع‘آ أ¯آ¸عˆ" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBlock Text="âڑ ï¸ڈ" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                     <TextBlock Text="3" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" 
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
-                    <TextBlock Text="ط·ع¾ط¸â€ ط·آ¨ط¸ظ¹ط¸â€،ط·آ§ط·ع¾ ط·آ£ط¸â€¦ط¸â€ ط¸ظ¹ط·آ©" FontSize="{StaticResource FontSizeSmall}"
+                    <TextBlock Text="طھظ†ط¨ظٹظ‡ط§طھ ط£ظ…ظ†ظٹط©" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
             
             <Border Style="{StaticResource SmallCardStyle}" Background="{StaticResource SecondaryBrush}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="ظ‹ع؛â€œظ¹" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBlock Text="ًں“ٹ" FontSize="{StaticResource FontSizeTitle}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                     <TextBlock Text="156" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" 
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
-                    <TextBlock Text="ط·آ§ط¸â€‍ط·آ¹ط¸â€¦ط¸â€‍ط¸ظ¹ط·آ§ط·ع¾ ط·آ§ط¸â€‍ط¸ظ¹ط¸ث†ط¸â€¦" FontSize="{StaticResource FontSizeSmall}"
+                    <TextBlock Text="ط§ظ„ط¹ظ…ظ„ظٹط§طھ ط§ظ„ظٹظˆظ…" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource TextOnPrimaryColor}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
         </UniformGrid>
 
-        <!-- ط·آ§ط¸â€‍ط¸â€¦ط·آ­ط·ع¾ط¸ث†ط¸â€° ط·آ§ط¸â€‍ط·آ±ط·آ¦ط¸ظ¹ط·آ³ط¸ظ¹ -->
+        <!-- ط§ظ„ظ…ط­طھظˆظ‰ ط§ظ„ط±ط¦ظٹط³ظٹ -->
         <Grid Grid.Row="2" Margin="20,0,20,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ط¸â€ڑط·آ§ط·آ¦ط¸â€¦ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€  -->
+            <!-- ظ‚ط§ط¦ظ…ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† -->
             <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,10,0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -178,9 +178,9 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- ط·آ¹ط¸â€ ط¸ث†ط·آ§ط¸â€  ط¸ث†ط·آ¨ط·آ­ط·آ« -->
+                    <!-- ط¹ظ†ظˆط§ظ† ظˆط¨ط­ط« -->
                     <Grid Grid.Row="0" Margin="0,0,0,15">
-                        <TextBlock Text="ظ‹ع؛â€œâ€¹ ط¸â€ڑط·آ§ط·آ¦ط¸â€¦ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€ "
+                        <TextBlock Text="ًں“‹ ظ‚ط§ط¦ظ…ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†"
                                    FontSize="20" 
                                    FontWeight="SemiBold" 
                                    Foreground="{StaticResource TextBrush}"
@@ -203,7 +203,7 @@
                                                 <ScrollViewer x:Name="PART_ContentHost" 
                                                               Padding="{TemplateBinding Padding}"
                                                               VerticalAlignment="Center"/>
-                                                <TextBlock Text="ظ‹ع؛â€‌ع† ط·آ§ط¸â€‍ط·آ¨ط·آ­ط·آ« ط·آ¹ط¸â€  ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦..."
+                                                <TextBlock Text="ًں”چ ط§ظ„ط¨ط­ط« ط¹ظ† ظ…ط³طھط®ط¯ظ…..."
                                                            Foreground="{StaticResource TextMutedColor}"
                                                            Padding="10,0"
                                                            VerticalAlignment="Center"
@@ -227,46 +227,46 @@
                             
                             <Button Style="{StaticResource ModernButtonStyle}" Height="35" Margin="10,0,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="ظ‹ع؛â€‌ع†" FontSize="{StaticResource FontSizeNormal}" Margin="0,0,5,0"/>
-                                    <TextBlock Text="ط·آ¨ط·آ­ط·آ«"/>
+                                    <TextBlock Text="ًں”چ" FontSize="{StaticResource FontSizeNormal}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="ط¨ط­ط«"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
                     </Grid>
 
-                    <!-- ط¸ظ¾ط¸â€‍ط·آ§ط·ع¾ط·آ± -->
+                    <!-- ظپظ„ط§طھط± -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
                         <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource BackgroundBrush}" 
                                 Foreground="{StaticResource TextBrush}" Height="30" FontSize="{StaticResource FontSizeSmall}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="ظ‹ع؛â€کآ¥" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
-                                <TextBlock Text="ط·آ§ط¸â€‍ط¸ئ’ط¸â€‍ (24)"/>
+                                <TextBlock Text="ًں‘¥" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
+                                <TextBlock Text="ط§ظ„ظƒظ„ (24)"/>
                             </StackPanel>
                         </Button>
                         <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource AccentBrush}" Height="30" FontSize="{StaticResource FontSizeSmall}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="ظ‹ع؛ع؛آ¢" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
-                                <TextBlock Text="ط¸â€ ط·آ´ط·آ· (18)"/>
+                                <TextBlock Text="ًںں¢" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
+                                <TextBlock Text="ظ†ط´ط· (18)"/>
                             </StackPanel>
                         </Button>
                         <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource WarningBrush}" Height="30" FontSize="{StaticResource FontSizeSmall}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="أ¢عˆآ¸أ¯آ¸عˆ" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
-                                <TextBlock Text="ط¸â€¦ط·آ¹ط·آ·ط¸â€‍ (4)"/>
+                                <TextBlock Text="âڈ¸ï¸ڈ" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
+                                <TextBlock Text="ظ…ط¹ط·ظ„ (4)"/>
                             </StackPanel>
                         </Button>
                         <Button Style="{StaticResource ModernButtonStyle}" Background="{StaticResource DangerBrush}" Height="30" FontSize="{StaticResource FontSizeSmall}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="ظ‹ع؛â€‌â€™" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
-                                <TextBlock Text="ط¸â€¦ط·آ­ط·آ¸ط¸ث†ط·آ± (2)"/>
+                                <TextBlock Text="ًں”’" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
+                                <TextBlock Text="ظ…ط­ط¸ظˆط± (2)"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
 
-                    <!-- ط¸â€ڑط·آ§ط·آ¦ط¸â€¦ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€  -->
+                    <!-- ظ‚ط§ط¦ظ…ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† -->
                     <ScrollViewer Grid.Row="2">
                         <StackPanel>
-                            <!-- ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط¸â€ ط¸â€¦ط¸ث†ط·آ°ط·آ¬ط¸ظ¹ 1 -->
+                            <!-- ظ…ط³طھط®ط¯ظ… ظ†ظ…ظˆط°ط¬ظٹ 1 -->
                             <Border Background="{StaticResource BackgroundBrush}" 
                                     BorderBrush="{StaticResource BorderColor}"
                                     BorderThickness="1"
@@ -281,13 +281,13 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- ط·آµط¸ث†ط·آ±ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ -->
+                                    <!-- طµظˆط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ… -->
                                     <Border Grid.Column="0" 
                                             Width="50" Height="50" 
                                             Background="{StaticResource PrimaryBrush}"
                                             CornerRadius="25"
                                             Margin="0,0,15,0">
-                                        <TextBlock Text="ط·آ£ط·آ­"
+                                        <TextBlock Text="ط£ط­"
                                                    FontSize="18" 
                                                    FontWeight="Bold"
                                                    Foreground="{StaticResource TextOnPrimaryColor}"
@@ -295,20 +295,20 @@
                                                    VerticalAlignment="Center"/>
                                     </Border>
 
-                                    <!-- ط¸â€¦ط·آ¹ط¸â€‍ط¸ث†ط¸â€¦ط·آ§ط·ع¾ ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ -->
+                                    <!-- ظ…ط¹ظ„ظˆظ…ط§طھ ط§ظ„ظ…ط³طھط®ط¯ظ… -->
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="ط·آ£ط·آ­ط¸â€¦ط·آ¯ ط¸â€¦ط·آ­ط¸â€¦ط·آ¯ ط·آ¹ط¸â€‍ط¸ظ¹"
+                                        <TextBlock Text="ط£ط­ظ…ط¯ ظ…ط­ظ…ط¯ ط¹ظ„ظٹ"
                                                    FontSize="{StaticResource FontSizeMedium}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextBrush}"/>
-                                        <TextBlock Text="ط¸â€¦ط·آ¯ط¸ظ¹ط·آ± ط·آ§ط¸â€‍ط¸â€ ط·آ¸ط·آ§ط¸â€¦ أ¢â‚¬آ¢ ahmed.ali@company.com"
+                                        <TextBlock Text="ظ…ط¯ظٹط± ط§ظ„ظ†ط¸ط§ظ… â€¢ ahmed.ali@company.com"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <Border Background="{StaticResource AccentBrush}" 
                                                     CornerRadius="12" 
                                                     Padding="6,2">
-                                                <TextBlock Text="ظ‹ع؛ع؛آ¢ ط¸â€¦ط·ع¾ط·آµط¸â€‍"
+                                                <TextBlock Text="ًںں¢ ظ…طھطµظ„"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
@@ -316,52 +316,52 @@
                                                     CornerRadius="12" 
                                                     Padding="6,2"
                                                     Margin="5,0,0,0">
-                                                <TextBlock Text="ظ‹ع؛â€کâ€ک ط¸â€¦ط·آ´ط·آ±ط¸ظ¾"
+                                                <TextBlock Text="ًں‘‘ ظ…ط´ط±ظپ"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- ط·آ¢ط·آ®ط·آ± ط¸â€ ط·آ´ط·آ§ط·آ· -->
+                                    <!-- ط¢ط®ط± ظ†ط´ط§ط· -->
                                     <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="ط·آ¢ط·آ®ط·آ± ط¸â€ ط·آ´ط·آ§ط·آ·"
+                                        <TextBlock Text="ط¢ط®ط± ظ†ط´ط§ط·"
                                                    FontSize="10" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
-                                        <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° 5 ط·آ¯ط¸â€ڑط·آ§ط·آ¦ط¸â€ڑ"
+                                        <TextBlock Text="ظ…ظ†ط° 5 ط¯ظ‚ط§ط¦ظ‚"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextBrush}"/>
                                     </StackPanel>
 
-                                    <!-- ط·آ£ط·آ²ط·آ±ط·آ§ط·آ± ط·آ§ط¸â€‍ط·آ¥ط·آ¬ط·آ±ط·آ§ط·طŒط·آ§ط·ع¾ -->
+                                    <!-- ط£ط²ط±ط§ط± ط§ظ„ط¥ط¬ط±ط§ط،ط§طھ -->
                                     <StackPanel Grid.Column="3" Orientation="Horizontal">
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource PrimaryBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="أ¢إ“عˆأ¯آ¸عˆ"/>
+                                            <TextBlock Text="âœڈï¸ڈ"/>
                                         </Button>
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource WarningBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="أ¢ع‘آ أ¯آ¸عˆ"/>
+                                            <TextBlock Text="âڑ ï¸ڈ"/>
                                         </Button>
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource DangerBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="ظ‹ع؛â€”â€کأ¯آ¸عˆ"/>
+                                            <TextBlock Text="ًں—‘ï¸ڈ"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <!-- ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط¸â€ ط¸â€¦ط¸ث†ط·آ°ط·آ¬ط¸ظ¹ 2 -->
+                            <!-- ظ…ط³طھط®ط¯ظ… ظ†ظ…ظˆط°ط¬ظٹ 2 -->
                             <Border Background="{StaticResource BackgroundBrush}" 
                                     BorderBrush="{StaticResource BorderColor}"
                                     BorderThickness="1"
@@ -381,7 +381,7 @@
                                             Background="{StaticResource AccentBrush}"
                                             CornerRadius="25"
                                             Margin="0,0,15,0">
-                                        <TextBlock Text="ط¸ظ¾ط·آ·"
+                                        <TextBlock Text="ظپط·"
                                                    FontSize="18" 
                                                    FontWeight="Bold"
                                                    Foreground="{StaticResource TextOnPrimaryColor}"
@@ -390,18 +390,18 @@
                                     </Border>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="ط¸ظ¾ط·آ§ط·آ·ط¸â€¦ط·آ© ط·آ£ط·آ­ط¸â€¦ط·آ¯"
+                                        <TextBlock Text="ظپط§ط·ظ…ط© ط£ط­ظ…ط¯"
                                                    FontSize="{StaticResource FontSizeMedium}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextBrush}"/>
-                                        <TextBlock Text="ط¸â€¦ط·آ­ط·آ§ط·آ³ط·آ¨ط·آ© أ¢â‚¬آ¢ fatima.ahmed@company.com"
+                                        <TextBlock Text="ظ…ط­ط§ط³ط¨ط© â€¢ fatima.ahmed@company.com"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <Border Background="{StaticResource AccentBrush}" 
                                                     CornerRadius="12" 
                                                     Padding="6,2">
-                                                <TextBlock Text="ظ‹ع؛ع؛آ¢ ط¸â€¦ط·ع¾ط·آµط¸â€‍ط·آ©"
+                                                <TextBlock Text="ًںں¢ ظ…طھطµظ„ط©"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
@@ -409,7 +409,7 @@
                                                     CornerRadius="12" 
                                                     Padding="6,2"
                                                     Margin="5,0,0,0">
-                                                <TextBlock Text="ظ‹ع؛â€œظ¹ ط¸â€¦ط·آ­ط·آ§ط·آ³ط·آ¨"
+                                                <TextBlock Text="ًں“ٹ ظ…ط­ط§ط³ط¨"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
@@ -417,10 +417,10 @@
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="ط·آ¢ط·آ®ط·آ± ط¸â€ ط·آ´ط·آ§ط·آ·"
+                                        <TextBlock Text="ط¢ط®ط± ظ†ط´ط§ط·"
                                                    FontSize="10" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
-                                        <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° 15 ط·آ¯ط¸â€ڑط¸ظ¹ط¸â€ڑط·آ©"
+                                        <TextBlock Text="ظ…ظ†ط° 15 ط¯ظ‚ظٹظ‚ط©"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextBrush}"/>
@@ -432,27 +432,27 @@
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="أ¢إ“عˆأ¯آ¸عˆ"/>
+                                            <TextBlock Text="âœڈï¸ڈ"/>
                                         </Button>
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource WarningBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="أ¢ع‘آ أ¯آ¸عˆ"/>
+                                            <TextBlock Text="âڑ ï¸ڈ"/>
                                         </Button>
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource DangerBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="ظ‹ع؛â€”â€کأ¯آ¸عˆ"/>
+                                            <TextBlock Text="ًں—‘ï¸ڈ"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <!-- ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط¸â€¦ط·آ¹ط·آ·ط¸â€‍ -->
+                            <!-- ظ…ط³طھط®ط¯ظ… ظ…ط¹ط·ظ„ -->
                             <Border Background="{StaticResource BackgroundBrush}" 
                                     BorderBrush="{StaticResource DangerBrush}"
                                     BorderThickness="1"
@@ -472,7 +472,7 @@
                                             Background="{StaticResource TextMutedBrush}"
                                             CornerRadius="25"
                                             Margin="0,0,15,0">
-                                        <TextBlock Text="ط¸â€¦ط·آ­"
+                                        <TextBlock Text="ظ…ط­"
                                                    FontSize="18" 
                                                    FontWeight="Bold"
                                                    Foreground="{StaticResource TextOnPrimaryColor}"
@@ -481,18 +481,18 @@
                                     </Border>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="ط¸â€¦ط·آ­ط¸â€¦ط·آ¯ ط·آ³ط·آ§ط¸â€‍ط¸â€¦"
+                                        <TextBlock Text="ظ…ط­ظ…ط¯ ط³ط§ظ„ظ…"
                                                    FontSize="{StaticResource FontSizeMedium}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
-                                        <TextBlock Text="ط¸â€¦ط¸â€ ط·آ¯ط¸ث†ط·آ¨ ط¸â€¦ط·آ¨ط¸ظ¹ط·آ¹ط·آ§ط·ع¾ أ¢â‚¬آ¢ mohamed.salem@company.com"
+                                        <TextBlock Text="ظ…ظ†ط¯ظˆط¨ ظ…ط¨ظٹط¹ط§طھ â€¢ mohamed.salem@company.com"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    Foreground="{StaticResource TextMutedColor}"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <Border Background="{StaticResource DangerBrush}" 
                                                     CornerRadius="12" 
                                                     Padding="6,2">
-                                                <TextBlock Text="ظ‹ع؛â€‌آ´ ط¸â€¦ط·آ¹ط·آ·ط¸â€‍"
+                                                <TextBlock Text="ًں”´ ظ…ط¹ط·ظ„"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
@@ -500,7 +500,7 @@
                                                     CornerRadius="12" 
                                                     Padding="6,2"
                                                     Margin="5,0,0,0">
-                                                <TextBlock Text="ظ‹ع؛â€؛â€™ ط¸â€¦ط·آ¨ط¸ظ¹ط·آ¹ط·آ§ط·ع¾"
+                                                <TextBlock Text="ًں›’ ظ…ط¨ظٹط¹ط§طھ"
                                                            FontSize="10" 
                                                            Foreground="{StaticResource TextOnPrimaryColor}"/>
                                             </Border>
@@ -508,10 +508,10 @@
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="ط·آ¢ط·آ®ط·آ± ط¸â€ ط·آ´ط·آ§ط·آ·"
+                                        <TextBlock Text="ط¢ط®ط± ظ†ط´ط§ط·"
                                                    FontSize="10" 
                                                    Foreground="{StaticResource TextMutedColor}"/>
-                                        <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° ط¸ظ¹ط¸ث†ط¸â€¦ط¸ظ¹ط¸â€ "
+                                        <TextBlock Text="ظ…ظ†ط° ظٹظˆظ…ظٹظ†"
                                                    FontSize="{StaticResource FontSizeSmall}" 
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
@@ -523,14 +523,14 @@
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="ظ‹ع؛â€‌â€œ"/>
+                                            <TextBlock Text="ًں”“"/>
                                         </Button>
                                         <Button Style="{StaticResource ModernButtonStyle}" 
                                                 Background="{StaticResource PrimaryBrush}"
                                                 Width="30" Height="30" 
                                                 Padding="0"
                                                 FontSize="{StaticResource FontSizeSmall}">
-                                            <TextBlock Text="أ¢إ“عˆأ¯آ¸عˆ"/>
+                                            <TextBlock Text="âœڈï¸ڈ"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -540,12 +540,12 @@
                 </Grid>
             </Border>
 
-            <!-- ط·آ§ط¸â€‍ط¸â€‍ط¸ث†ط·آ­ط·آ© ط·آ§ط¸â€‍ط·آ¬ط·آ§ط¸â€ ط·آ¨ط¸ظ¹ط·آ© -->
+            <!-- ط§ظ„ظ„ظˆط­ط© ط§ظ„ط¬ط§ظ†ط¨ظٹط© -->
             <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                <!-- ط·آ§ط¸â€‍ط·آ£ط·آ¯ط¸ث†ط·آ§ط·آ± ط¸ث†ط·آ§ط¸â€‍ط·آµط¸â€‍ط·آ§ط·آ­ط¸ظ¹ط·آ§ط·ع¾ -->
+                <!-- ط§ظ„ط£ط¯ظˆط§ط± ظˆط§ظ„طµظ„ط§ط­ظٹط§طھ -->
                 <Border Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="ظ‹ع؛â€؛طŒأ¯آ¸عˆ ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ§ط¸â€‍ط·آ£ط·آ¯ط¸ث†ط·آ§ط·آ±"
+                        <TextBlock Text="ًں›،ï¸ڈ ط¥ط¯ط§ط±ط© ط§ظ„ط£ط¯ظˆط§ط±"
                                    FontSize="18" 
                                    FontWeight="SemiBold" 
                                    Foreground="{StaticResource TextBrush}"
@@ -565,10 +565,10 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="ظ‹ع؛â€کâ€ک ط¸â€¦ط·آ¯ط¸ظ¹ط·آ± ط·آ§ط¸â€‍ط¸â€ ط·آ¸ط·آ§ط¸â€¦"
+                                        <TextBlock Text="ًں‘‘ ظ…ط¯ظٹط± ط§ظ„ظ†ط¸ط§ظ…"
                                                    FontWeight="SemiBold"
                                                    FontSize="{StaticResource FontSizeNormal}"/>
-                                        <TextBlock Text="ط·آµط¸â€‍ط·آ§ط·آ­ط¸ظ¹ط·آ§ط·ع¾ ط¸ئ’ط·آ§ط¸â€¦ط¸â€‍ط·آ©"
+                                        <TextBlock Text="طµظ„ط§ط­ظٹط§طھ ظƒط§ظ…ظ„ط©"
                                                    FontSize="11" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
                                     </StackPanel>
@@ -595,10 +595,10 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="ظ‹ع؛â€œظ¹ ط¸â€¦ط·آ­ط·آ§ط·آ³ط·آ¨"
+                                        <TextBlock Text="ًں“ٹ ظ…ط­ط§ط³ط¨"
                                                    FontWeight="SemiBold"
                                                    FontSize="{StaticResource FontSizeNormal}"/>
-                                        <TextBlock Text="ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط¸â€¦ط·آ§ط¸â€‍ط¸ظ¹ط·آ©"
+                                        <TextBlock Text="ط¥ط¯ط§ط±ط© ظ…ط§ظ„ظٹط©"
                                                    FontSize="11" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
                                     </StackPanel>
@@ -625,10 +625,10 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="ظ‹ع؛â€؛â€™ ط¸â€¦ط¸â€ ط·آ¯ط¸ث†ط·آ¨ ط¸â€¦ط·آ¨ط¸ظ¹ط·آ¹ط·آ§ط·ع¾"
+                                        <TextBlock Text="ًں›’ ظ…ظ†ط¯ظˆط¨ ظ…ط¨ظٹط¹ط§طھ"
                                                    FontWeight="SemiBold"
                                                    FontSize="{StaticResource FontSizeNormal}"/>
-                                        <TextBlock Text="ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط¸â€¦ط·آ¨ط¸ظ¹ط·آ¹ط·آ§ط·ع¾"
+                                        <TextBlock Text="ط¥ط¯ط§ط±ط© ظ…ط¨ظٹط¹ط§طھ"
                                                    FontSize="11" 
                                                    Foreground="{StaticResource TextSecondaryColor}"/>
                                     </StackPanel>
@@ -647,17 +647,17 @@
                                 Background="{StaticResource SecondaryBrush}"
                                 Margin="0,15,0,0">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="أ¢ع‘â„¢أ¯آ¸عˆ" FontSize="{StaticResource FontSizeNormal}" Margin="0,0,5,0"/>
-                                <TextBlock Text="ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ§ط¸â€‍ط·آ£ط·آ¯ط¸ث†ط·آ§ط·آ±"/>
+                                <TextBlock Text="âڑ™ï¸ڈ" FontSize="{StaticResource FontSizeNormal}" Margin="0,0,5,0"/>
+                                <TextBlock Text="ط¥ط¯ط§ط±ط© ط§ظ„ط£ط¯ظˆط§ط±"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </Border>
 
-                <!-- ط·آ§ط¸â€‍ط·آ£ط¸â€ ط·آ´ط·آ·ط·آ© ط·آ§ط¸â€‍ط·آ£ط·آ®ط¸ظ¹ط·آ±ط·آ© -->
+                <!-- ط§ظ„ط£ظ†ط´ط·ط© ط§ظ„ط£ط®ظٹط±ط© -->
                 <Border Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="ظ‹ع؛â€œث† ط·آ§ط¸â€‍ط·آ£ط¸â€ ط·آ´ط·آ·ط·آ© ط·آ§ط¸â€‍ط·آ£ط·آ®ط¸ظ¹ط·آ±ط·آ©"
+                        <TextBlock Text="ًں“ˆ ط§ظ„ط£ظ†ط´ط·ط© ط§ظ„ط£ط®ظٹط±ط©"
                                    FontSize="18" 
                                    FontWeight="SemiBold" 
                                    Foreground="{StaticResource TextBrush}"
@@ -669,10 +669,10 @@
                                     Padding="10" 
                                     Margin="0,3">
                                 <StackPanel>
-                                    <TextBlock Text="أ¢إ“â€¦ ط·ع¾ط·آ³ط·آ¬ط¸ظ¹ط¸â€‍ ط·آ¯ط·آ®ط¸ث†ط¸â€‍ ط·آ£ط·آ­ط¸â€¦ط·آ¯ ط¸â€¦ط·آ­ط¸â€¦ط·آ¯"
+                                    <TextBlock Text="âœ… طھط³ط¬ظٹظ„ ط¯ط®ظˆظ„ ط£ط­ظ…ط¯ ظ…ط­ظ…ط¯"
                                                FontSize="{StaticResource FontSizeSmall}" 
                                                FontWeight="SemiBold"/>
-                                    <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° 5 ط·آ¯ط¸â€ڑط·آ§ط·آ¦ط¸â€ڑ"
+                                    <TextBlock Text="ظ…ظ†ط° 5 ط¯ظ‚ط§ط¦ظ‚"
                                                FontSize="10" 
                                                Foreground="{StaticResource TextSecondaryColor}"/>
                                 </StackPanel>
@@ -683,11 +683,11 @@
                                     Padding="10" 
                                     Margin="0,3">
                                 <StackPanel>
-                                    <TextBlock Text="ظ‹ع؛ع‘آ« ط¸ظ¾ط·آ´ط¸â€‍ ط·ع¾ط·آ³ط·آ¬ط¸ظ¹ط¸â€‍ ط·آ¯ط·آ®ط¸ث†ط¸â€‍"
+                                    <TextBlock Text="ًںڑ« ظپط´ظ„ طھط³ط¬ظٹظ„ ط¯ط®ظˆظ„"
                                                FontSize="{StaticResource FontSizeSmall}" 
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource DangerBrush}"/>
-                                    <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° 12 ط·آ¯ط¸â€ڑط¸ظ¹ط¸â€ڑط·آ©"
+                                    <TextBlock Text="ظ…ظ†ط° 12 ط¯ظ‚ظٹظ‚ط©"
                                                FontSize="10" 
                                                Foreground="{StaticResource TextSecondaryColor}"/>
                                 </StackPanel>
@@ -698,10 +698,10 @@
                                     Padding="10" 
                                     Margin="0,3">
                                 <StackPanel>
-                                    <TextBlock Text="ظ‹ع؛â€کآ¤ ط·آ¥ط¸â€ ط·آ´ط·آ§ط·طŒ ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط·آ¬ط·آ¯ط¸ظ¹ط·آ¯"
+                                    <TextBlock Text="ًں‘¤ ط¥ظ†ط´ط§ط، ظ…ط³طھط®ط¯ظ… ط¬ط¯ظٹط¯"
                                                FontSize="{StaticResource FontSizeSmall}" 
                                                FontWeight="SemiBold"/>
-                                    <TextBlock Text="ط¸â€¦ط¸â€ ط·آ° ط·آ³ط·آ§ط·آ¹ط·آ©"
+                                    <TextBlock Text="ظ…ظ†ط° ط³ط§ط¹ط©"
                                                FontSize="10" 
                                                Foreground="{StaticResource TextSecondaryColor}"/>
                                 </StackPanel>
@@ -710,10 +710,10 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ط·آ§ط¸â€‍ط·ع¾ط¸â€ ط·آ¨ط¸ظ¹ط¸â€،ط·آ§ط·ع¾ ط·آ§ط¸â€‍ط·آ£ط¸â€¦ط¸â€ ط¸ظ¹ط·آ© -->
+                <!-- ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ط§ظ„ط£ظ…ظ†ظٹط© -->
                 <Border Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="ظ‹ع؛â€‌â€™ ط·آ§ط¸â€‍ط·ع¾ط¸â€ ط·آ¨ط¸ظ¹ط¸â€،ط·آ§ط·ع¾ ط·آ§ط¸â€‍ط·آ£ط¸â€¦ط¸â€ ط¸ظ¹ط·آ©"
+                        <TextBlock Text="ًں”’ ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ط§ظ„ط£ظ…ظ†ظٹط©"
                                    FontSize="18" 
                                    FontWeight="SemiBold" 
                                    Foreground="{StaticResource TextBrush}"
@@ -726,11 +726,11 @@
                                 Padding="10" 
                                 Margin="0,5">
                             <StackPanel>
-                                <TextBlock Text="أ¢ع‘آ أ¯آ¸عˆ ط¸â€¦ط·آ­ط·آ§ط¸ث†ط¸â€‍ط·آ§ط·ع¾ ط·ع¾ط·آ³ط·آ¬ط¸ظ¹ط¸â€‍ ط·آ¯ط·آ®ط¸ث†ط¸â€‍ ط¸â€¦ط·آ´ط·آ¨ط¸ث†ط¸â€،ط·آ©"
+                                <TextBlock Text="âڑ ï¸ڈ ظ…ط­ط§ظˆظ„ط§طھ طھط³ط¬ظٹظ„ ط¯ط®ظˆظ„ ظ…ط´ط¨ظˆظ‡ط©"
                                            FontSize="{StaticResource FontSizeSmall}" 
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource DangerBrush}"/>
-                                <TextBlock Text="3 ط¸â€¦ط·آ­ط·آ§ط¸ث†ط¸â€‍ط·آ§ط·ع¾ ط¸â€¦ط¸â€  IP ط·ط›ط¸ظ¹ط·آ± ط¸â€¦ط·آ¹ط·آ±ط¸ث†ط¸ظ¾"
+                                <TextBlock Text="3 ظ…ط­ط§ظˆظ„ط§طھ ظ…ظ† IP ط؛ظٹط± ظ…ط¹ط±ظˆظپ"
                                            FontSize="10" 
                                            Foreground="{StaticResource TextSecondaryColor}"/>
                             </StackPanel>
@@ -741,8 +741,8 @@
                                 FontSize="{StaticResource FontSizeSmall}"
                                 Height="30">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="ظ‹ع؛â€‌ع†" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
-                                <TextBlock Text="ط·آ¹ط·آ±ط·آ¶ ط·آ§ط¸â€‍ط·ع¾ط¸ظ¾ط·آ§ط·آµط¸ظ¹ط¸â€‍"/>
+                                <TextBlock Text="ًں”چ" FontSize="{StaticResource FontSizeSmall}" Margin="0,0,3,0"/>
+                                <TextBlock Text="ط¹ط±ط¶ ط§ظ„طھظپط§طµظٹظ„"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -750,7 +750,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- ط·آ´ط·آ±ط¸ظ¹ط·آ· ط·آ§ط¸â€‍ط·آ­ط·آ§ط¸â€‍ط·آ© -->
+        <!-- ط´ط±ظٹط· ط§ظ„ط­ط§ظ„ط© -->
         <Border Grid.Row="3" 
                 Background="{StaticResource BackgroundBrush}" 
                 BorderBrush="{StaticResource BorderColor}"
@@ -758,27 +758,27 @@
                 Padding="20,15"
                 Margin="20,10,20,0">
             <Grid>
-                <TextBlock Text="ط¸â€ ط·آ¸ط·آ§ط¸â€¦ ط·آ¥ط·آ¯ط·آ§ط·آ±ط·آ© ط·آ§ط¸â€‍ط¸â€¦ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ط¸ظ¹ط¸â€  ط·آ§ط¸â€‍ط¸â€¦ط·ع¾ط¸â€ڑط·آ¯ط¸â€¦ - ط·آ¢ط·آ®ط·آ± ط·ع¾ط·آ­ط·آ¯ط¸ظ¹ط·آ«: ط·آ§ط¸â€‍ط¸ظ¹ط¸ث†ط¸â€¦ 14:25"
+                <TextBlock Text="ظ†ط¸ط§ظ… ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ط§ظ„ظ…طھظ‚ط¯ظ… - ط¢ط®ط± طھط­ط¯ظٹط«: ط§ظ„ظٹظˆظ… 14:25"
                            Foreground="{StaticResource TextBrush}"
                            VerticalAlignment="Center"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Content="ظ‹ع؛â€‌â€‍ ط·ع¾ط·آ­ط·آ¯ط¸ظ¹ط·آ«"
+                    <Button Content="ًں”„ طھط­ط¯ظٹط«"
                             Style="{StaticResource ModernButtonStyle}" 
                             Background="{StaticResource AccentBrush}"
                             Height="35"
                             FontSize="{StaticResource FontSizeSmall}"/>
-                    <Button Content="ظ‹ع؛â€œظ¹ ط·ع¾ط¸â€ڑط·آ±ط¸ظ¹ط·آ±"
+                    <Button Content="ًں“ٹ طھظ‚ط±ظٹط±"
                             Style="{StaticResource ModernButtonStyle}" 
                             Background="{StaticResource SecondaryBrush}"
                             Height="35"
                             FontSize="{StaticResource FontSizeSmall}"/>
-                    <Button Content="ظ‹ع؛â€œآ¤ ط·ع¾ط·آµط·آ¯ط¸ظ¹ط·آ±"
+                    <Button Content="ًں“¤ طھطµط¯ظٹط±"
                             Style="{StaticResource ModernButtonStyle}" 
                             Background="{StaticResource WarningBrush}"
                             Height="35"
                             FontSize="{StaticResource FontSizeSmall}"/>
-                    <Button Content="أ¢â€Œإ’ ط·آ¥ط·ط›ط¸â€‍ط·آ§ط¸â€ڑ"
+                    <Button Content="â‌Œ ط¥ط؛ظ„ط§ظ‚"
                             Style="{StaticResource ModernButtonStyle}" 
                             Background="{StaticResource SecondaryBrush}"
                             Height="35"

@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="ط§ظ„ظ†ط¸ط§ظ… ط§ظ„ظ…ط­ط§ط³ط¨ظٹ ط§ظ„ط´ط§ظ…ظ„ - ظ„ظˆط­ط© ط§ظ„ط±ط³ظˆظ… ط§ظ„ط¨ظٹط§ظ†ظٹط©"
+        Title="النظام المحاسبي الشامل - لوحة الرسوم البيانية"
         Height="900" Width="1400"
         Style="{StaticResource StandardWindow}"
         WindowState="Maximized">
 
     <Window.Resources>
-        <!-- ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ (ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ Linear Gradient(...) ) -->
+        <!-- ��� ������� (���� �� Linear Gradient(...) ) -->
         <LinearGradientBrush x:Key="GradHeader" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#667eea" Offset="0"/>
             <GradientStop Color="#764ba2" Offset="1"/>
@@ -36,7 +36,7 @@
             <GradientStop Color="#38f9d7" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+        <!-- ����� �������� -->
         <LinearGradientBrush x:Key="GradBtnPurple" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#667eea" Offset="0"/>
             <GradientStop Color="#764ba2" Offset="1"/>
@@ -62,7 +62,7 @@
             <GradientStop Color="#fed6e3" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+        <!-- ������� -->
         <Style x:Key="ModernCardStyle" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E9ECEF"/>
@@ -165,39 +165,39 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <TextBlock Text="??" FontSize="28" Foreground="White" VerticalAlignment="Center" Margin="0,0,15,0"/>
                     <StackPanel>
-                        <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" FontSize="22" FontWeight="Bold" Foreground="White"/>
-                        <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" FontSize="14" Foreground="#E8E8E8" Margin="0,2,0,0"/>
+                        <TextBlock Text="���� ��������� ������� ��������" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="������� ������ �������� ������� ���������" FontSize="14" Foreground="#E8E8E8" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                    <TextBlock x:Name="txtLastUpdate" Text="ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½: ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½..." FontSize="12" Foreground="#E8E8E8"/>
-                    <TextBlock x:Name="txtDataStatus" Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½: ï؟½ï؟½ï؟½ï؟½" FontSize="12" Foreground="#90EE90" Margin="0,2,0,0"/>
+                    <TextBlock x:Name="txtLastUpdate" Text="��� �����: ���� �������..." FontSize="12" Foreground="#E8E8E8"/>
+                    <TextBlock x:Name="txtDataStatus" Text="���� ��������: ����" FontSize="12" Foreground="#90EE90" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,15,0">
-                    <Button Content="??" ToolTip="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Width="40" Height="40"
+                    <Button Content="??" ToolTip="����� ��������" Width="40" Height="40"
                             Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
                             FontSize="16" Margin="5,0" Click="btnRefreshData_Click"/>
-                    <Button Content="??" ToolTip="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Width="40" Height="40"
+                    <Button Content="??" ToolTip="����� ��������" Width="40" Height="40"
                             Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
                             FontSize="16" Margin="5,0" Click="btnExportReports_Click"/>
-                    <Button Content="??" ToolTip="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Width="40" Height="40"
+                    <Button Content="??" ToolTip="������� ��������" Width="40" Height="40"
                             Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1.5"
                             FontSize="16" Margin="5,0" Click="btnChartSettings_Click"/>
                 </StackPanel>
 
                 <Button Grid.Column="3" Content="?" Width="40" Height="40" Background="Transparent"
                         Foreground="White" BorderBrush="White" BorderThickness="1.5"
-                        FontSize="18" FontWeight="Bold" Click="btnClose_Click" ToolTip="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                        FontSize="18" FontWeight="Bold" Click="btnClose_Click" ToolTip="����� �������"/>
             </Grid>
         </Border>
 
-        <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+        <!-- ������� -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="15">
             <StackPanel>
 
-                <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+                <!-- �������� -->
                 <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -211,15 +211,15 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ���� �������� ��������"/>
 
                             <ComboBox Grid.Column="1" x:Name="cmbTimePeriod" Width="150" SelectedIndex="0" SelectionChanged="cmbTimePeriod_SelectionChanged">
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½"/>
+                                <ComboBoxItem Content="�����"/>
+                                <ComboBoxItem Content="�������"/>
+                                <ComboBoxItem Content="����� ������"/>
+                                <ComboBoxItem Content="����� ������"/>
+                                <ComboBoxItem Content="����� �������"/>
+                                <ComboBoxItem Content="����"/>
                             </ComboBox>
                         </Grid>
 
@@ -227,43 +227,43 @@
                             <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardPurple}">
                                 <StackPanel>
                                     <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtSalesTotal" Text="0.00 ï؟½.ï؟½" Style="{StaticResource StatValueStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtSalesGrowth" Text="?? +12% ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock Text="������ ��������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtSalesTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtSalesGrowth" Text="?? +12% �� ����� ������" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardPinkRed}">
                                 <StackPanel>
                                     <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtPurchaseTotal" Text="0.00 ï؟½.ï؟½" Style="{StaticResource StatValueStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtPurchaseGrowth" Text="?? -5% ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock Text="������ ���������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtPurchaseTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtPurchaseGrowth" Text="?? -5% �� ����� ������" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardBlueCyan}">
                                 <StackPanel>
                                     <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtProfitTotal" Text="0.00 ï؟½.ï؟½" Style="{StaticResource StatValueStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtProfitMargin" Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½: 25%" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock Text="���� �����" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtProfitTotal" Text="0.00 �.�" Style="{StaticResource StatValueStyle}" Foreground="White"/>
+                                    <TextBlock x:Name="txtProfitMargin" Text="���� �����: 25%" FontSize="10" Foreground="#E8E8E8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Style="{StaticResource StatCardStyle}" Background="{StaticResource GradCardGreenTeal}">
                                 <StackPanel>
                                     <TextBlock Text="??" Style="{StaticResource IconTextStyle}" Foreground="White"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
+                                    <TextBlock Text="������ ��������" Style="{StaticResource StatLabelStyle}" Foreground="White"/>
                                     <TextBlock x:Name="txtProductCount" Text="0" Style="{StaticResource StatValueStyle}" Foreground="White"/>
-                                    <TextBlock x:Name="txtLowStockAlert" Text="?? 15 ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" FontSize="10" Foreground="#FFE4B5" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock x:Name="txtLowStockAlert" Text="?? 15 ���� ���� ��� ������" FontSize="10" Foreground="#FFE4B5" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
                         </UniformGrid>
                     </Grid>
                 </Border>
 
-                <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+                <!-- ������ �������� -->
                 <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -277,21 +277,21 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextStyle}" Text="?? ������� �������� ��������"/>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <ComboBox x:Name="cmbChartType" Width="120" Margin="5,0" SelectedIndex="0" SelectionChanged="cmbChartType_SelectionChanged">
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                                    <ComboBoxItem Content="���"/>
+                                    <ComboBoxItem Content="�����"/>
+                                    <ComboBoxItem Content="�����"/>
+                                    <ComboBoxItem Content="�����"/>
                                 </ComboBox>
 
                                 <ComboBox x:Name="cmbDataType" Width="120" Margin="5,0" SelectedIndex="0" SelectionChanged="cmbDataType_SelectionChanged">
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
-                                    <ComboBoxItem Content="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                                    <ComboBoxItem Content="��������"/>
+                                    <ComboBoxItem Content="���������"/>
+                                    <ComboBoxItem Content="�������"/>
+                                    <ComboBoxItem Content="�������"/>
                                 </ComboBox>
                             </StackPanel>
                         </Grid>
@@ -300,9 +300,9 @@
                             <Grid>
                                 <StackPanel x:Name="chartPlaceholder" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Text="??" FontSize="48" Foreground="#6C757D" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½" FontSize="16" Foreground="#6C757D" HorizontalAlignment="Center" Margin="0,10,0,5"/>
-                                    <TextBlock Text="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ (LiveCharts)" FontSize="12" Foreground="#ADB5BD" HorizontalAlignment="Center"/>
-                                    <Button Content="ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Style="{StaticResource ModernButtonStyle}" Margin="0,20,0,0" Click="btnLoadSampleData_Click"/>
+                                    <TextBlock Text="���� ��� ����� ������� ���" FontSize="16" Foreground="#6C757D" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                                    <TextBlock Text="����� ����� ����� ������ �������� (LiveCharts)" FontSize="12" Foreground="#ADB5BD" HorizontalAlignment="Center"/>
+                                    <Button Content="����� �������� ���������" Style="{StaticResource ModernButtonStyle}" Margin="0,20,0,0" Click="btnLoadSampleData_Click"/>
                                 </StackPanel>
 
                                 <ContentControl x:Name="chartContainer" Visibility="Collapsed"/>
@@ -311,7 +311,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+                <!-- �������� ������� -->
                 <Border Style="{StaticResource ModernCardStyle}" Margin="0,0,0,20">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -319,20 +319,20 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? �������� ���������� �������"/>
 
                         <UniformGrid Grid.Row="1" Columns="3" Rows="2">
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnDailySalesReport_Click"/>
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnSalesTrendsAnalysis_Click"/>
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnTopProductsReport_Click"/>
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnInventoryStatusReport_Click"/>
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnLowStockAlerts_Click"/>
-                            <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnProductProfitabilityAnalysis_Click"/>
+                            <Button Content="?? ����� �������� �������" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnDailySalesReport_Click"/>
+                            <Button Content="?? ����� ������� ��������" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnSalesTrendsAnalysis_Click"/>
+                            <Button Content="?? ���� �������� ������" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnTopProductsReport_Click"/>
+                            <Button Content="?? ����� ���� �������" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnInventoryStatusReport_Click"/>
+                            <Button Content="?? ������� ������� �������" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnLowStockAlerts_Click"/>
+                            <Button Content="?? ����� ������� ��� ������" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="5" Click="btnProductProfitabilityAnalysis_Click"/>
                         </UniformGrid>
                     </Grid>
                 </Border>
 
-                <!-- ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+                <!-- ��������� �������� -->
                 <Border Style="{StaticResource ModernCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -340,7 +340,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½"/>
+                        <TextBlock Grid.Row="0" Style="{StaticResource HeaderTextStyle}" Text="?? ��������� �������� ���������"/>
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -349,15 +349,15 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                                <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnCustomerBehaviorAnalysis_Click"/>
-                                <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnMonthlyPerformanceComparison_Click"/>
-                                <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSeasonalTrendsAnalysis_Click"/>
+                                <Button Content="?? ����� ���� �������" Background="{StaticResource GradBtnPurple}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnCustomerBehaviorAnalysis_Click"/>
+                                <Button Content="?? ������ ������ ������" Background="{StaticResource GradBtnPinkRed}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnMonthlyPerformanceComparison_Click"/>
+                                <Button Content="?? ����� ��������� ��������" Background="{StaticResource GradBtnBlueCyan}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSeasonalTrendsAnalysis_Click"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSalesForecast_Click"/>
-                                <Button Content="?? ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnDemandPlanning_Click"/>
-                                <Button Content="? ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnInteractiveDashboard_Click"/>
+                                <Button Content="?? ������ ���������" Background="{StaticResource GradBtnGreenTeal}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnSalesForecast_Click"/>
+                                <Button Content="?? ����� ��������" Background="{StaticResource GradBtnRoseGold}" Foreground="White" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnDemandPlanning_Click"/>
+                                <Button Content="? ���� ������� �������" Background="{StaticResource GradBtnAquaRose}" Foreground="#2C3E50" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,10" Click="btnInteractiveDashboard_Click"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -366,7 +366,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ -->
+        <!-- ���� ������ -->
         <Border Grid.Row="2" Background="{DynamicResource TextPrimaryBrush}" Padding="15,8">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -378,11 +378,11 @@
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <TextBlock Text="??" Foreground="#28A745" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <TextBlock x:Name="txtStatusMessage" Text="ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ - ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtStatusMessage" Text="���� ��������� ���� - ���� �������� �����" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Grid.Column="1" x:Name="txtRecordCount" Text="ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½: 1,234" Foreground="#6C757D" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
-                <TextBlock Grid.Column="2" x:Name="txtDbConnection" Text="?? ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½ï؟½" Foreground="#28A745" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
+                <TextBlock Grid.Column="1" x:Name="txtRecordCount" Text="������ �������: 1,234" Foreground="#6C757D" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
+                <TextBlock Grid.Column="2" x:Name="txtDbConnection" Text="?? ���� ������ ��������" Foreground="#28A745" FontSize="11" VerticalAlignment="Center" Margin="20,0"/>
                 <TextBlock Grid.Column="3" x:Name="txtCurrentDateTime" Text="2024-01-01 12:00:00" Foreground="#ADB5BD" FontSize="11" VerticalAlignment="Center"/>
             </Grid>
         </Border>

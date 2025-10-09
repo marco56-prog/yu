@@ -1,52 +1,28 @@
 param(
-    [Parameter(Mandatory=$true)]
     [string]$Key,
-
-    [Parameter(Mandatory=$true)]
     [string]$Value
 )
 
-$resxPath = "./AccountingSystem.WPF/Resources/Strings.resx"
-
-# Load the XML file
-try {
-    $xml = [xml](Get-Content $resxPath)
-}
-catch {
-    Write-Error "Failed to load or parse the ResX file at '$resxPath'. Error: $_"
+if (-not $Key -or -not $Value) {
+    Write-Host "Usage: .\add-resource.ps1 -Key <resource_key> -Value <resource_value>"
     exit 1
 }
 
-# Find the root element
-$root = $xml.root
+$filePath = ".\AccountingSystem.WPF\Properties\Strings.resx"
 
-# Check if the key already exists
-$existingNode = $root.SelectSingleNode("//data[@name='$Key']")
+$xml = [xml](Get-Content $filePath)
 
-if ($existingNode) {
-    Write-Warning "Resource key '$Key' already exists. No changes were made."
-    exit
-}
+$dataNode = $xml.CreateElement("data")
+$dataNode.SetAttribute("name", $Key)
+$dataNode.SetAttribute("xml:space", "preserve")
 
-# Create the new 'data' element
-$newData = $xml.CreateElement("data")
-$newData.SetAttribute("name", $Key)
-$newData.SetAttribute("xml:space", "preserve")
+$valueNode = $xml.CreateElement("value")
+$valueNode.InnerText = $Value
 
-# Create the 'value' element and set its content
-$newValue = $xml.CreateElement("value")
-$newValue.InnerText = $Value
+$dataNode.AppendChild($valueNode)
 
-# Append the new elements
-$newData.AppendChild($newValue)
-$root.AppendChild($newData)
+$xml.root.AppendChild($dataNode)
 
-# Save the modified XML file
-try {
-    $xml.Save($resxPath)
-    Write-Host "Successfully added resource '$Key' to '$resxPath'."
-}
-catch {
-    Write-Error "Failed to save the ResX file. Error: $_"
-    exit 1
-}
+$xml.Save($filePath)
+
+Write-Host "Resource '$Key' added to $filePath"

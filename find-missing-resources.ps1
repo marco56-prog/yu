@@ -1,43 +1,27 @@
-# Script to find hard-coded strings in WPF XAML files that should be moved to resource files.
+# PowerShell Script to Find Hardcoded Arabic Strings in XAML Files
 
-$searchPath = "./AccountingSystem.WPF"
-Write-Host "Searching for hard-coded strings in XAML files under '$searchPath'..."
+# --- Configuration ---
+# Target directory to scan for XAML files.
+$targetDirectory = ".\AccountingSystem.WPF"
+# Regular expression to find hardcoded Arabic strings in XAML attributes.
+# This looks for attributes like `Content="some arabic text"` or `Header="some arabic text"`
+$regex = '((Content|Header|Title|Text|Tag|ToolTip|Message|Header)="([^"]*[\u0600-\u06FF]+[^"]*)"'
 
-# Regex to find attributes (like Content, Header, Text, Title) with hard-coded strings.
-# It avoids strings that are bindings or static resources.
-$regex = '(Content|Header|Title|Text)\s*=\s*"([^"{}]*[^"{}\s]+[^"{}]*)"'
-
-# Get all XAML files, excluding the designer cache.
-$xamlFiles = Get-ChildItem -Path $searchPath -Filter "*.xaml" -Recurse | Where-Object { $_.FullName -notlike "*\obj\*" }
-
-$foundSomething = $false
-
-foreach ($file in $xamlFiles) {
+# --- Script ---
+# Get all XAML files recursively from the target directory.
+Get-ChildItem -Path $targetDirectory -Recurse -Filter *.xaml | ForEach-Object {
+    $file = $_
+    # Read the content of the file.
     $content = Get-Content $file.FullName -Raw
-    $lines = $content.Split([Environment]::NewLine)
 
-    for ($i = 0; $i -lt $lines.Length; $i++) {
-        $line = $lines[$i]
-        $matches = [regex]::Matches($line, $regex)
+    # Find all matches for the regex in the file content.
+    $matches = $content | Select-String -Pattern $regex -AllMatches
 
-        if ($matches.Count -gt 0) {
-            foreach ($match in $matches) {
-                $foundSomething = $true
-                $hardcodedString = $match.Groups[2].Value
-
-                # Report the finding
-                Write-Host "--------------------------------------------------"
-                Write-Host "File: $($file.FullName)" -ForegroundColor Yellow
-                Write-Host "Line $($i + 1): $line"
-                Write-Host "Found hard-coded string: '$hardcodedString'" -ForegroundColor Red
-            }
+    # If any matches are found, print the file path and the matched strings.
+    if ($matches) {
+        Write-Host "File: $($file.FullName)"
+        $matches.Matches | ForEach-Object {
+            Write-Host "  - $($_.Value)"
         }
     }
-}
-
-if (-not $foundSomething) {
-    Write-Host "No hard-coded strings found in common attributes. The project looks clean!" -ForegroundColor Green
-} else {
-    Write-Host "--------------------------------------------------"
-    Write-Host "Search complete. Use the 'add-resource.ps1' script to move these strings to the resource file."
 }

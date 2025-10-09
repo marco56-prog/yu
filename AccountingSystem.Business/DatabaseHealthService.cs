@@ -171,7 +171,7 @@ namespace AccountingSystem.Business
             {
                 status.AppliedMigrations = (await _dbContext.Database.GetAppliedMigrationsAsync()).ToList();
                 status.PendingMigrations = (await _dbContext.Database.GetPendingMigrationsAsync()).ToList();
-                status.AllMigrations = (await _dbContext.Database.GetMigrationsAsync()).ToList();
+                status.AllMigrations = _dbContext.Database.GetMigrations().ToList();
 
                 status.IsUpToDate = !status.PendingMigrations.Any();
                 status.LastAppliedMigration = status.AppliedMigrations.LastOrDefault();

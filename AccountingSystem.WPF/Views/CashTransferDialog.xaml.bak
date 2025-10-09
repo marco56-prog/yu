@@ -1,7 +1,7 @@
-ï»؟<Window x:Class="AccountingSystem.WPF.Views.CashTransferDialog"
+﻿<Window x:Class="AccountingSystem.WPF.Views.CashTransferDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ط·ع¾ط·آ­ط¸ث†ط¸ظ¹ط¸â€‍ ط·آ¨ط¸ظ¹ط¸â€  ط·آ§ط¸â€‍ط·آ®ط·آ²ط·آ§ط·آ¦ط¸â€ "
+        Title="طھط­ظˆظٹظ„ ط¨ظٹظ† ط§ظ„ط®ط²ط§ط¦ظ†"
         Height="380" Width="560"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
@@ -70,11 +70,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <Border Background="{StaticResource MasterPrimaryBrush}" Width="40" Height="40" CornerRadius="20" Margin="0,0,10,0">
-                        <TextBlock Text="ظ‹ع؛â€™آ±" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="ًں’±" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <StackPanel>
-                        <TextBlock Text="ط·ع¾ط·آ­ط¸ث†ط¸ظ¹ط¸â€‍ ط·آ¨ط¸ظ¹ط¸â€  ط·آ§ط¸â€‍ط·آ®ط·آ²ط·آ§ط·آ¦ط¸â€ " FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" Foreground="{StaticResource TextPrimaryColor}"/>
-                        <TextBlock Text="ط·آ§ط¸â€ ط¸â€ڑط¸â€‍ ط¸â€¦ط·آ¨ط¸â€‍ط·ط›ط¸â€¹ط·آ§ ط¸â€¦ط¸â€  ط·آ®ط·آ²ط¸â€ ط·آ© ط·آ¥ط¸â€‍ط¸â€° ط·آ£ط·آ®ط·آ±ط¸â€°" FontSize="{StaticResource FontSizeSmall}" Foreground="{StaticResource TextSecondaryColor}"/>
+                        <TextBlock Text="طھط­ظˆظٹظ„ ط¨ظٹظ† ط§ظ„ط®ط²ط§ط¦ظ†" FontSize="{StaticResource FontSizeLarge}" FontWeight="Bold" Foreground="{StaticResource TextPrimaryColor}"/>
+                        <TextBlock Text="ط§ظ†ظ‚ظ„ ظ…ط¨ظ„ط؛ظ‹ط§ ظ…ظ† ط®ط²ظ†ط© ط¥ظ„ظ‰ ط£ط®ط±ظ‰" FontSize="{StaticResource FontSizeSmall}" Foreground="{StaticResource TextSecondaryColor}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -96,31 +96,31 @@
 
                     <!-- Source -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,12">
-                        <TextBlock Text="ط¸â€¦ط¸â€  ط·آ§ط¸â€‍ط·آ®ط·آ²ط¸â€ ط·آ©" FontWeight="Bold"/>
+                        <TextBlock Text="ظ…ظ† ط§ظ„ط®ط²ظ†ط©" FontWeight="Bold"/>
                         <TextBlock Name="txtSourceCashBox" FontSize="{StaticResource FontSizeNormal}" Foreground="{StaticResource PrimaryColor}" />
                     </StackPanel>
 
                     <!-- Target -->
                     <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,12">
-                        <TextBlock Text="ط·آ¥ط¸â€‍ط¸â€° ط·آ§ط¸â€‍ط·آ®ط·آ²ط¸â€ ط·آ© *" FontWeight="Bold"/>
+                        <TextBlock Text="ط¥ظ„ظ‰ ط§ظ„ط®ط²ظ†ط© *" FontWeight="Bold"/>
                         <ComboBox Name="cmbTargetCashBox" Height="34" FontSize="{StaticResource FontSizeNormal}"
                                   DisplayMemberPath="CashBoxName"/>
                     </StackPanel>
 
                     <!-- Amount -->
                     <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,12">
-                        <TextBlock Text="ط·آ§ط¸â€‍ط¸â€¦ط·آ¨ط¸â€‍ط·ط› *" FontWeight="Bold"/>
+                        <TextBlock Text="ط§ظ„ظ…ط¨ظ„ط؛ *" FontWeight="Bold"/>
                         <TextBox Name="txtAmount" Height="40" FontSize="{StaticResource FontSizeMedium}" Padding="10"
                                  HorizontalContentAlignment="Center"
                                  BorderBrush="{StaticResource BorderColor}" BorderThickness="2"
                                  PreviewTextInput="txtAmount_PreviewTextInput"
                                  DataObject.Pasting="txtAmount_Pasting"/>
-                        <TextBlock Text="ط·آ§ط·آ³ط·ع¾ط·آ®ط·آ¯ط¸â€¦ ط¸ظ¾ط·آ§ط·آµط¸â€‍ ط·آ¹ط·آ´ط·آ±ط¸ظ¹ ط·آ­ط·آ³ط·آ¨ ط·آ¥ط·آ¹ط·آ¯ط·آ§ط·آ¯ط·آ§ط·ع¾ ط·آ¬ط¸â€،ط·آ§ط·آ²ط¸ئ’" FontSize="{StaticResource FontSizeXSmall}" Foreground="{StaticResource TextMutedColor}" Margin="4,4,0,0"/>
+                        <TextBlock Text="ط§ط³طھط®ط¯ظ… ظپط§طµظ„ ط¹ط´ط±ظٹ ط­ط³ط¨ ط¥ط¹ط¯ط§ط¯ط§طھ ط¬ظ‡ط§ط²ظƒ" FontSize="{StaticResource FontSizeXSmall}" Foreground="{StaticResource TextMutedColor}" Margin="4,4,0,0"/>
                     </StackPanel>
 
                     <!-- Description -->
                     <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0">
-                        <TextBlock Text="ط¸ث†ط·آµط¸ظ¾ ط·آ§ط¸â€‍ط·ع¾ط·آ­ط¸ث†ط¸ظ¹ط¸â€‍ *" FontWeight="Bold"/>
+                        <TextBlock Text="ظˆطµظپ ط§ظ„طھط­ظˆظٹظ„ *" FontWeight="Bold"/>
                         <TextBox Name="txtDescription" Height="34" FontSize="{StaticResource FontSizeNormal}"/>
                     </StackPanel>
                 </Grid>
@@ -128,7 +128,7 @@
 
             <Border Style="{StaticResource CardStyle}">
                 <StackPanel>
-                    <TextBlock Text="ط¸â€¦ط¸â€‍ط·آ§ط·آ­ط·آ¸ط·آ§ط·ع¾" FontWeight="Bold"/>
+                    <TextBlock Text="ظ…ظ„ط§ط­ط¸ط§طھ" FontWeight="Bold"/>
                     <TextBox Name="txtNotes" Height="70" FontSize="{StaticResource FontSizeSmall}"
                              TextWrapping="Wrap" AcceptsReturn="True"
                              VerticalScrollBarVisibility="Auto"/>
@@ -139,14 +139,13 @@
         <!-- Footer Buttons -->
         <Border Grid.Row="2" Background="{StaticResource MasterSurfaceBrush}" Padding="12" BorderBrush="{StaticResource BorderColor}" BorderThickness="1,1,0,0" CornerRadius="8">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="btnTransfer" Content="ط·ع¾ط·آ­ط¸ث†ط¸ظ¹ط¸â€‍" Width="130" Height="42"
+                <Button Name="btnTransfer" Content="طھط­ظˆظٹظ„" Width="130" Height="42"
                         Style="{StaticResource WarningButton}"
                         Click="btnTransfer_Click" IsDefault="True"/>
-                <Button Name="btnCancel" Content="ط·آ¥ط¸â€‍ط·ط›ط·آ§ط·طŒ" Width="110" Height="42"
+                <Button Name="btnCancel" Content="ط¥ظ„ط؛ط§ط،" Width="110" Height="42"
                         Style="{StaticResource SecondaryButton}"
                         Click="btnCancel_Click" IsCancel="True"/>
             </StackPanel>
         </Border>
     </Grid>
 </Window>
-

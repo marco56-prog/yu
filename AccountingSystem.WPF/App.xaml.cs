@@ -520,6 +520,7 @@ namespace AccountingSystem.WPF
             // VMs & Helpers
             services.AddScoped<DashboardViewModel>();
             services.AddScoped<WindowHelper>();
+            services.AddTransient<ProductViewModel>();
             
             // MVVM Services and ViewModels
             services.AddAccountingSystemServices();

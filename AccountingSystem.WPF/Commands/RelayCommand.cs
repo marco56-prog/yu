@@ -1,65 +1,123 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AccountingSystem.WPF.Commands
 {
     /// <summary>
-    /// RelayCommand for synchronous operations
+    /// A command whose sole purpose is to relay its functionality to other
+    /// objects by invoking delegates. The default return value for the CanExecute
+    /// method is 'true'.
     /// </summary>
     public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
-        private readonly Func<bool>? _canExecute;
+        private readonly Action<object?> _execute;
+        private readonly Predicate<object?>? _canExecute;
 
-        public RelayCommand(Action execute, Func<bool>? canExecute = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelayCommand"/> class.
+        /// </summary>
+        /// <param name="execute">The execution logic.</param>
+        /// <param name="canExecute">The execution status logic.</param>
+        public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
-
-        public void Execute(object? parameter) => _execute();
-
-        public event EventHandler? CanExecuteChanged
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelayCommand"/> class.
+        /// </summary>
+        /// <param name="execute">The execution logic.</param>
+        /// <param name="canExecute">The execution status logic.</param>
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
+            : this(p => execute(), p => canExecute == null || canExecute())
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            if (execute == null) throw new ArgumentNullException(nameof(execute));
         }
 
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        /// <inheritdoc/>
+        public event EventHandler? CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        /// <inheritdoc/>
+        public bool CanExecute(object? parameter)
+        {
+            return _canExecute == null || _canExecute(parameter);
+        }
+
+        /// <inheritdoc/>
+        public void Execute(object? parameter)
+        {
+            _execute(parameter);
+        }
     }
 
     /// <summary>
-    /// RelayCommand with parameter for synchronous operations
+    /// A generic command whose sole purpose is to relay its functionality to other
+    /// objects by invoking delegates. The default return value for the CanExecute
+    /// method is 'true'.
     /// </summary>
+    /// <typeparam name="T">The type of the command parameter.</typeparam>
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T?> _execute;
         private readonly Predicate<T?>? _canExecute;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelayCommand{T}"/> class.
+        /// </summary>
+        /// <param name="execute">The execution logic.</param>
+        /// <param name="canExecute">The execution status logic.</param>
         public RelayCommand(Action<T?> execute, Predicate<T?>? canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke((T?)parameter) ?? true;
-
-        public void Execute(object? parameter) => _execute((T?)parameter);
-
+        /// <inheritdoc/>
         public event EventHandler? CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        /// <inheritdoc/>
+        public bool CanExecute(object? parameter)
+        {
+            return _canExecute == null || _canExecute(ConvertParameter(parameter));
+        }
+
+        /// <inheritdoc/>
+        public void Execute(object? parameter)
+        {
+            _execute(ConvertParameter(parameter));
+        }
+
+        private static T? ConvertParameter(object? parameter)
+        {
+            if (parameter is T validParameter)
+            {
+                return validParameter;
+            }
+            if (parameter == null)
+            {
+                if (typeof(T).IsValueType && Nullable.GetUnderlyingType(typeof(T)) == null)
+                {
+                    return default;
+                }
+                return (T?)parameter;
+            }
+            return (T)Convert.ChangeType(parameter, typeof(T));
+        }
     }
 
     /// <summary>
-    /// AsyncRelayCommand for asynchronous operations
+    /// An async command that relays functionality to other objects by invoking delegates.
     /// </summary>
     public class AsyncRelayCommand : ICommand
     {
@@ -73,43 +131,40 @@ namespace AccountingSystem.WPF.Commands
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter) => !_isExecuting && (_canExecute?.Invoke() ?? true);
+        public event EventHandler? CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object? parameter)
+        {
+            return !_isExecuting && (_canExecute == null || _canExecute());
+        }
 
         public async void Execute(object? parameter)
         {
-            if (!CanExecute(parameter)) return;
-
-            try
+            if (CanExecute(parameter))
             {
-                _isExecuting = true;
-                RaiseCanExecuteChanged();
-                await _execute();
-            }
-            catch (Exception ex)
-            {
-                // Log error or handle appropriately
-                System.Diagnostics.Debug.WriteLine($"AsyncRelayCommand error: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                _isExecuting = false;
-                RaiseCanExecuteChanged();
+                try
+                {
+                    _isExecuting = true;
+                    CommandManager.InvalidateRequerySuggested();
+                    await _execute();
+                }
+                finally
+                {
+                    _isExecuting = false;
+                    CommandManager.InvalidateRequerySuggested();
+                }
             }
         }
-
-        public event EventHandler? CanExecuteChanged
-        {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
-        }
-
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 
     /// <summary>
-    /// AsyncRelayCommand with parameter for asynchronous operations
+    /// A generic async command that relays functionality to other objects by invoking delegates.
     /// </summary>
+    /// <typeparam name="T">The type of the command parameter.</typeparam>
     public class AsyncRelayCommand<T> : ICommand
     {
         private readonly Func<T?, Task> _execute;
@@ -122,37 +177,50 @@ namespace AccountingSystem.WPF.Commands
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter) => !_isExecuting && (_canExecute?.Invoke((T?)parameter) ?? true);
+        public event EventHandler? CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object? parameter)
+        {
+            return !_isExecuting && (_canExecute == null || _canExecute(ConvertParameter(parameter)));
+        }
 
         public async void Execute(object? parameter)
         {
-            if (!CanExecute(parameter)) return;
-
-            try
+            if (CanExecute(parameter))
             {
-                _isExecuting = true;
-                RaiseCanExecuteChanged();
-                await _execute((T?)parameter);
-            }
-            catch (Exception ex)
-            {
-                // Log error or handle appropriately
-                System.Diagnostics.Debug.WriteLine($"AsyncRelayCommand error: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                _isExecuting = false;
-                RaiseCanExecuteChanged();
+                try
+                {
+                    _isExecuting = true;
+                    CommandManager.InvalidateRequerySuggested();
+                    await _execute(ConvertParameter(parameter));
+                }
+                finally
+                {
+                    _isExecuting = false;
+                    CommandManager.InvalidateRequerySuggested();
+                }
             }
         }
 
-        public event EventHandler? CanExecuteChanged
+        private static T? ConvertParameter(object? parameter)
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            if (parameter is T validParameter)
+            {
+                return validParameter;
+            }
+            if (parameter == null)
+            {
+                if (typeof(T).IsValueType && Nullable.GetUnderlyingType(typeof(T)) == null)
+                {
+                    return default;
+                }
+                return (T?)parameter;
+            }
+            return (T)Convert.ChangeType(parameter, typeof(T));
         }
-
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

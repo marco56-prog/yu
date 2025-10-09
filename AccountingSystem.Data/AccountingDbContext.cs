@@ -62,11 +62,6 @@ public class AccountingDbContext : DbContext
     public DbSet<CustomerLoyaltyPoint> CustomerLoyaltyPoints { get; set; }
     public DbSet<LoyaltyTransaction> LoyaltyTransactions { get; set; }
 
-
-
-
-
-
     // جداول حركات المخزون والمعاملات
     public DbSet<StockMovement> StockMovements { get; set; }
     public DbSet<CashBox> CashBoxes { get; set; }
@@ -113,6 +108,11 @@ public class AccountingDbContext : DbContext
     // سجلات الأخطاء الشاملة
     public DbSet<ErrorLog> ErrorLogs { get; set; }
     public DbSet<ErrorLogComment> ErrorLogComments { get; set; }
+
+    // Core Accounting
+    public DbSet<Account> Accounts { get; set; }
+    public DbSet<JournalVoucher> JournalVouchers { get; set; }
+    public DbSet<JournalVoucherDetail> JournalVoucherDetails { get; set; }
 
     // التقارير المخصصة
     // public DbSet<CustomReport> CustomReports { get; set; } // معطل مؤقتاً لحل مشاكل FK
@@ -252,6 +252,17 @@ public class AccountingDbContext : DbContext
             .HasIndex(st => st.TransactionNumber)
             .IsUnique()
             .HasDatabaseName("IX_SupplierTransaction_Number");
+
+        // Core Accounting
+        modelBuilder.Entity<Account>()
+            .HasIndex(a => a.Code)
+            .IsUnique()
+            .HasDatabaseName("IX_Account_Code");
+
+        modelBuilder.Entity<JournalVoucher>()
+            .HasIndex(v => v.VoucherNumber)
+            .IsUnique()
+            .HasDatabaseName("IX_JournalVoucher_Number");
     }
 
     /// <summary>
@@ -459,6 +470,24 @@ public class AccountingDbContext : DbContext
             .HasForeignKey(lt => lt.CustomerLoyaltyPointId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Core Accounting Relationships
+        modelBuilder.Entity<Account>()
+            .HasOne(a => a.ParentAccount)
+            .WithMany(a => a.ChildAccounts)
+            .HasForeignKey(a => a.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<JournalVoucherDetail>()
+            .HasOne(d => d.JournalVoucher)
+            .WithMany(v => v.Details)
+            .HasForeignKey(d => d.JournalVoucherId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JournalVoucherDetail>()
+            .HasOne(d => d.Account)
+            .WithMany(a => a.JournalVoucherDetails)
+            .HasForeignKey(d => d.AccountId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     /// <summary>
@@ -499,6 +528,11 @@ public class AccountingDbContext : DbContext
         modelBuilder.Entity<LoyaltyProgram>().ToTable("LoyaltyPrograms");
         modelBuilder.Entity<CustomerLoyaltyPoint>().ToTable("CustomerLoyaltyPoints");
         modelBuilder.Entity<LoyaltyTransaction>().ToTable("LoyaltyTransactions");
+
+        // Core Accounting
+        modelBuilder.Entity<Account>().ToTable("Accounts");
+        modelBuilder.Entity<JournalVoucher>().ToTable("JournalVouchers");
+        modelBuilder.Entity<JournalVoucherDetail>().ToTable("JournalVoucherDetails");
     }
 
     /// <summary>

@@ -57,15 +57,12 @@ namespace AccountingSystem.Business
             if (digits.Length < 7 || digits.Length > 15)
                 return false;
 
-            // If a number starts with '0', it must be a valid Egyptian number.
-            // Otherwise, it's not in a supported format for this system.
-            if (digits.StartsWith("0"))
-            {
-                return IsEgyptianPhone(digits);
-            }
+            // التحقق من الأرقام المصرية
+            if (IsEgyptianPhone(digits))
+                return true;
 
-            // The tests imply that only numbers starting with '0' are supported.
-            return false;
+            // التحقق من الأرقام الدولية
+            return IsInternationalPhone(digits);
         }
 
         private static bool IsEgyptianPhone(string digits)
@@ -80,19 +77,8 @@ namespace AccountingSystem.Business
             // أرقام أرضية مصرية: تبدأ بكود المحافظة
             if (digits.Length >= 8 && digits.Length <= 10)
             {
-                // Check for 3-digit city codes first
-                if (digits.Length > 8)
-                {
-                    var cityCode3 = digits.Substring(0, 3);
-                    if (IsValidEgyptianCityCode(cityCode3))
-                    {
-                        return true;
-                    }
-                }
-
-                // Then check for 2-digit city codes
-                var cityCode2 = digits.Substring(0, 2);
-                return IsValidEgyptianCityCode(cityCode2);
+                var cityCode = digits[..2];
+                return IsValidEgyptianCityCode(cityCode);
             }
 
             return false;
@@ -100,16 +86,8 @@ namespace AccountingSystem.Business
 
         private static bool IsValidEgyptianCityCode(string cityCode)
         {
-            if (string.IsNullOrEmpty(cityCode)) return false;
             // أكواد المحافظات المصرية الرئيسية
-            string[] validCodes = {
-                // 2-digit codes
-                "02", "03",
-                // 3-digit codes
-                "013", "040", "045", "046", "047", "048", "050", "055", "057",
-                "062", "064", "065", "066", "068", "082", "084", "086", "088",
-                "092", "093", "095", "096", "097"
-            };
+            string[] validCodes = { "02", "03", "04", "05", "06", "07", "08", "09", "13", "15", "16", "17", "18", "19", "20" };
             return validCodes.Contains(cityCode);
         }
 

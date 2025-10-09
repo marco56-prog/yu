@@ -277,6 +277,8 @@ namespace AccountingSystem.Business
 
         public Task<Result<Product>> CreateProductAsync(Product product) => _productService.CreateProductAsync(product);
 
+        public Task<Product> AddProductAsync(Product product) => _productService.AddProductAsync(product);
+
         public Task<Product> UpdateProductAsync(Product product) => _productService.UpdateProductAsync(product);
 
         public Task<bool> DeleteProductAsync(int id) => _productService.DeleteProductAsync(id);

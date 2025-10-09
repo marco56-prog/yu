@@ -18,6 +18,7 @@ namespace AccountingSystem.Business
         Task<Product?> GetProductByIdAsync(int id);
         Task<Result<Product>> GetProductByCodeAsync(string code);
         Task<Result<Product>> CreateProductAsync(Product product);
+        Task<Product> AddProductAsync(Product product);
         Task<Product> UpdateProductAsync(Product product);
         Task<bool> DeleteProductAsync(int id);
         Task<decimal> GetProductStockAsync(int productId);
@@ -102,6 +103,16 @@ namespace AccountingSystem.Business
             await _unitOfWork.Repository<Product>().AddAsync(product);
             await _unitOfWork.SaveChangesAsync();
             return Result<Product>.Success(product);
+        }
+
+        public async Task<Product> AddProductAsync(Product product)
+        {
+            var result = await CreateProductAsync(product);
+            if (result.IsSuccess)
+            {
+                return result.Data;
+            }
+            throw new InvalidOperationException(result.Message);
         }
 
     public async Task<Product> UpdateProductAsync(Product product)

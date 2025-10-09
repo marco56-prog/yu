@@ -5,6 +5,10 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using AccountingSystem.WPF.ViewModels;
+using AccountingSystem.WPF.Views;
+using AccountingSystem.Business;
+using AccountingSystem.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AccountingSystem.WPF
 {
@@ -308,7 +312,16 @@ namespace AccountingSystem.WPF
 
         private void mnuProducts_Click(object sender, RoutedEventArgs e)
         {
-            ShowMessage("إدارة المنتجات");
+            try
+            {
+                var productsWindow = App.ServiceProvider.GetRequiredService<ProductsWindow>();
+                productsWindow.Owner = this;
+                productsWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في فتح نافذة إدارة المنتجات: {ex.Message}\n\n{ex.StackTrace}", "خطأ فادح", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             HideSidebar();
         }
 

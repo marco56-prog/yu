@@ -179,7 +179,9 @@ namespace AccountingSystem.WPF.ViewModels
 
         private void RaiseCounters()
         {
-            OnPropertiesChanged(nameof(TotalNotifications), nameof(UnreadCount), nameof(HasUnreadNotifications));
+            OnPropertyChanged(nameof(TotalNotifications));
+            OnPropertyChanged(nameof(UnreadCount));
+            OnPropertyChanged(nameof(HasUnreadNotifications));
         }
 
         private bool FilterNotifications(object obj)

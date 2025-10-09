@@ -5,10 +5,6 @@
         Height="650" Width="1000" 
         Style="{StaticResource StandardWindow}"
         WindowState="Maximized">
-    
-    <Window.Resources>
-    <!-- Using centralized Button styles from Resources/UnifiedStyles.xaml -->
-    </Window.Resources>
 
     <Grid Style="{StaticResource MainWindowLayout}">
         <Grid.RowDefinitions>
@@ -41,33 +37,29 @@
                 
                 <!-- الأزرار -->
                 <StackPanel Grid.Column="0" Style="{StaticResource HorizontalButtonGroup}">
-                    <Button Name="btnAdd" 
-                            Style="{StaticResource PrimaryButton}" 
-                            Click="btnAdd_Click">
+                    <Button Command="{Binding AddProductCommand}"
+                            Style="{StaticResource PrimaryButton}">
                         <StackPanel Orientation="Horizontal">
                             <ContentPresenter Content="{StaticResource AddIcon}" Margin="0,0,5,0"/>
                             <TextBlock Text="إضافة منتج جديد"/>
                         </StackPanel>
                     </Button>
-                    <Button Name="btnEdit" 
-                            Style="{StaticResource SecondaryButton}" 
-                            Click="btnEdit_Click">
+                    <Button Command="{Binding EditProductCommand}"
+                            Style="{StaticResource SecondaryButton}">
                         <StackPanel Orientation="Horizontal">
                             <ContentPresenter Content="{StaticResource EditIcon}" Margin="0,0,5,0"/>
                             <TextBlock Text="تعديل"/>
                         </StackPanel>
                     </Button>
-                    <Button Name="btnDelete" 
-                            Style="{StaticResource DangerButton}" 
-                            Click="btnDelete_Click">
+                    <Button Command="{Binding DeleteProductCommand}"
+                            Style="{StaticResource DangerButton}">
                         <StackPanel Orientation="Horizontal">
                             <ContentPresenter Content="{StaticResource DeleteIcon}" Margin="0,0,5,0"/>
                             <TextBlock Text="حذف"/>
                         </StackPanel>
                     </Button>
-                    <Button Name="btnRefresh" 
-                            Style="{StaticResource SecondaryButton}" 
-                            Click="btnRefresh_Click">
+                    <Button Command="{Binding RefreshCommand}"
+                            Style="{StaticResource SecondaryButton}">
                         <StackPanel Orientation="Horizontal">
                             <ContentPresenter Content="{StaticResource RefreshIcon}" Margin="0,0,5,0"/>
                             <TextBlock Text="تحديث"/>
@@ -90,11 +82,10 @@
                                    Style="{StaticResource BodyTextBlock}" 
                                    VerticalAlignment="Center"/>
                         <Border Style="{StaticResource SearchBar}">
-                            <TextBox Name="txtSearch" 
+                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                      Width="200" 
                                      Background="Transparent"
-                                     BorderThickness="0"
-                                     TextChanged="txtSearch_TextChanged"/>
+                                     BorderThickness="0"/>
                         </Border>
                     </StackPanel>
                     
@@ -115,7 +106,8 @@
 
         <!-- جدول المنتجات -->
         <Border Grid.Row="2" Style="{StaticResource TableContainer}">
-            <DataGrid Name="dgProducts" 
+            <DataGrid ItemsSource="{Binding ProductsView}"
+                      SelectedItem="{Binding SelectedProduct}"
                       Style="{StaticResource StandardDataGrid}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="كود المنتج" Binding="{Binding ProductCode}" Width="100" IsReadOnly="True"/>
@@ -147,8 +139,7 @@
                 <Border Grid.Column="1" 
                         Style="{StaticResource SummaryPill}" 
                         Background="{StaticResource InfoBrush}">
-                    <TextBlock Name="lblCount" 
-                               Text="عدد المنتجات: 0" 
+                    <TextBlock Text="{Binding Products.Count, StringFormat='عدد المنتجات: {0}'}"
                                Foreground="{StaticResource TextOnPrimaryBrush}"/>
                 </Border>
             </Grid>

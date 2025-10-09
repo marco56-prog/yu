@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -146,7 +147,7 @@ public class Unit
 }
 
 // كائن المنتج
-public class Product
+public class Product : ICloneable
 {
     [Key]
     public int ProductId { get; set; }
@@ -250,6 +251,11 @@ public class Product
     public virtual ICollection<Promotion> Promotions { get; set; } = [];
     public virtual ICollection<ProductStock> ProductStocks { get; set; } = [];
     public virtual ICollection<ProductPriceHistory> PriceHistories { get; set; } = [];
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
 }
 
 // كائن وحدات المنتج (معاملات التحويل)

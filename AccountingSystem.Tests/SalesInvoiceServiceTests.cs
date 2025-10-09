@@ -150,9 +150,17 @@ public class SalesInvoiceServiceTests : IDisposable
         Assert.True(result.IsSuccess);
         
         var createdInvoice = result.Data;
-        Assert.Equal(950m, createdInvoice.SubTotal); // (10 * 100) - 50 = 950
-        Assert.Equal(133m, createdInvoice.TaxAmount); // 950 * 0.14 = 133
-        Assert.Equal(1083m, createdInvoice.TotalAmount); // 950 + 133 = 1083
+
+        // Corrected logic:
+        // SubTotal is the gross total before item discounts: 10 * 100 = 1000
+        // DiscountAmount is the sum of item discounts: 50
+        // Taxable amount is SubTotal - DiscountAmount: 1000 - 50 = 950
+        // TaxAmount is calculated on the taxable amount: 950 * 0.14 = 133
+        // TotalAmount (NetTotal) is taxable amount + tax: 950 + 133 = 1083
+        Assert.Equal(1000m, createdInvoice.SubTotal);
+        Assert.Equal(50m, createdInvoice.DiscountAmount);
+        Assert.Equal(133m, createdInvoice.TaxAmount);
+        Assert.Equal(1083m, createdInvoice.TotalAmount);
     }
 
     [Fact]
@@ -269,6 +277,64 @@ public class SalesInvoiceServiceTests : IDisposable
         // التحقق من عدم تحديث المخزون للمسودات
         var product_after = await _context.Products.FindAsync(product.ProductId);
         Assert.Equal(100m, product_after!.CurrentStock); // لم يتغير
+    }
+
+    [Fact]
+    public async Task CreateSalesInvoice_ShouldCalculateNetTotalCorrectly_WhenItemDiscountExists()
+    {
+        // Arrange
+        var customer = await _context.Customers.FirstAsync();
+        var product = await _context.Products.FirstAsync();
+
+        var invoice = new SalesInvoice
+        {
+            CustomerId = customer.CustomerId,
+            InvoiceDate = DateTime.Now,
+            PaidAmount = 0, // No payment
+            CreatedBy = "TestUser"
+        };
+
+        invoice.Items.Add(new SalesInvoiceItem
+        {
+            ProductId = product.ProductId,
+            Quantity = 10,
+            UnitPrice = 100, // TotalPrice = 1000
+            DiscountAmount = 50 // Item discount
+        });
+
+        invoice.Items.Add(new SalesInvoiceItem
+        {
+            ProductId = product.ProductId,
+            Quantity = 5,
+            UnitPrice = 80, // TotalPrice = 400
+            DiscountAmount = 20 // Item discount
+        });
+
+        // Expected calculations:
+        // SubTotal should be sum of TotalPrices: (10 * 100) + (5 * 80) = 1400
+        // TotalDiscount on invoice should be sum of item discounts: 50 + 20 = 70
+        // NetTotal = SubTotal - TotalDiscount = 1400 - 70 = 1330
+        // RemainingAmount = 1330 (since PaidAmount is 0)
+
+        // Buggy calculation that is currently in place:
+        // Item1 NetAmount = 1000 - 50 = 950
+        // Item2 NetAmount = 400 - 20 = 380
+        // SubTotal (buggy) = 950 + 380 = 1330
+        // TotalDiscount = 50 + 20 = 70
+        // NetTotal (buggy) = SubTotal - TotalDiscount = 1330 - 70 = 1260 (INCORRECT)
+
+        // Act
+        var result = await _salesInvoiceService.CreateSalesInvoiceAsync(invoice);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        var createdInvoice = result.Data;
+
+        // These assertions will fail with the current buggy logic, proving the bug exists.
+        Assert.Equal(1400m, createdInvoice.SubTotal);
+        Assert.Equal(70m, createdInvoice.DiscountAmount);
+        Assert.Equal(1330m, createdInvoice.NetTotal);
+        Assert.Equal(1330m, createdInvoice.RemainingAmount);
     }
 
     public void Dispose()

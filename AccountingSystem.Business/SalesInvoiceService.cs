@@ -478,16 +478,19 @@ namespace AccountingSystem.Business
                 d.NetAmount  = Math.Max(0, d.TotalPrice - d.DiscountAmount);
             }
 
-            var subTotal        = invoice.Items.Sum(x => x.NetAmount);
+            var subTotal        = invoice.Items.Sum(x => x.TotalPrice);
             var detailsDiscount = invoice.Items.Sum(x => x.DiscountAmount);
 
             invoice.SubTotal       = subTotal;
-            invoice.DiscountAmount = Math.Max(0, detailsDiscount);
+            invoice.DiscountAmount = Math.Max(0, invoice.DiscountAmount) + detailsDiscount;
 
-            // If TaxRate provided, compute tax from SubTotal
+            // Tax is calculated on the value after discounts.
+            var taxableAmount = invoice.SubTotal - invoice.DiscountAmount;
+
+            // If TaxRate provided, compute tax from the taxable amount
             if (invoice.TaxRate > 0)
             {
-                invoice.TaxAmount = Math.Round(invoice.SubTotal * (invoice.TaxRate / 100m), 2);
+                invoice.TaxAmount = Math.Round(taxableAmount * (invoice.TaxRate / 100m), 2);
             }
             else
             {
@@ -496,7 +499,7 @@ namespace AccountingSystem.Business
 
             invoice.PaidAmount     = Math.Max(0, invoice.PaidAmount);
 
-            invoice.NetTotal = invoice.SubTotal + invoice.TaxAmount - invoice.DiscountAmount;
+            invoice.NetTotal = taxableAmount + invoice.TaxAmount;
             if (invoice.NetTotal < 0) invoice.NetTotal = 0;
 
             if (invoice.PaidAmount > invoice.NetTotal)
@@ -505,8 +508,8 @@ namespace AccountingSystem.Business
             invoice.RemainingAmount = invoice.NetTotal - invoice.PaidAmount;
             if (invoice.RemainingAmount < 0) invoice.RemainingAmount = 0;
 
-            // Ensure TotalAmount (gross) matches tests expectations: subtotal + tax
-            invoice.TotalAmount = invoice.SubTotal + invoice.TaxAmount;
+            // After review, TotalAmount seems to represent the final billable amount, which is NetTotal.
+            invoice.TotalAmount = invoice.NetTotal;
         }
 
         private async Task SavePriceHistoryAsync(SalesInvoice invoice)

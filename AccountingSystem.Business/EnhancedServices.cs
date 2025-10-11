@@ -75,8 +75,8 @@ namespace AccountingSystem.Business
                 throw new InvalidOperationException("اسم الفئة موجود بالفعل.");
 
             existing.CategoryName = newName;
-            existing.Description  = category.Description;
-            existing.IsActive     = category.IsActive;
+            existing.Description = category.Description;
+            existing.IsActive = category.IsActive;
 
             await _context.SaveChangesAsync();
             return existing;
@@ -140,10 +140,10 @@ namespace AccountingSystem.Business
 
         public async Task<Unit> CreateUnitAsync(Unit unit)
         {
-            var name   = (unit.UnitName   ?? string.Empty).Trim();
+            var name = (unit.UnitName ?? string.Empty).Trim();
             var symbol = (unit.UnitSymbol ?? string.Empty).Trim();
 
-            var nameNorm   = name.ToLowerInvariant();
+            var nameNorm = name.ToLowerInvariant();
             var symbolNorm = symbol.ToLowerInvariant();
 
             var dup = await _context.Units
@@ -172,10 +172,10 @@ namespace AccountingSystem.Business
             if (existing == null)
                 throw new InvalidOperationException("الوحدة غير موجودة.");
 
-            var name   = (unit.UnitName   ?? string.Empty).Trim();
+            var name = (unit.UnitName ?? string.Empty).Trim();
             var symbol = (unit.UnitSymbol ?? string.Empty).Trim();
 
-            var nameNorm   = name.ToLowerInvariant();
+            var nameNorm = name.ToLowerInvariant();
             var symbolNorm = symbol.ToLowerInvariant();
 
             var dup = await _context.Units
@@ -281,7 +281,7 @@ namespace AccountingSystem.Business
 
         public Task<bool> DeleteProductAsync(int id) => _productService.DeleteProductAsync(id);
 
-        public Task<int> GetLowStockCountAsync(CancellationToken cancellationToken = default) => 
+        public Task<int> GetLowStockCountAsync(CancellationToken cancellationToken = default) =>
             _productService.GetLowStockCountAsync(cancellationToken);
 
         // ==== مخزون ====

@@ -77,8 +77,8 @@ namespace AccountingSystem.Business
         /// <summary>بحث عام عن المنتجات (بالاسم/الكود/الوصف).</summary>
         Task<IEnumerable<Product>> SearchProductsAsync(string searchTerm);
 
-    // ==== توسعة مفيدة (متوافقة مع الخدمات اللي بعتهالك) ====
-    // لا تعيد تعاريف للتواقيع الموجودة في IProductService هنا لتجنب الازدواج.
+        // ==== توسعة مفيدة (متوافقة مع الخدمات اللي بعتهالك) ====
+        // لا تعيد تعاريف للتواقيع الموجودة في IProductService هنا لتجنب الازدواج.
     }
 
     // =========================

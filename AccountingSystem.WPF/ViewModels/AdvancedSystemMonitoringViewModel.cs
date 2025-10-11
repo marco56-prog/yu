@@ -114,7 +114,7 @@ namespace AccountingSystem.WPF.ViewModels
         public AdvancedSystemMonitoringViewModel(ILogger<AdvancedSystemMonitoringViewModel> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
+
             InitializeCommands();
             InitializeData();
         }
@@ -178,12 +178,12 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("بدء مراقبة النظام - Starting system monitoring");
-                
+
                 SystemStatus = "قيد المراقبة";
-                
+
                 // محاكاة بدء المراقبة
                 await Task.Delay(1000);
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -202,9 +202,9 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("إيقاف مراقبة النظام - Stopping system monitoring");
-                
+
                 SystemStatus = "متوقف";
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -223,7 +223,7 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("تحديث بيانات المراقبة - Refreshing monitoring data");
-                
+
                 // محاكاة تحديث البيانات
                 var random = new Random();
                 CpuUsage = random.NextDouble() * 100;
@@ -232,9 +232,9 @@ namespace AccountingSystem.WPF.ViewModels
                 ActiveConnections = random.Next(1, 20);
                 ThreadCount = random.Next(50, 200);
                 DatabaseSize = 50.0 + random.NextDouble() * 50;
-                
+
                 await Task.Delay(500); // محاكاة وقت التحديث
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -253,9 +253,9 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("تصدير سجل المراقبة - Exporting monitoring log");
-                
+
                 await Task.Delay(1000); // محاكاة عملية التصدير
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -274,9 +274,9 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("مسح سجل المراقبة - Clearing monitoring log");
-                
+
                 SystemAlerts.Clear();
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -295,7 +295,7 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("عرض تفاصيل المراقبة - Viewing monitoring details");
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Info,
@@ -314,9 +314,9 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("فحص صحة النظام - Checking system health");
-                
+
                 await Task.Delay(2000); // محاكاة فحص شامل
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Success,
@@ -335,9 +335,9 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("تحسين النظام - Optimizing system");
-                
+
                 await Task.Delay(3000); // محاكاة عملية التحسين
-                
+
                 SystemAlerts.Add(new SystemAlert
                 {
                     Level = AlertLevel.Success,

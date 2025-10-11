@@ -88,7 +88,7 @@ public interface IUnitOfWork : IDisposable
     void BeginTransaction();
     Task CommitTransactionAsync();
     void RollbackTransaction();
-    
+
     // خصائص Repository للوصول المباشر
     IRepository<Customer> Customers { get; }
     IRepository<Supplier> Suppliers { get; }

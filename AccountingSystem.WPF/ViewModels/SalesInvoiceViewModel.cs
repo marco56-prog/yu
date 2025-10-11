@@ -231,8 +231,8 @@ namespace AccountingSystem.WPF.ViewModels
 
         // Computed Properties
         public string InvoiceNumber => CurrentInvoice?.InvoiceNumber ?? "سيتم التوليد تلقائياً";
-        public string WindowTitle => CurrentInvoice?.InvoiceNumber != null 
-            ? $"فاتورة بيع - {CurrentInvoice.InvoiceNumber}" 
+        public string WindowTitle => CurrentInvoice?.InvoiceNumber != null
+            ? $"فاتورة بيع - {CurrentInvoice.InvoiceNumber}"
             : "فاتورة بيع جديدة";
         public string CustomerBalance => SelectedCustomer?.Balance.ToString("C", _culture) ?? "0.00 ج.م";
         public bool CanEdit => CurrentMode == InvoiceMode.New || CurrentMode == InvoiceMode.Edit;
@@ -450,8 +450,8 @@ namespace AccountingSystem.WPF.ViewModels
             {
                 var setting = await _context.SystemSettings.AsNoTracking()
                     .FirstOrDefaultAsync(s => s.SettingKey == "TaxRate", ct);
-                
-                if (setting?.SettingValue != null && 
+
+                if (setting?.SettingValue != null &&
                     decimal.TryParse(setting.SettingValue, out var rate))
                 {
                     TaxRate = rate;
@@ -517,9 +517,9 @@ namespace AccountingSystem.WPF.ViewModels
             InvoiceDate = DateTime.Now;
             Notes = string.Empty;
             PaidAmount = 0;
-            
+
             InvoiceItems.Clear();
-            
+
             CurrentMode = InvoiceMode.New;
             HasUnsavedChanges = false;
             StatusMessage = "فاتورة جديدة";
@@ -563,18 +563,18 @@ namespace AccountingSystem.WPF.ViewModels
         private void CalculateTotals()
         {
             SubTotal = InvoiceItems.Sum(item => item.Quantity * item.UnitPrice);
-            
+
             var itemsDiscount = InvoiceItems.Sum(item => item.DiscountAmount);
-            var globalDiscount = GlobalDiscountIsPercentage 
-                ? SubTotal * (GlobalDiscountAmount / 100m) 
+            var globalDiscount = GlobalDiscountIsPercentage
+                ? SubTotal * (GlobalDiscountAmount / 100m)
                 : GlobalDiscountAmount;
-            
+
             TotalDiscount = itemsDiscount + globalDiscount;
-            
-            var baseForTax = TaxOnNetOfDiscount 
-                ? Math.Max(0, SubTotal - TotalDiscount) 
+
+            var baseForTax = TaxOnNetOfDiscount
+                ? Math.Max(0, SubTotal - TotalDiscount)
                 : SubTotal;
-            
+
             TaxAmount = Math.Round(baseForTax * (TaxRate / 100m), 2);
             NetTotal = baseForTax + TaxAmount;
 
@@ -629,13 +629,13 @@ namespace AccountingSystem.WPF.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show($"فشل في حفظ الفاتورة: {result?.Message ?? "خطأ غير معروف"}", 
+                    MessageBox.Show($"فشل في حفظ الفاتورة: {result?.Message ?? "خطأ غير معروف"}",
                         "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في حفظ الفاتورة: {ex.Message}", 
+                MessageBox.Show($"خطأ في حفظ الفاتورة: {ex.Message}",
                     "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
                 ComprehensiveLogger.LogError("فشل حفظ فاتورة البيع", ex, "SalesInvoiceViewModel");
             }
@@ -682,7 +682,7 @@ namespace AccountingSystem.WPF.ViewModels
                 // Check if auto-post is enabled
                 var autoPostSetting = await _context.SystemSettings
                     .FirstOrDefaultAsync(s => s.SettingKey == "AutoPostSalesInvoices");
-                
+
                 if (autoPostSetting?.SettingValue?.ToLower() == "true")
                 {
                     var posted = await _salesInvoiceService.PostSalesInvoiceAsync(invoice.SalesInvoiceId);
@@ -729,7 +729,7 @@ namespace AccountingSystem.WPF.ViewModels
                 // This would be called from ItemEntryDialog
                 if (item != null)
                 {
-                    var existing = InvoiceItems.FirstOrDefault(i => 
+                    var existing = InvoiceItems.FirstOrDefault(i =>
                         i.ProductId == item.ProductId && i.UnitId == item.UnitId);
 
                     if (existing != null)
@@ -759,7 +759,7 @@ namespace AccountingSystem.WPF.ViewModels
 
             try
             {
-                if (MessageBox.Show($"هل تريد حذف {item.Product?.ProductName}؟", 
+                if (MessageBox.Show($"هل تريد حذف {item.Product?.ProductName}؟",
                     "تأكيد الحذف", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     InvoiceItems.Remove(item);

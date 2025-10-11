@@ -100,11 +100,11 @@ public class AuditLog
 
     [Required, StringLength(50)]
     public required string Action { get; set; } // Create, Update, Delete, View, Login, etc.
-    
+
     // إضافة الخصائص المطلوبة للتوافق مع AuditService
     [Required, StringLength(100)]
     public string Operation => Action; // Alias للـ Action
-    
+
     [StringLength(50)]
     public string Username { get; set; } = string.Empty;
 
@@ -126,10 +126,10 @@ public class AuditLog
 
     [StringLength(50)]
     public string? IpAddress { get; set; }
-    
+
     [StringLength(20)]
     public string Severity { get; set; } = "Medium";
-    
+
     [StringLength(20)]
     public string Status { get; set; } = "Success";
 

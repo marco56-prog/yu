@@ -69,7 +69,7 @@ namespace AccountingSystem.Business
                 .SingleOrDefaultAsync(s => s.InvoiceNumber == number);
         }
 
-    public async Task<Result<SalesInvoice>> CreateSalesInvoiceAsync(SalesInvoice invoice)
+        public async Task<Result<SalesInvoice>> CreateSalesInvoiceAsync(SalesInvoice invoice)
         {
             // تنظيف متتبع EF لتجنب تعارض التتبع مع كيانات ملاحة قادمة من UI
             _unitOfWork.Context.ChangeTracker.Clear();
@@ -129,7 +129,7 @@ namespace AccountingSystem.Business
             invoice.CreatedDate = DateTime.Now;
             // Preserve caller's choice of draft/confirmed (tests set IsDraft explicitly).
             // Ensure CreatedBy is set
-            invoice.CreatedBy   = string.IsNullOrWhiteSpace(invoice.CreatedBy) ? "1" : invoice.CreatedBy;
+            invoice.CreatedBy = string.IsNullOrWhiteSpace(invoice.CreatedBy) ? "1" : invoice.CreatedBy;
 
             _unitOfWork.BeginTransaction();
             try
@@ -214,15 +214,15 @@ namespace AccountingSystem.Business
             CalculateInvoiceTotals(invoice);
 
             // تحديث رأس الفاتورة (نحافظ على InvoiceNumber كما هو)
-            existing.CustomerId       = invoice.CustomerId;
-            existing.InvoiceDate      = invoice.InvoiceDate;
-            existing.SubTotal         = invoice.SubTotal;
-            existing.TaxAmount        = Math.Max(0, invoice.TaxAmount);
-            existing.DiscountAmount   = Math.Max(0, invoice.DiscountAmount);
-            existing.NetTotal         = invoice.NetTotal;
-            existing.PaidAmount       = Math.Max(0, invoice.PaidAmount);
-            existing.RemainingAmount  = Math.Max(0, invoice.RemainingAmount);
-            existing.Notes            = invoice.Notes;
+            existing.CustomerId = invoice.CustomerId;
+            existing.InvoiceDate = invoice.InvoiceDate;
+            existing.SubTotal = invoice.SubTotal;
+            existing.TaxAmount = Math.Max(0, invoice.TaxAmount);
+            existing.DiscountAmount = Math.Max(0, invoice.DiscountAmount);
+            existing.NetTotal = invoice.NetTotal;
+            existing.PaidAmount = Math.Max(0, invoice.PaidAmount);
+            existing.RemainingAmount = Math.Max(0, invoice.RemainingAmount);
+            existing.Notes = invoice.Notes;
 
             _unitOfWork.BeginTransaction();
             try
@@ -332,7 +332,7 @@ namespace AccountingSystem.Business
                     invoiceId
                 );
 
-                invoice.Status  = InvoiceStatus.Confirmed;
+                invoice.Status = InvoiceStatus.Confirmed;
                 invoice.IsPosted = true;
                 _unitOfWork.Repository<SalesInvoice>().Update(invoice);
 
@@ -389,7 +389,7 @@ namespace AccountingSystem.Business
                     invoiceId
                 );
 
-                invoice.Status   = InvoiceStatus.Cancelled;
+                invoice.Status = InvoiceStatus.Cancelled;
                 invoice.IsPosted = false; // للتأكيد أنها لم تعد مرحلة
                 _unitOfWork.Repository<SalesInvoice>().Update(invoice);
 
@@ -410,7 +410,7 @@ namespace AccountingSystem.Business
                 .FindAsync(s => s.CustomerId == customerId && s.IsPosted);
 
             if (fromDate.HasValue) invoices = invoices.Where(s => s.InvoiceDate >= fromDate.Value);
-            if (toDate.HasValue)   invoices = invoices.Where(s => s.InvoiceDate <= toDate.Value);
+            if (toDate.HasValue) invoices = invoices.Where(s => s.InvoiceDate <= toDate.Value);
 
             return invoices.Sum(s => s.NetTotal);
         }
@@ -441,8 +441,8 @@ namespace AccountingSystem.Business
                 if (unit == null || !unit.IsActive)
                     throw new InvalidOperationException($"الوحدة رقم {unitId} غير موجودة أو غير نشطة");
 
-                if (d.Quantity <= 0)      throw new InvalidOperationException("الكمية يجب أن تكون أكبر من صفر");
-                if (d.UnitPrice < 0)      throw new InvalidOperationException("سعر الوحدة لا يمكن أن يكون سالباً");
+                if (d.Quantity <= 0) throw new InvalidOperationException("الكمية يجب أن تكون أكبر من صفر");
+                if (d.UnitPrice < 0) throw new InvalidOperationException("سعر الوحدة لا يمكن أن يكون سالباً");
                 if (d.DiscountAmount < 0) d.DiscountAmount = 0;
 
                 // تحقق من توافر المخزون (نفذ دائماً؛ لا يسمح بإنشاء فاتورة بكمية أكبر من المخزون)
@@ -465,9 +465,9 @@ namespace AccountingSystem.Business
                 }
             }
 
-            if (invoice.PaidAmount < 0)      invoice.PaidAmount = 0;
-            if (invoice.TaxAmount < 0)       invoice.TaxAmount  = 0;
-            if (invoice.DiscountAmount < 0)  invoice.DiscountAmount = 0;
+            if (invoice.PaidAmount < 0) invoice.PaidAmount = 0;
+            if (invoice.TaxAmount < 0) invoice.TaxAmount = 0;
+            if (invoice.DiscountAmount < 0) invoice.DiscountAmount = 0;
         }
 
         private static void CalculateInvoiceTotals(SalesInvoice invoice)
@@ -475,13 +475,13 @@ namespace AccountingSystem.Business
             foreach (var d in invoice.Items)
             {
                 d.TotalPrice = d.Quantity * d.UnitPrice;
-                d.NetAmount  = Math.Max(0, d.TotalPrice - d.DiscountAmount);
+                d.NetAmount = Math.Max(0, d.TotalPrice - d.DiscountAmount);
             }
 
-            var subTotal        = invoice.Items.Sum(x => x.NetAmount);
+            var subTotal = invoice.Items.Sum(x => x.NetAmount);
             var detailsDiscount = invoice.Items.Sum(x => x.DiscountAmount);
 
-            invoice.SubTotal       = subTotal;
+            invoice.SubTotal = subTotal;
             invoice.DiscountAmount = Math.Max(0, detailsDiscount);
 
             // If TaxRate provided, compute tax from SubTotal
@@ -494,7 +494,7 @@ namespace AccountingSystem.Business
                 invoice.TaxAmount = Math.Max(0, invoice.TaxAmount);
             }
 
-            invoice.PaidAmount     = Math.Max(0, invoice.PaidAmount);
+            invoice.PaidAmount = Math.Max(0, invoice.PaidAmount);
 
             invoice.NetTotal = invoice.SubTotal + invoice.TaxAmount - invoice.DiscountAmount;
             if (invoice.NetTotal < 0) invoice.NetTotal = 0;
@@ -570,7 +570,7 @@ namespace AccountingSystem.Business
             }
             catch
             {
-                return Result<IEnumerable<SalesInvoice>>.Failure("فشل في جلب الفواتير") ;
+                return Result<IEnumerable<SalesInvoice>>.Failure("فشل في جلب الفواتير");
             }
         }
 

@@ -19,7 +19,7 @@ namespace AccountingSystem.WPF.Helpers
     {
         private readonly ILogger<StartupHelper>? _logger;
         private readonly AppConfiguration _appConfig;
-        
+
         private static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string LogsDir = Path.Combine(BaseDir, ConfigurationKeys.LogsDirectory);
         private static readonly string StartupLogPath = Path.Combine(LogsDir, ConfigurationKeys.StartupLogFile);
@@ -80,7 +80,7 @@ namespace AccountingSystem.WPF.Helpers
         {
             var createdNew = false;
             mutex = new Mutex(true, $"Global\\{ConfigurationKeys.ApplicationGuid}", out createdNew);
-            
+
             if (!createdNew)
             {
                 SafeAppend(StartupLogPath, $"[{GetCurrentTime()}] اكتشاف نسخة أخرى تعمل بالفعل\n");
@@ -100,7 +100,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 // التحقق من عدم تحميل المورد مسبقاً
-                if (Application.Current.Resources.MergedDictionaries.Any(d => 
+                if (Application.Current.Resources.MergedDictionaries.Any(d =>
                     string.Equals(d.Source?.OriginalString, ConfigurationKeys.UnifiedStylesPath, StringComparison.OrdinalIgnoreCase)))
                 {
                     SafeAppend(StartupLogPath, $"[{GetCurrentTime()}] UnifiedStyles سبق تحميله - تخطي التحميل المكرر\n");
@@ -108,20 +108,20 @@ namespace AccountingSystem.WPF.Helpers
                 }
 
                 // تحميل قاموس الموارد
-                var dict = new ResourceDictionary(); 
+                var dict = new ResourceDictionary();
                 dict.Source = new Uri(ConfigurationKeys.UnifiedStylesPath, UriKind.Relative);
 
                 // فحص المفاتيح المتضاربة
                 var conflictingKeys = dict.Keys.Cast<object>()
-                    .Where(key => Application.Current.Resources.Contains(key) || 
+                    .Where(key => Application.Current.Resources.Contains(key) ||
                                  Application.Current.Resources.MergedDictionaries.Any(md => md.Contains(key)))
                     .ToList();
 
                 if (conflictingKeys.Count > 0)
                 {
-                    SafeAppend(StartupLogPath, 
+                    SafeAppend(StartupLogPath,
                         $"[{GetCurrentTime()}] تم العثور على {conflictingKeys.Count} مفاتيح متضاربة: {string.Join(", ", conflictingKeys)}\n");
-                    
+
                     // إزالة المفاتيح المتضاربة
                     foreach (var key in conflictingKeys)
                     {
@@ -158,7 +158,7 @@ namespace AccountingSystem.WPF.Helpers
             var env = configuration?[ConfigurationKeys.EnvironmentKey] ??
                       Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ??
                       ConfigurationKeys.ProductionEnvironment;
-            
+
             return env.Equals(ConfigurationKeys.DevelopmentEnvironment, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -176,7 +176,7 @@ namespace AccountingSystem.WPF.Helpers
         /// الحصول على الوقت الحالي بتنسيق منسق
         /// </summary>
         /// <returns>الوقت الحالي</returns>
-        private static string GetCurrentTime() => 
+        private static string GetCurrentTime() =>
             DateTime.Now.ToString(ConfigurationKeys.DateTimeFormat, CultureInfo.InvariantCulture);
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <param name="text">النص المراد إضافته</param>
         private static void SafeAppend(string path, string text)
         {
-            try { File.AppendAllText(path, text, Encoding.UTF8); } 
+            try { File.AppendAllText(path, text, Encoding.UTF8); }
             catch { /* تجاهل آمن */ }
         }
 
@@ -197,7 +197,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <param name="text">النص المراد كتابته</param>
         private static void SafeWrite(string path, string text)
         {
-            try { File.WriteAllText(path, text, Encoding.UTF8); } 
+            try { File.WriteAllText(path, text, Encoding.UTF8); }
             catch { /* تجاهل آمن */ }
         }
     }

@@ -61,7 +61,7 @@ public class Customer
     public virtual PriceLevel? PriceLevel { get; set; }
     public virtual ICollection<SalesInvoice> SalesInvoices { get; set; } = [];
     public virtual ICollection<CustomerTransaction> CustomerTransactions { get; set; } = [];
-    
+
     // العلاقات الجديدة للعروض
     public virtual ICollection<Promotion> Promotions { get; set; } = [];
 }
@@ -244,7 +244,7 @@ public class Product
     public virtual ICollection<StockMovement> StockMovements { get; set; } = [];
     public virtual ICollection<SalesInvoiceItem> SalesInvoiceItems { get; set; } = [];
     public virtual ICollection<PurchaseInvoiceItem> PurchaseInvoiceItems { get; set; } = [];
-    
+
     // العلاقات الجديدة للخصومات والعروض والمستودعات
     public virtual ICollection<DiscountRule> DiscountRules { get; set; } = [];
     public virtual ICollection<Promotion> Promotions { get; set; } = [];

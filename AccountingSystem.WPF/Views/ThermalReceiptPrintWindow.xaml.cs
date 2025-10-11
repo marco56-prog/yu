@@ -43,11 +43,11 @@ namespace AccountingSystem.WPF.Views
         private readonly DrawingPrinting.PrinterSettings _printerSettings;
         private double _receiptWidth = 300; // العرض بالبكسل للعرض 80mm
 
-        public ThermalReceiptPrintWindow(SalesInvoice invoice, IUnitOfWork unitOfWork, 
+        public ThermalReceiptPrintWindow(SalesInvoice invoice, IUnitOfWork unitOfWork,
                                        List<PosItem> items, decimal paidAmount, string paymentMethod)
         {
             InitializeComponent();
-            
+
             _invoice = invoice ?? throw new ArgumentNullException(nameof(invoice));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _items = items ?? throw new ArgumentNullException(nameof(items));
@@ -55,7 +55,7 @@ namespace AccountingSystem.WPF.Views
             _paymentMethod = paymentMethod;
 
             _printerSettings = new DrawingPrinting.PrinterSettings();
-            
+
             Loaded += (s, e) => LoadReceiptDataAsync();
             _ = _unitOfWork; // reference to avoid unused field analysis warning
         }
@@ -66,16 +66,16 @@ namespace AccountingSystem.WPF.Views
             {
                 // تحميل الطابعات المتاحة
                 LoadAvailablePrinters();
-                
+
                 // تحديث بيانات الإيصال
                 UpdateReceiptContent();
-                
+
                 // ضبط حجم المعاينة
                 UpdateReceiptSize();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل بيانات الإيصال: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل بيانات الإيصال: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -85,16 +85,16 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 cmbAvailablePrinters.Items.Clear();
-                
+
                 // إضافة طابعة افتراضية
                 cmbAvailablePrinters.Items.Add("الطابعة الافتراضية");
-                
+
                 // تحميل جميع الطابعات المثبتة
                 foreach (string printerName in DrawingPrinting.PrinterSettings.InstalledPrinters)
                 {
                     cmbAvailablePrinters.Items.Add(printerName);
                 }
-                
+
                 // اختيار الطابعة الافتراضية
                 if (cmbAvailablePrinters.Items.Count > 0)
                 {
@@ -103,9 +103,9 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل الطابعات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل الطابعات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-                
+
                 // إضافة خيار افتراضي
                 cmbAvailablePrinters.Items.Add("لا توجد طابعات متاحة");
                 cmbAvailablePrinters.SelectedIndex = 0;
@@ -120,42 +120,42 @@ namespace AccountingSystem.WPF.Views
                 lblReceiptNumber.Text = $"إيصال رقم: {_invoice.InvoiceNumber}";
                 lblReceiptDate.Text = _invoice.InvoiceDate.ToString("yyyy/MM/dd");
                 lblReceiptTime.Text = _invoice.InvoiceDate.ToString("HH:mm:ss");
-                
+
                 // تحديث معلومات الكاشير
                 lblCashier.Text = "الكاشير: admin"; // يمكن تحسينها لاحقاً
-                
+
                 // مسح العناصر الموجودة
                 DynamicItems.Children.Clear();
-                
+
                 // إضافة عناصر الفاتورة
                 foreach (var item in _items)
                 {
                     var itemGrid = CreateReceiptItemGrid(item);
                     DynamicItems.Children.Add(itemGrid);
                 }
-                
+
                 // تحديث الإجماليات
                 lblSubTotal.Text = $"{_invoice.SubTotal:N2} ج.م";
                 lblTax.Text = $"{_invoice.TaxAmount:N2} ج.م";
                 lblDiscount.Text = $"{_invoice.DiscountAmount:N2} ج.م";
                 lblTotalAmount.Text = $"{_invoice.NetTotal:N2} ج.م";
-                
+
                 // تحديث معلومات الدفع
                 lblPaymentMethod.Text = _paymentMethod;
                 lblPaidAmount.Text = $"{_paidAmount:N2} ج.م";
                 var changeAmount = _paidAmount - _invoice.NetTotal;
                 lblChangeAmount.Text = $"{changeAmount:N2} ج.م";
                 lblChangeAmount.Foreground = changeAmount >= 0 ? System.Windows.Media.Brushes.Green : System.Windows.Media.Brushes.Red;
-                
+
                 // تحديث الباركود
                 lblBarcodeNumber.Text = $"{_invoice.InvoiceNumber}-{_invoice.InvoiceDate:yyyyMMdd}";
-                
+
                 // تحديث وقت الطباعة
                 lblPrintTime.Text = $"طبع في: {DateTime.Now:yyyy/MM/dd HH:mm:ss}";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحديث محتوى الإيصال: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحديث محتوى الإيصال: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -167,7 +167,7 @@ namespace AccountingSystem.WPF.Views
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
             grid.Margin = new Thickness(0, 0, 0, 2);
-            
+
             // اسم المنتج
             var nameBlock = new TextBlock
             {
@@ -175,7 +175,7 @@ namespace AccountingSystem.WPF.Views
             };
             Grid.SetColumn(nameBlock, 0);
             grid.Children.Add(nameBlock);
-            
+
             // الكمية × السعر
             var quantityPriceBlock = new TextBlock
             {
@@ -186,7 +186,7 @@ namespace AccountingSystem.WPF.Views
             };
             Grid.SetColumn(quantityPriceBlock, 1);
             grid.Children.Add(quantityPriceBlock);
-            
+
             // الإجمالي
             var totalBlock = new TextBlock
             {
@@ -197,7 +197,7 @@ namespace AccountingSystem.WPF.Views
             };
             Grid.SetColumn(totalBlock, 2);
             grid.Children.Add(totalBlock);
-            
+
             return grid;
         }
 
@@ -247,18 +247,18 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 await PrintThermalReceiptAsync();
-                
+
                 if (chkOpenCashDrawer.IsChecked == true)
                 {
                     OpenCashDrawer();
                 }
-                
-                MessageBox.Show("تم طباعة الإيصال بنجاح!", "نجحت العملية", 
+
+                MessageBox.Show("تم طباعة الإيصال بنجاح!", "نجحت العملية",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في طباعة الإيصال: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في طباعة الإيصال: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -270,9 +270,9 @@ namespace AccountingSystem.WPF.Views
                 // إنشاء معاينة طباعة تقليدية
                 var printDialog = new PrintDialog();
                 var flowDoc = CreateFlowDocument();
-                
+
                 printDialog.ShowDialog();
-                
+
                 if (printDialog.PrintQueue != null)
                 {
                     var paginator = ((IDocumentPaginatorSource)flowDoc).DocumentPaginator;
@@ -281,7 +281,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في معاينة الطباعة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في معاينة الطباعة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -295,7 +295,7 @@ namespace AccountingSystem.WPF.Views
                     Filter = "PDF Files|*.pdf|XPS Files|*.xps",
                     FileName = $"Receipt_{_invoice.InvoiceNumber}_{DateTime.Now:yyyyMMdd}"
                 };
-                
+
                 if (saveDialog.ShowDialog() == true)
                 {
                     if (saveDialog.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
@@ -306,14 +306,14 @@ namespace AccountingSystem.WPF.Views
                     {
                         SaveAsXps(saveDialog.FileName);
                     }
-                    
-                    MessageBox.Show("تم حفظ الإيصال بنجاح!", "نجحت العملية", 
+
+                    MessageBox.Show("تم حفظ الإيصال بنجاح!", "نجحت العملية",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في حفظ الإيصال: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في حفظ الإيصال: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -324,13 +324,13 @@ namespace AccountingSystem.WPF.Views
             {
                 // طباعة إيصال تجريبي
                 await PrintTestReceiptAsync();
-                
-                MessageBox.Show("تم طباعة إيصال تجريبي!", "اكتملت العملية", 
+
+                MessageBox.Show("تم طباعة إيصال تجريبي!", "اكتملت العملية",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في الطباعة التجريبية: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في الطباعة التجريبية: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -351,21 +351,21 @@ namespace AccountingSystem.WPF.Views
                 // إنشاء مستند للطباعة
                 var printDocument = new DrawingPrinting.PrintDocument();
                 printDocument.PrinterSettings = _printerSettings;
-                
+
                 // ضبط حجم الورق للطباعة الحرارية
                 var paperSize = new DrawingPrinting.PaperSize("Receipt", (int)_receiptWidth, 800);
                 printDocument.DefaultPageSettings.PaperSize = paperSize;
                 printDocument.DefaultPageSettings.Margins = new DrawingPrinting.Margins(10, 10, 10, 10);
-                
-                printDocument.PrintPage += (sender, e) => 
+
+                printDocument.PrintPage += (sender, e) =>
                 {
                     if (e.Graphics != null)
                         DrawReceiptContent(e.Graphics, e.MarginBounds);
                 };
-                
+
                 // طباعة
                 printDocument.Print();
-                
+
                 // حفظ نسخة إضافية إذا طُلب ذلك
                 if (chkPrintCopy.IsChecked == true)
                 {
@@ -387,51 +387,51 @@ namespace AccountingSystem.WPF.Views
                 var leftMargin = bounds.Left;
                 var rightMargin = bounds.Right;
                 var centerX = bounds.Left + bounds.Width / 2;
-                
+
                 // خطوط مختلفة
                 var headerFont = new DrawingFont(DefaultFontName, 12, DrawingFontStyle.Bold);
                 var normalFont = new DrawingFont(DefaultFontName, 9);
                 var smallFont = new DrawingFont(DefaultFontName, 8);
-                
+
                 // رأس المتجر
                 var storeNameSize = graphics.MeasureString(lblStoreName.Text, headerFont);
-                graphics.DrawString(lblStoreName.Text, headerFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString(lblStoreName.Text, headerFont, System.Drawing.Brushes.Black,
                     centerX - storeNameSize.Width / 2, yPosition);
                 yPosition += (int)storeNameSize.Height + 5;
-                
-                graphics.DrawString(lblStoreAddress.Text, smallFont, System.Drawing.Brushes.Black, 
+
+                graphics.DrawString(lblStoreAddress.Text, smallFont, System.Drawing.Brushes.Black,
                     leftMargin, yPosition);
                 yPosition += 15;
-                
-                graphics.DrawString(lblStorePhone.Text, smallFont, System.Drawing.Brushes.Black, 
+
+                graphics.DrawString(lblStorePhone.Text, smallFont, System.Drawing.Brushes.Black,
                     leftMargin, yPosition);
                 yPosition += 20;
-                
+
                 // خط فاصل
                 graphics.DrawLine(System.Drawing.Pens.Black, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 10;
-                
+
                 // معلومات الفاتورة
-                graphics.DrawString($"إيصال: {_invoice.InvoiceNumber}", normalFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString($"إيصال: {_invoice.InvoiceNumber}", normalFont, System.Drawing.Brushes.Black,
                     leftMargin, yPosition);
-                graphics.DrawString(_invoice.InvoiceDate.ToString("yyyy/MM/dd HH:mm"), normalFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString(_invoice.InvoiceDate.ToString("yyyy/MM/dd HH:mm"), normalFont, System.Drawing.Brushes.Black,
                     rightMargin - 100, yPosition);
                 yPosition += 20;
-                
+
                 // خط فاصل
                 graphics.DrawLine(System.Drawing.Pens.Black, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 10;
-                
+
                 // رأس الجدول
                 graphics.DrawString("الصنف", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
                 graphics.DrawString("كمية×سعر", normalFont, System.Drawing.Brushes.Black, centerX - 30, yPosition);
                 graphics.DrawString("الإجمالي", normalFont, System.Drawing.Brushes.Black, rightMargin - 60, yPosition);
                 yPosition += 20;
-                
+
                 // خط تحت الرأس
                 graphics.DrawLine(System.Drawing.Pens.Gray, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 5;
-                
+
                 // العناصر
                 foreach (var item in _items)
                 {
@@ -439,79 +439,79 @@ namespace AccountingSystem.WPF.Views
                     var productName = item.ProductName;
                     if (productName.Length > 20)
                         productName = productName.Substring(0, 17) + "...";
-                        
+
                     graphics.DrawString(productName, smallFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
-                    graphics.DrawString($"{item.Quantity:N0}×{item.UnitPrice:N2}", smallFont, System.Drawing.Brushes.Black, 
+                    graphics.DrawString($"{item.Quantity:N0}×{item.UnitPrice:N2}", smallFont, System.Drawing.Brushes.Black,
                         centerX - 30, yPosition);
-                    graphics.DrawString($"{item.TotalPrice:N2}", smallFont, System.Drawing.Brushes.Black, 
+                    graphics.DrawString($"{item.TotalPrice:N2}", smallFont, System.Drawing.Brushes.Black,
                         rightMargin - 60, yPosition);
                     yPosition += 15;
                 }
-                
+
                 yPosition += 10;
-                
+
                 // خط فاصل
                 graphics.DrawLine(System.Drawing.Pens.Black, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 10;
-                
+
                 // الإجماليات
                 graphics.DrawString("المجموع:", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
-                graphics.DrawString($"{_invoice.SubTotal:N2} ج.م", normalFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString($"{_invoice.SubTotal:N2} ج.م", normalFont, System.Drawing.Brushes.Black,
                     rightMargin - 80, yPosition);
                 yPosition += 15;
-                
+
                 if (_invoice.TaxAmount > 0)
                 {
                     graphics.DrawString("الضريبة:", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
-                    graphics.DrawString($"{_invoice.TaxAmount:N2} ج.م", normalFont, System.Drawing.Brushes.Black, 
+                    graphics.DrawString($"{_invoice.TaxAmount:N2} ج.م", normalFont, System.Drawing.Brushes.Black,
                         rightMargin - 80, yPosition);
                     yPosition += 15;
                 }
-                
+
                 if (_invoice.DiscountAmount > 0)
                 {
                     graphics.DrawString("الخصم:", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
-                    graphics.DrawString($"{_invoice.DiscountAmount:N2} ج.م", normalFont, System.Drawing.Brushes.Black, 
+                    graphics.DrawString($"{_invoice.DiscountAmount:N2} ج.م", normalFont, System.Drawing.Brushes.Black,
                         rightMargin - 80, yPosition);
                     yPosition += 15;
                 }
-                
+
                 // الإجمالي النهائي
                 graphics.DrawLine(System.Drawing.Pens.Black, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 5;
-                
+
                 graphics.DrawString("الإجمالي:", headerFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
-                graphics.DrawString($"{_invoice.NetTotal:N2} ج.م", headerFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString($"{_invoice.NetTotal:N2} ج.م", headerFont, System.Drawing.Brushes.Black,
                     rightMargin - 100, yPosition);
                 yPosition += 25;
-                
+
                 // معلومات الدفع
                 graphics.DrawString($"الدفع: {_paymentMethod}", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
                 yPosition += 15;
                 graphics.DrawString($"المدفوع: {_paidAmount:N2} ج.م", normalFont, System.Drawing.Brushes.Black, leftMargin, yPosition);
                 yPosition += 15;
-                
+
                 var changeAmount = _paidAmount - _invoice.NetTotal;
                 if (changeAmount != 0)
                 {
-                    graphics.DrawString($"الباقي: {changeAmount:N2} ج.م", normalFont, 
+                    graphics.DrawString($"الباقي: {changeAmount:N2} ج.م", normalFont,
                         changeAmount >= 0 ? System.Drawing.Brushes.Green : System.Drawing.Brushes.Red, leftMargin, yPosition);
                     yPosition += 20;
                 }
-                
+
                 // رسالة الشكر
                 yPosition += 10;
                 graphics.DrawLine(System.Drawing.Pens.Black, leftMargin, yPosition, rightMargin, yPosition);
                 yPosition += 10;
-                
+
                 var thankYouSize = graphics.MeasureString("شكراً لزيارتكم", headerFont);
-                graphics.DrawString("شكراً لزيارتكم", headerFont, System.Drawing.Brushes.Black, 
+                graphics.DrawString("شكراً لزيارتكم", headerFont, System.Drawing.Brushes.Black,
                     centerX - thankYouSize.Width / 2, yPosition);
             }
             catch (Exception ex)
             {
                 // في حالة الخطأ، اطبع رسالة خطأ بسيطة
-                graphics.DrawString($"خطأ في الطباعة: {ex.Message}", 
+                graphics.DrawString($"خطأ في الطباعة: {ex.Message}",
                     new DrawingFont(DefaultFontName, 10), System.Drawing.Brushes.Red, bounds.Left, bounds.Top);
             }
         }
@@ -522,30 +522,30 @@ namespace AccountingSystem.WPF.Views
             {
                 var testDocument = new PrintDocument();
                 testDocument.PrinterSettings = _printerSettings;
-                
-                testDocument.PrintPage += (sender, e) => 
+
+                testDocument.PrintPage += (sender, e) =>
                 {
                     var graphics = e.Graphics;
                     if (graphics == null) return;
                     var yPos = e.MarginBounds.Top;
                     var font = new System.Drawing.Font("Arial", 10);
-                    
-                    graphics.DrawString("*** إيصال تجريبي ***", font, System.Drawing.Brushes.Black, 
+
+                    graphics.DrawString("*** إيصال تجريبي ***", font, System.Drawing.Brushes.Black,
                         e.MarginBounds.Left, yPos);
                     yPos += 20;
-                    
-                    graphics.DrawString($"التاريخ: {DateTime.Now:yyyy/MM/dd HH:mm:ss}", font, System.Drawing.Brushes.Black, 
+
+                    graphics.DrawString($"التاريخ: {DateTime.Now:yyyy/MM/dd HH:mm:ss}", font, System.Drawing.Brushes.Black,
                         e.MarginBounds.Left, yPos);
                     yPos += 20;
-                    
-                    graphics.DrawString("هذا اختبار لطباعة الإيصالات", font, System.Drawing.Brushes.Black, 
+
+                    graphics.DrawString("هذا اختبار لطباعة الإيصالات", font, System.Drawing.Brushes.Black,
                         e.MarginBounds.Left, yPos);
                     yPos += 20;
-                    
-                    graphics.DrawString("إذا ظهر هذا النص، فالطابعة تعمل بشكل صحيح", font, System.Drawing.Brushes.Black, 
+
+                    graphics.DrawString("إذا ظهر هذا النص، فالطابعة تعمل بشكل صحيح", font, System.Drawing.Brushes.Black,
                         e.MarginBounds.Left, yPos);
                 };
-                
+
                 testDocument.Print();
                 await Task.Delay(500); // انتظار قصير
             }
@@ -562,7 +562,7 @@ namespace AccountingSystem.WPF.Views
                 // محاولة إرسال أمر فتح درج النقود
                 // هذا يعتمد على نوع الطابعة
                 // ESC/POS example command could be sent to a compatible printer here if supported
-                
+
                 // يمكن تطوير هذا لاحقاً لدعم أنواع مختلفة من الطابعات
                 Console.Beep(1000, 200); // صوت تنبيه مؤقت
             }
@@ -583,12 +583,12 @@ namespace AccountingSystem.WPF.Views
             doc.PageWidth = _receiptWidth;
             doc.PagePadding = new Thickness(10);
             doc.FontFamily = new System.Windows.Media.FontFamily("Arial");
-            
+
             // يمكن إضافة المحتوى هنا حسب الحاجة
             var paragraph = new System.Windows.Documents.Paragraph();
             paragraph.Inlines.Add(new Run("محتوى الإيصال..."));
             doc.Blocks.Add(paragraph);
-            
+
             return doc;
         }
 
@@ -649,7 +649,7 @@ namespace AccountingSystem.WPF.Views
 
                     // إضافة العناصر
                     var table = new iText.Layout.Element.Table(3).UseAllAvailableWidth();
-                    
+
                     // رؤوس الجدول
                     table.AddHeaderCell(new Cell().Add(new iText.Layout.Element.Paragraph("الصنف").SetFont(font)));
                     table.AddHeaderCell(new Cell().Add(new iText.Layout.Element.Paragraph("الكمية×السعر").SetFont(font)));

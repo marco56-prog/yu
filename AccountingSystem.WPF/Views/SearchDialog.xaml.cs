@@ -65,7 +65,7 @@ namespace AccountingSystem.WPF.Views
 
             // إعداد CollectionView للفلترة والترتيب
             _collectionView = CollectionViewSource.GetDefaultView(_filteredItems);
-            
+
             // إعداد الأعمدة حسب التكوين
             SetupColumns();
 
@@ -142,7 +142,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     // تطبيق البحث حسب التكوين
                     var searchResults = _originalItems.Where(item => _config.SearchFunction(item, _searchText));
-                    
+
                     foreach (var item in searchResults)
                         _filteredItems.Add(item);
                 }
@@ -159,7 +159,7 @@ namespace AccountingSystem.WPF.Views
 
                 // تحديث حالة الأزرار
                 btnOK.IsEnabled = _filteredItems.Count > 0;
-                
+
                 UpdateStatusMessage();
             }
             catch (Exception ex)
@@ -254,7 +254,7 @@ namespace AccountingSystem.WPF.Views
 
                 default:
                     // إذا لم تكن حروف التحكم، ركّز على البحث
-                    if (e.Key >= Key.A && e.Key <= Key.Z || 
+                    if (e.Key >= Key.A && e.Key <= Key.Z ||
                         e.Key >= Key.D0 && e.Key <= Key.D9 ||
                         e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9 ||
                         e.Key == Key.Space)
@@ -290,10 +290,10 @@ namespace AccountingSystem.WPF.Views
         {
             var itemsPerPage = Math.Max(1, (int)(dgResults.ActualHeight / 25)); // تقدير تقريبي
             var currentIndex = dgResults.SelectedIndex;
-            var newIndex = down 
+            var newIndex = down
                 ? Math.Min(_filteredItems.Count - 1, currentIndex + itemsPerPage)
                 : Math.Max(0, currentIndex - itemsPerPage);
-            
+
             dgResults.SelectedIndex = newIndex;
             ScrollToSelected();
         }
@@ -436,7 +436,7 @@ namespace AccountingSystem.WPF.Views
                     customer.CustomerName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     customer.CustomerCode.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     (customer.Phone?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true),
-                
+
                 Columns = new List<SearchColumnConfig>
                 {
                     new() { Header = "الكود", PropertyPath = "CustomerCode", Width = 100 },
@@ -456,7 +456,7 @@ namespace AccountingSystem.WPF.Views
                     product.ProductName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     product.ProductCode.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     (product.Barcode?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true),
-                
+
                 Columns = new List<SearchColumnConfig>
                 {
                     new() { Header = "الكود", PropertyPath = "ProductCode", Width = 100 },
@@ -476,7 +476,7 @@ namespace AccountingSystem.WPF.Views
                     supplier.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     supplier.SupplierCode.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     (supplier.Phone?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true),
-                
+
                 Columns = new List<SearchColumnConfig>
                 {
                     new() { Header = "الكود", PropertyPath = "SupplierCode", Width = 100 },
@@ -495,7 +495,7 @@ namespace AccountingSystem.WPF.Views
                 SearchFunction = (invoice, searchText) =>
                     invoice.InvoiceNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     (invoice.Customer?.CustomerName.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true),
-                
+
                 Columns = new List<SearchColumnConfig>
                 {
                     new() { Header = "رقم الفاتورة", PropertyPath = "InvoiceNumber", Width = 120 },
@@ -508,20 +508,20 @@ namespace AccountingSystem.WPF.Views
         }
 
         // يمكن إضافة المزيد من التكوينات للكيانات الأخرى مثل المخازن والمندوبين...
-        
+
         public static SearchConfiguration<T> CreateGenericConfig<T>(
-            Func<T, string, bool> searchFunc, 
+            Func<T, string, bool> searchFunc,
             params (string Header, string PropertyPath, double Width, string? Format)[] columns)
         {
             return new SearchConfiguration<T>
             {
                 SearchFunction = searchFunc,
-                Columns = columns.Select(c => new SearchColumnConfig 
-                { 
-                    Header = c.Header, 
-                    PropertyPath = c.PropertyPath, 
+                Columns = columns.Select(c => new SearchColumnConfig
+                {
+                    Header = c.Header,
+                    PropertyPath = c.PropertyPath,
                     Width = c.Width,
-                    StringFormat = c.Format 
+                    StringFormat = c.Format
                 }).ToList()
             };
         }

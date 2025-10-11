@@ -17,10 +17,10 @@ namespace AccountingSystem.WPF.Views
         public SupplierSearchDialog(List<Supplier> suppliers)
         {
             InitializeComponent();
-            
+
             _allSuppliers = suppliers ?? throw new ArgumentNullException(nameof(suppliers));
             _filteredSuppliers = new List<Supplier>(_allSuppliers);
-            
+
             dgSuppliers.ItemsSource = _filteredSuppliers;
             txtSearch.Focus();
         }
@@ -35,29 +35,29 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 var searchText = txtSearch.Text?.ToLowerInvariant() ?? "";
-                
+
                 _filteredSuppliers.Clear();
-                
+
                 if (string.IsNullOrWhiteSpace(searchText))
                 {
                     _filteredSuppliers.AddRange(_allSuppliers);
                 }
                 else
                 {
-                    var filtered = _allSuppliers.Where(s => 
+                    var filtered = _allSuppliers.Where(s =>
                         s.SupplierName?.ToLowerInvariant().Contains(searchText) == true ||
                         s.Phone?.ToLowerInvariant().Contains(searchText) == true ||
                         s.Address?.ToLowerInvariant().Contains(searchText) == true
                     );
-                    
+
                     _filteredSuppliers.AddRange(filtered);
                 }
-                
+
                 dgSuppliers.Items.Refresh();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في البحث: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في البحث: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -114,7 +114,7 @@ namespace AccountingSystem.WPF.Views
             }
             else
             {
-                MessageBox.Show("يرجى اختيار مورد من القائمة", "تنبيه", 
+                MessageBox.Show("يرجى اختيار مورد من القائمة", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }

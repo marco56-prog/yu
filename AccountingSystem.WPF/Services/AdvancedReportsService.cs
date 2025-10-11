@@ -108,8 +108,8 @@ namespace AccountingSystem.WPF.Services
                         .ToList()
                 };
 
-                ComprehensiveLogger.LogBusinessOperation("تم إنشاء تقرير المبيعات بنجاح", 
-                    $"إجمالي الفواتير: {result.TotalInvoices}, إجمالي المبيعات: {result.TotalSales:C}", 
+                ComprehensiveLogger.LogBusinessOperation("تم إنشاء تقرير المبيعات بنجاح",
+                    $"إجمالي الفواتير: {result.TotalInvoices}, إجمالي المبيعات: {result.TotalSales:C}",
                     isSuccess: true);
 
                 return result;
@@ -192,7 +192,7 @@ namespace AccountingSystem.WPF.Services
                     .AsNoTracking()
                     .Include(item => item.Product)
                     .Include(item => item.SalesInvoice)
-                    .Where(item => item.SalesInvoice!.InvoiceDate >= startDate && 
+                    .Where(item => item.SalesInvoice!.InvoiceDate >= startDate &&
                                   item.SalesInvoice.InvoiceDate <= endDate)
                     .GroupBy(item => new { item.ProductId, item.Product!.ProductName })
                     .Select(g => new TopSellingProductData
@@ -295,8 +295,8 @@ namespace AccountingSystem.WPF.Services
                     }).ToList()
                 };
 
-                ComprehensiveLogger.LogBusinessOperation("تم إنشاء تقرير المخزون بنجاح", 
-                    $"إجمالي المنتجات: {result.TotalProducts}, قيمة المخزون: {result.TotalStockValue:C}", 
+                ComprehensiveLogger.LogBusinessOperation("تم إنشاء تقرير المخزون بنجاح",
+                    $"إجمالي المنتجات: {result.TotalProducts}, قيمة المخزون: {result.TotalStockValue:C}",
                     isSuccess: true);
 
                 return result;
@@ -361,7 +361,7 @@ namespace AccountingSystem.WPF.Services
                         CurrentStock = p.CurrentStock,
                         MinimumStock = p.MinimumStock,
                         UnitName = p.MainUnit!.UnitName ?? "",
-                        AlertLevel = p.CurrentStock <= 0 ? AlertLevel.Critical : 
+                        AlertLevel = p.CurrentStock <= 0 ? AlertLevel.Critical :
                                    p.CurrentStock <= p.MinimumStock * 0.5m ? AlertLevel.High : AlertLevel.Medium,
                         SuggestedOrderQuantity = Math.Max(p.MinimumStock * 2 - p.CurrentStock, 0)
                     })
@@ -436,31 +436,31 @@ namespace AccountingSystem.WPF.Services
                     StartDate = startDate,
                     EndDate = endDate,
                     GeneratedAt = DateTime.Now,
-                    
+
                     // المبيعات
                     TotalSales = salesInvoices.Sum(s => s.NetTotal),
                     TotalSalesCount = salesInvoices.Count,
                     TotalSalesTax = salesInvoices.Sum(s => s.TaxAmount),
                     TotalCollected = salesInvoices.Sum(s => s.PaidAmount),
                     TotalAccountsReceivable = salesInvoices.Sum(s => s.RemainingAmount),
-                    
+
                     // المشتريات
                     TotalPurchases = purchaseInvoices.Sum(p => p.NetTotal),
                     TotalPurchasesCount = purchaseInvoices.Count,
                     TotalPurchasesTax = purchaseInvoices.Sum(p => p.TaxAmount),
                     TotalPaid = purchaseInvoices.Sum(p => p.PaidAmount),
                     TotalAccountsPayable = purchaseInvoices.Sum(p => p.RemainingAmount),
-                    
+
                     // الربحية
                     GrossProfit = salesInvoices.Sum(s => s.NetTotal) - purchaseInvoices.Sum(p => p.NetTotal),
-                    NetProfit = (salesInvoices.Sum(s => s.NetTotal) - purchaseInvoices.Sum(p => p.NetTotal)) - 
+                    NetProfit = (salesInvoices.Sum(s => s.NetTotal) - purchaseInvoices.Sum(p => p.NetTotal)) -
                                (salesInvoices.Sum(s => s.TaxAmount) + purchaseInvoices.Sum(p => p.TaxAmount))
                 };
 
                 result.ProfitMargin = result.TotalSales > 0 ? (result.GrossProfit / result.TotalSales) * 100 : 0;
 
-                ComprehensiveLogger.LogBusinessOperation("تم إنشاء الملخص المالي بنجاح", 
-                    $"المبيعات: {result.TotalSales:C}, المشتريات: {result.TotalPurchases:C}, الربح: {result.GrossProfit:C}", 
+                ComprehensiveLogger.LogBusinessOperation("تم إنشاء الملخص المالي بنجاح",
+                    $"المبيعات: {result.TotalSales:C}, المشتريات: {result.TotalPurchases:C}, الربح: {result.GrossProfit:C}",
                     isSuccess: true);
 
                 return result;
@@ -738,7 +738,7 @@ namespace AccountingSystem.WPF.Services
             var culture = new CultureInfo("ar-EG");
 
             var weeklyData = sales.Union(purchases.Cast<object>())
-                .GroupBy(invoice => 
+                .GroupBy(invoice =>
                 {
                     var date = invoice is SalesInvoice s ? s.InvoiceDate : ((PurchaseInvoice)invoice).InvoiceDate;
                     return culture.Calendar.GetWeekOfYear(date, culture.DateTimeFormat.CalendarWeekRule, culture.DateTimeFormat.FirstDayOfWeek);

@@ -67,7 +67,7 @@ namespace AccountingSystem.WPF.Views.Settings
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل الإعدادات الحالية: {ex.Message}", 
+                MessageBox.Show($"خطأ في تحميل الإعدادات الحالية: {ex.Message}",
                     "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -78,7 +78,7 @@ namespace AccountingSystem.WPF.Views.Settings
             {
                 if (cmbTheme.SelectedValue == null || cmbAccent.SelectedValue == null || cmbFont.SelectedValue == null)
                 {
-                    MessageBox.Show("يرجى اختيار جميع الإعدادات", "تنبيه", 
+                    MessageBox.Show("يرجى اختيار جميع الإعدادات", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -92,12 +92,12 @@ namespace AccountingSystem.WPF.Views.Settings
 
                 _themeService.ApplyAll(options);
 
-                MessageBox.Show("تم تطبيق إعدادات المظهر بنجاح!", "نجح", 
+                MessageBox.Show("تم تطبيق إعدادات المظهر بنجاح!", "نجح",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تطبيق الإعدادات: {ex.Message}", 
+                MessageBox.Show($"خطأ في تطبيق الإعدادات: {ex.Message}",
                     "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -124,13 +124,13 @@ namespace AccountingSystem.WPF.Views.Settings
                     _themeService.ApplyAll(defaultOptions);
                     LoadCurrentSettings(); // إعادة تحميل واجهة الإعدادات
 
-                    MessageBox.Show("تم استعادة الإعدادات الافتراضية!", "نجح", 
+                    MessageBox.Show("تم استعادة الإعدادات الافتراضية!", "نجح",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في استعادة الإعدادات: {ex.Message}", 
+                MessageBox.Show($"خطأ في استعادة الإعدادات: {ex.Message}",
                     "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

@@ -138,11 +138,11 @@ namespace AccountingSystem.Business
                 .OrderByDescending(s => s.InvoiceDate)
                 .ToListAsync();
 
-            var totalSales    = invoices.Sum(s => s.SubTotal);
-            var totalTax      = invoices.Sum(s => s.TaxAmount);
+            var totalSales = invoices.Sum(s => s.SubTotal);
+            var totalTax = invoices.Sum(s => s.TaxAmount);
             var totalDiscount = invoices.Sum(s => s.DiscountAmount);
-            var netSales      = invoices.Sum(s => s.NetTotal);
-            var count         = invoices.Count;
+            var netSales = invoices.Sum(s => s.NetTotal);
+            var count = invoices.Count;
 
             return new SalesReport
             {
@@ -176,7 +176,7 @@ namespace AccountingSystem.Business
             var items = products.Select(p =>
             {
                 var purchasePrice = p.PurchasePrice < 0 ? 0 : p.PurchasePrice;
-                var currentStock  = p.CurrentStock < 0 ? 0 : p.CurrentStock;
+                var currentStock = p.CurrentStock < 0 ? 0 : p.CurrentStock;
 
                 var item = new InventoryReportItem
                 {
@@ -192,7 +192,7 @@ namespace AccountingSystem.Business
                     InventoryValue = currentStock * purchasePrice,
                 };
                 item.IsOutOfStock = item.CurrentStock <= 0;
-                item.IsLowStock   = !item.IsOutOfStock && item.CurrentStock <= item.MinimumStock;
+                item.IsLowStock = !item.IsOutOfStock && item.CurrentStock <= item.MinimumStock;
                 return item;
             }).ToList();
 
@@ -235,8 +235,8 @@ namespace AccountingSystem.Business
                 .GroupBy(x => new { x.ProductId, x.ProductName })
                 .Select(g =>
                 {
-                    var qty  = g.Sum(x => x.Quantity);
-                    var rev  = g.Sum(x => x.Revenue);
+                    var qty = g.Sum(x => x.Quantity);
+                    var rev = g.Sum(x => x.Revenue);
                     var cogs = g.Sum(x => x.Cost);
                     var prof = rev - cogs;
                     return new ProfitReportItem
@@ -254,8 +254,8 @@ namespace AccountingSystem.Business
                 .ToList();
 
             var totalRevenue = items.Sum(i => i.Revenue);
-            var totalCogs    = items.Sum(i => i.CostOfGoodsSold);
-            var grossProfit  = items.Sum(i => i.Profit);
+            var totalCogs = items.Sum(i => i.CostOfGoodsSold);
+            var grossProfit = items.Sum(i => i.Profit);
 
             return new ProfitReport
             {
@@ -281,7 +281,7 @@ namespace AccountingSystem.Business
 
             var items = customers.Select(c =>
             {
-                var totalSales    = (c.SalesInvoices?.Where(s => s.IsPosted).Sum(s => s.NetTotal)) ?? 0;
+                var totalSales = (c.SalesInvoices?.Where(s => s.IsPosted).Sum(s => s.NetTotal)) ?? 0;
                 // نفترض أن Expense = مدفوع من العميل (تحصيل)، و Income = مديونية/فاتورة
                 var totalPayments = (c.CustomerTransactions?
                                         .Where(t => t.TransactionType == TransactionType.Expense)
@@ -302,8 +302,8 @@ namespace AccountingSystem.Business
             }).OrderByDescending(i => i.Balance).ToList();
 
             var totalReceivables = items.Where(i => i.Balance > 0).Sum(i => i.Balance);
-            var totalPayables    = items.Where(i => i.Balance < 0).Sum(i => Math.Abs(i.Balance));
-            var netBalance       = items.Sum(i => i.Balance);
+            var totalPayables = items.Where(i => i.Balance < 0).Sum(i => Math.Abs(i.Balance));
+            var netBalance = items.Sum(i => i.Balance);
 
             return new CustomerBalanceReport
             {

@@ -123,7 +123,7 @@ public class InventoryAnalytics
     public int ActiveProducts { get; set; }
     public int LowStockProducts { get; set; }
     public int OutOfStockProducts { get; set; }
-    
+
     public decimal TotalInventoryValue { get; set; }
     public decimal TotalInventoryCost { get; set; }
     public decimal AverageStockLevel { get; set; }
@@ -172,10 +172,10 @@ public class CustomerAnalytics
     public int TotalCustomers { get; set; }
     public int ActiveCustomers { get; set; }
     public int NewCustomers { get; set; }
-    
+
     public decimal TotalReceivables { get; set; }
     public decimal AverageCustomerValue { get; set; }
-    
+
     public List<CustomerSegmentData> CustomerSegments { get; set; } = new();
     public List<CustomerSalesData> TopCustomers { get; set; } = new();
     public List<CustomerDebtData> HighDebtCustomers { get; set; } = new();

@@ -20,7 +20,7 @@ namespace AccountingSystem.WPF.Views
         public AdvancedReportsWindow()
         {
             InitializeComponent();
-            
+
             // Get logger and error service for proper error handling
             try
             {
@@ -85,7 +85,7 @@ namespace AccountingSystem.WPF.Views
         public AdvancedReportsWindow(AdvancedReportsViewModel viewModel)
         {
             InitializeComponent();
-            
+
             try
             {
                 _logger = App.ServiceProvider?.GetService<ILogger<AdvancedReportsWindow>>();
@@ -104,11 +104,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تم تحميل نافذة التقارير المتقدمة");
-                
+
                 // Initialize date pickers with default values
                 dpFromDate.SelectedDate = DateTime.Now.AddMonths(-1);
                 dpToDate.SelectedDate = DateTime.Now;
-                
+
                 // تحميل البيانات الأولية
                 await LoadInitialDataAsync();
             }
@@ -128,12 +128,12 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تحميل البيانات الأولية للتقارير المتقدمة");
-                
+
                 // محاكاة تحميل البيانات
                 await Task.Delay(500);
-                
+
                 // إعداد البيانات الأولية
-                MessageBox.Show("تم تحميل البيانات الأولية بنجاح\n\n• تقارير المبيعات: جاهزة\n• تقارير المشتريات: جاهزة\n• تقارير المخزون: جاهزة", 
+                MessageBox.Show("تم تحميل البيانات الأولية بنجاح\n\n• تقارير المبيعات: جاهزة\n• تقارير المشتريات: جاهزة\n• تقارير المخزون: جاهزة",
                     "تحميل البيانات", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -150,11 +150,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("بدء إنشاء التقرير");
-                
+
                 // إنشاء تقرير مالي شامل
                 var fromDate = dpFromDate.SelectedDate ?? DateTime.Now.AddMonths(-1);
                 var toDate = dpToDate.SelectedDate ?? DateTime.Now;
-                
+
                 var reportContent = $"تقرير مالي شامل\n" +
                                    $"الفترة: {fromDate:yyyy/MM/dd} - {toDate:yyyy/MM/dd}\n\n" +
                                    $"إجمالي المبيعات: 2,450,000 ج.م\n" +
@@ -162,7 +162,7 @@ namespace AccountingSystem.WPF.Views
                                    $"صافي الربح: 770,000 ج.م\n" +
                                    $"عدد الفواتير: 1,247 فاتورة\n\n" +
                                    $"تم إنشاء التقرير في: {DateTime.Now:yyyy/MM/dd HH:mm:ss}";
-                
+
                 MessageBox.Show(reportContent, "تقرير مالي شامل", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -181,32 +181,32 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("بدء تصدير التقرير");
-                
+
                 // تنفيذ وظيفة التصدير
                 var exportOptions = new string[] { "PDF", "Excel", "CSV" };
                 var choice = Microsoft.VisualBasic.Interaction.InputBox(
                     "اختر صيغة التصدير:\n1- PDF\n2- Excel\n3- CSV\n\nأدخل الرقم (1-3):",
                     "تصدير التقرير",
                     "1");
-                    
+
                 if (!string.IsNullOrEmpty(choice) && int.TryParse(choice, out int exportChoice) && exportChoice >= 1 && exportChoice <= 3)
                 {
                     var format = exportOptions[exportChoice - 1];
                     var fileName = $"C:\\Reports\\Advanced_Report_{DateTime.Now:yyyyMMdd_HHmmss}.{format.ToLower()}";
-                    
+
                     // محاكاة عملية التصدير
                     var csvContent = "اسم التقرير,التاريخ,القيمة\n";
                     csvContent += $"تقرير متقدم,{DateTime.Now:yyyy-MM-dd},2450000\n";
                     csvContent += $"تقرير المبيعات,{DateTime.Now:yyyy-MM-dd},1680000\n";
-                    
+
                     var filePath = Path.Combine("C:\\Reports", $"report_{DateTime.Now:yyyyMMdd}.csv");
-                    
+
                     try
                     {
                         Directory.CreateDirectory("C:\\Reports");
                         File.WriteAllText(filePath, csvContent, System.Text.Encoding.UTF8);
-                        
-                        MessageBox.Show($"تم تصدير التقرير بصيغة {format} بنجاح!\n\nالملف: {fileName}", 
+
+                        MessageBox.Show($"تم تصدير التقرير بصيغة {format} بنجاح!\n\nالملف: {fileName}",
                             "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     catch (Exception ioEx)
@@ -219,12 +219,12 @@ namespace AccountingSystem.WPF.Views
                 {
                     MessageBox.Show("يرجى اختيار رقم صحيح بين 1 و3", "خطأ في الاختيار", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-                var result = MessageBox.Show("هل تريد تصدير التقرير الحالي؟", 
+                var result = MessageBox.Show("هل تريد تصدير التقرير الحالي؟",
                     "تصدير التقرير", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("تم تصدير التقرير بنجاح\n\nالملف: C:\\Reports\\Advanced_Report.pdf", 
+                    MessageBox.Show("تم تصدير التقرير بنجاح\n\nالملف: C:\\Reports\\Advanced_Report.pdf",
                         "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -244,26 +244,26 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("بدء جدولة التقرير");
-                
+
                 // تنفيذ وظيفة الجدولة
                 var scheduleOptions = new string[] { "يومياً", "أسبوعياً", "شهرياً" };
                 var scheduleChoice = Microsoft.VisualBasic.Interaction.InputBox(
                     "اختر جدول إنشاء التقارير:\n1- يومياً\n2- أسبوعياً\n3- شهرياً\n\nأدخل الرقم (1-3):",
                     "جدولة التقارير",
                     "1");
-                    
+
                 if (!string.IsNullOrEmpty(scheduleChoice) && int.TryParse(scheduleChoice, out int scheduleIndex) && scheduleIndex >= 1 && scheduleIndex <= 3)
                 {
                     var frequency = scheduleOptions[scheduleIndex - 1];
-                    MessageBox.Show($"تم تفعيل جدولة إنشاء التقارير {frequency} بنجاح!\n\nسيتم إنشاء التقارير {frequency} في الساعة 6:00 صباحاً", 
+                    MessageBox.Show($"تم تفعيل جدولة إنشاء التقارير {frequency} بنجاح!\n\nسيتم إنشاء التقارير {frequency} في الساعة 6:00 صباحاً",
                         "تم التفعيل", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                var result = MessageBox.Show("هل تريد جدولة التقارير التلقائية؟", 
+                var result = MessageBox.Show("هل تريد جدولة التقارير التلقائية؟",
                     "جدولة التقارير", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("تم تفعيل جدولة التقارير بنجاح\n\nسيتم إنشاء التقارير تلقائياً في أوقات محددة", 
+                    MessageBox.Show("تم تفعيل جدولة التقارير بنجاح\n\nسيتم إنشاء التقارير تلقائياً في أوقات محددة",
                         "تفعيل الجدولة", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -283,11 +283,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تطبيق الفلاتر");
-                
+
                 // تطبيق منطق الفلاتر
                 var filterText = ((Button)sender).Content.ToString();
                 _logger?.LogInformation("تطبيق فلتر التاريخ السريع: {FilterText} - Applying quick date filter", filterText);
-                
+
                 DateTime fromDate, toDate;
                 switch (filterText)
                 {
@@ -308,18 +308,18 @@ namespace AccountingSystem.WPF.Views
                         toDate = DateTime.Today;
                         break;
                 }
-                
+
                 dpFromDate.SelectedDate = fromDate;
                 dpToDate.SelectedDate = toDate;
-                
-                MessageBox.Show($"تم تطبيق فلتر '{filterText}' بنجاح\n\nمن: {fromDate:dd/MM/yyyy}\nإلى: {toDate:dd/MM/yyyy}", 
+
+                MessageBox.Show($"تم تطبيق فلتر '{filterText}' بنجاح\n\nمن: {fromDate:dd/MM/yyyy}\nإلى: {toDate:dd/MM/yyyy}",
                     "تم تطبيق الفلتر", MessageBoxButton.OK, MessageBoxImage.Information);
-                var result = MessageBox.Show("هل تريد تطبيق فلاتر متقدمة على التقارير؟", 
+                var result = MessageBox.Show("هل تريد تطبيق فلاتر متقدمة على التقارير؟",
                     "تطبيق فلاتر", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("تم تطبيق الفلاتر المتقدمة بنجاح\n\nفلتر بالتاريخ: مفعل\nفلتر بالعميل: مفعل\nفلتر بالمبلغ: مفعل", 
+                    MessageBox.Show("تم تطبيق الفلاتر المتقدمة بنجاح\n\nفلتر بالتاريخ: مفعل\nفلتر بالعميل: مفعل\nفلتر بالمبلغ: مفعل",
                         "تم تطبيق الفلاتر", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -339,16 +339,16 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("إعادة تعيين الفلاتر");
-                
+
                 // Reset date pickers to default values
                 dpFromDate.SelectedDate = DateTime.Now.AddMonths(-1);
                 dpToDate.SelectedDate = DateTime.Now;
-                
+
                 // إعادة تعيين الفلاتر الأخرى
                 dpFromDate.SelectedDate = DateTime.Now.AddMonths(-1);
                 dpToDate.SelectedDate = DateTime.Now;
-                
-                MessageBox.Show("تم إعادة تعيين جميع الفلاتر بنجاح", 
+
+                MessageBox.Show("تم إعادة تعيين جميع الفلاتر بنجاح",
                     "إعادة تعيين", MessageBoxButton.OK, MessageBoxImage.Information);
                 MessageBox.Show("تم إعادة تعيين الفلاتر", "نجح", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -368,18 +368,18 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تصدير إلى Excel");
-                
+
                 // تصدير التقرير إلى Excel
                 var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 var fileName = $"financial_report_{timestamp}.csv"; // استخدام CSV للبساطة
                 var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
-                
+
                 var csvContent = "العنصر,القيمة,العملة\n" +
                                "إجمالي المبيعات,2450000,ج.م\n" +
                                "إجمالي المشتريات,1680000,ج.م\n" +
                                "صافي الربح,770000,ج.م\n" +
                                "عدد الفواتير,1247,فاتورة";
-                
+
                 File.WriteAllText(filePath, csvContent, System.Text.Encoding.UTF8);
                 MessageBox.Show($"تم تصدير التقرير بنجاح إلى:\n{filePath}", "تصدير Excel", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -399,18 +399,18 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تصدير إلى PDF");
-                
+
                 // تنفيذ تصدير PDF
                 var fileName = $"C:\\Reports\\Advanced_Report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
-                
+
                 try
                 {
                     Directory.CreateDirectory("C:\\Reports");
                     // محاكاة عملية التصدير
                     var pdfContent = "PDF Content Placeholder";
                     File.WriteAllText(fileName.Replace(".pdf", ".txt"), pdfContent, System.Text.Encoding.UTF8);
-                    
-                    MessageBox.Show($"تم تصدير التقرير بصيغة PDF بنجاح!\n\nالملف: {fileName}", 
+
+                    MessageBox.Show($"تم تصدير التقرير بصيغة PDF بنجاح!\n\nالملف: {fileName}",
                         "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ioEx)
@@ -418,12 +418,12 @@ namespace AccountingSystem.WPF.Views
                     _logger?.LogError(ioEx, "خطأ في حفظ ملف PDF");
                     MessageBox.Show($"خطأ في حفظ ملف PDF: {ioEx.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                var result = MessageBox.Show("هل تريد تصدير التقرير بصيغة PDF؟", 
+                var result = MessageBox.Show("هل تريد تصدير التقرير بصيغة PDF؟",
                     "تصدير PDF", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("تم تصدير التقرير بصيغة PDF بنجاح\n\nالملف: C:\\Reports\\Advanced_Report.pdf", 
+                    MessageBox.Show("تم تصدير التقرير بصيغة PDF بنجاح\n\nالملف: C:\\Reports\\Advanced_Report.pdf",
                         "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -443,17 +443,17 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("تحديث البيانات");
-                
+
                 // تحديث جميع بيانات التقارير
                 _logger?.LogInformation("تحديث بيانات التقارير");
-                
+
                 // محاكاة تحديث البيانات من قاعدة البيانات
                 var random = new Random();
                 var updatedInfo = $"تم تحديث بيانات التقارير بنجاح!\n\n" +
                                  $"آخر تحديث: {DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
                                  $"عدد السجلات المحدثة: {random.Next(150, 500)}\n" +
                                  $"حالة النظام: يعمل بشكل ممتاز";
-                
+
                 MessageBox.Show(updatedInfo, "تحديث البيانات", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -472,7 +472,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("إدارة القوالب");
-                
+
                 // فتح نافذة إدارة القوالب
                 var templatesList = new System.Text.StringBuilder();
                 templatesList.AppendLine("📜 قوالب التقارير المتاحة:");
@@ -484,14 +484,14 @@ namespace AccountingSystem.WPF.Views
                 templatesList.AppendLine("✅ 5. قالب تقرير مخصص");
                 templatesList.AppendLine();
                 templatesList.AppendLine("🔧 يمكنك إنشاء قوالب جديدة أو تعديل القوالب الموجودة");
-                
+
                 MessageBox.Show(templatesList.ToString(), "إدارة قوالب التقارير", MessageBoxButton.OK, MessageBoxImage.Information);
-                var result = MessageBox.Show("هل تريد فتح إدارة قوالب التقارير؟", 
+                var result = MessageBox.Show("هل تريد فتح إدارة قوالب التقارير؟",
                     "إدارة القوالب", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("تم فتح إدارة قوالب التقارير بنجاح\n\nعدد القوالب المتاحة: 12\nقوالب مخصصة: 5", 
+                    MessageBox.Show("تم فتح إدارة قوالب التقارير بنجاح\n\nعدد القوالب المتاحة: 12\nقوالب مخصصة: 5",
                         "قوالب التقارير", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -511,7 +511,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger?.LogInformation("عرض إحصائيات الاستخدام");
-                
+
                 // عرض إحصائيات الاستخدام
                 var stats = new System.Text.StringBuilder();
                 stats.AppendLine("📈 إحصائيات استخدام التقارير:");
@@ -525,14 +525,14 @@ namespace AccountingSystem.WPF.Views
                 stats.AppendLine($"📊 إحصائيات المستخدمين:");
                 stats.AppendLine($"• عدد المستخدمين النشطين: 15 مستخدم");
                 stats.AppendLine($"• أكثر مستخدم نشاطاً: محمد أحمد (45 تقرير)");
-                
+
                 MessageBox.Show(stats.ToString(), "إحصائيات الاستخدام", MessageBoxButton.OK, MessageBoxImage.Information);
-                var result = MessageBox.Show("هل تريد عرض إحصائيات استخدام التقارير؟", 
+                var result = MessageBox.Show("هل تريد عرض إحصائيات استخدام التقارير؟",
                     "إحصائيات الاستخدام", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("إحصائيات استخدام التقارير:\n\nعدد التقارير المنشأة: 145\nأكثر تقرير استخداماً: تقرير المبيعات\nوقت الإنشاء المتوسط: 2.3 ثانية", 
+                    MessageBox.Show("إحصائيات استخدام التقارير:\n\nعدد التقارير المنشأة: 145\nأكثر تقرير استخداماً: تقرير المبيعات\nوقت الإنشاء المتوسط: 2.3 ثانية",
                         "إحصائيات الاستخدام", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }

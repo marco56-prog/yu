@@ -18,9 +18,9 @@ namespace AccountingSystem.WPF.Views
         public PostInvoiceResult Result { get; private set; } = new();
 
         // getters القديمة (متروكة للتوافق)
-        public bool GetPrintInvoice()    => chkPrintInvoice?.IsChecked ?? false;
-        public bool GetCollectPayment()  => chkCollectPayment?.IsChecked ?? false;
-        public bool GetOpenNewInvoice()  => chkOpenNewInvoice?.IsChecked ?? false;
+        public bool GetPrintInvoice() => chkPrintInvoice?.IsChecked ?? false;
+        public bool GetCollectPayment() => chkCollectPayment?.IsChecked ?? false;
+        public bool GetOpenNewInvoice() => chkOpenNewInvoice?.IsChecked ?? false;
         public decimal GetPaymentAmount() => ParseDecimal(txtPaymentAmount?.Text);
 
         public PostInvoiceDialog(SalesInvoice invoice)
@@ -32,7 +32,7 @@ namespace AccountingSystem.WPF.Views
 
                 _culture = new CultureInfo("ar-EG");
                 _culture.NumberFormat.CurrencySymbol = "ج.م";
-                
+
                 FlowDirection = FlowDirection.RightToLeft;
                 Title = "عمليات ما بعد الحفظ - فاتورة رقم: " + invoice.InvoiceNumber;
 
@@ -83,8 +83,8 @@ namespace AccountingSystem.WPF.Views
                 }
 
                 lblInvoiceNumber.Text = string.IsNullOrWhiteSpace(Invoice.InvoiceNumber) ? "غير محدد" : Invoice.InvoiceNumber;
-                lblCustomerName.Text  = Invoice.Customer?.CustomerName ?? "غير محدد";
-                lblNetTotal.Text      = Invoice.NetTotal.ToString("C", _culture);
+                lblCustomerName.Text = Invoice.Customer?.CustomerName ?? "غير محدد";
+                lblNetTotal.Text = Invoice.NetTotal.ToString("C", _culture);
                 lblRemainingAmount.Text = Invoice.RemainingAmount.ToString("C", _culture);
 
                 // افتراضي: كامل المتبقي (لو فيه متبقي)
@@ -256,11 +256,11 @@ namespace AccountingSystem.WPF.Views
                 // املأ النتيجة الموحّدة
                 Result = new PostInvoiceResult
                 {
-                    PrintInvoice   = chkPrintInvoice?.IsChecked == true,
+                    PrintInvoice = chkPrintInvoice?.IsChecked == true,
                     CollectPayment = collect,
                     OpenNewInvoice = chkOpenNewInvoice?.IsChecked == true,
-                    PaymentAmount  = pay,
-                    NewRemaining   = Math.Max(0m, Invoice.RemainingAmount - Math.Max(0m, pay))
+                    PaymentAmount = pay,
+                    NewRemaining = Math.Max(0m, Invoice.RemainingAmount - Math.Max(0m, pay))
                 };
 
                 DialogResult = true;

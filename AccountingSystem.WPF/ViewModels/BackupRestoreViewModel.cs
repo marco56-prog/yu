@@ -133,7 +133,7 @@ namespace AccountingSystem.WPF.ViewModels
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _backupService = backupService ?? throw new ArgumentNullException(nameof(backupService));
-            
+
             InitializeCommands();
             InitializeData();
         }
@@ -216,7 +216,7 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("بدء إنشاء نسخة احتياطية كاملة - Starting full backup");
-                
+
                 BackupStatus = "جاري إنشاء النسخة الاحتياطية الكاملة...";
                 BackupProgress = 0;
 
@@ -264,7 +264,7 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("بدء إنشاء نسخة احتياطية تدريجية - Starting incremental backup");
-                
+
                 BackupStatus = "جاري إنشاء النسخة الاحتياطية التدريجية...";
                 BackupProgress = 0;
 
@@ -312,7 +312,7 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation($"بدء استعادة النسخة الاحتياطية {SelectedBackup.Name} - Starting restore from backup");
-                
+
                 BackupStatus = $"جاري استعادة النسخة {SelectedBackup.Name}...";
                 BackupProgress = 0;
 
@@ -347,11 +347,11 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation($"التحقق من سلامة النسخة {SelectedBackup.Name} - Verifying backup integrity");
-                
+
                 BackupStatus = $"جاري التحقق من النسخة {SelectedBackup.Name}...";
-                
+
                 await Task.Delay(2000); // محاكاة عملية التحقق
-                
+
                 BackupStatus = "تم التحقق من سلامة النسخة الاحتياطية بنجاح";
 
                 BackupLogs.Insert(0, new BackupLog
@@ -376,12 +376,12 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation($"حذف النسخة الاحتياطية {SelectedBackup.Name} - Deleting backup");
-                
+
                 var backupToDelete = SelectedBackup;
                 AvailableBackups.Remove(backupToDelete);
-                
+
                 await Task.Delay(500); // محاكاة عملية الحذف
-                
+
                 BackupStatus = $"تم حذف النسخة {backupToDelete.Name} بنجاح";
 
                 BackupLogs.Insert(0, new BackupLog
@@ -422,11 +422,11 @@ namespace AccountingSystem.WPF.ViewModels
             try
             {
                 _logger.LogInformation("اختبار الاتصال - Testing connection");
-                
+
                 BackupStatus = "جاري اختبار الاتصال...";
-                
+
                 await Task.Delay(1500); // محاكاة اختبار الاتصال
-                
+
                 BackupStatus = "الاتصال ناجح - جميع الخدمات تعمل بشكل طبيعي";
             }
             catch (Exception ex)
@@ -512,7 +512,7 @@ namespace AccountingSystem.WPF.ViewModels
         private void ViewBackupDetails()
         {
             if (SelectedBackup == null) return;
-            
+
             _logger.LogInformation($"عرض تفاصيل النسخة {SelectedBackup.Name} - Viewing backup details");
             BackupStatus = $"عرض تفاصيل النسخة {SelectedBackup.Name}";
         }

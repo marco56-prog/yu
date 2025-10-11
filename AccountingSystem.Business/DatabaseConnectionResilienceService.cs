@@ -51,7 +51,7 @@ namespace AccountingSystem.Business
                 {
                     // التأكد من الاتصال قبل التنفيذ
                     await EnsureConnectionAsync();
-                    
+
                     // تنفيذ الإجراء
                     return await action();
                 }
@@ -59,7 +59,7 @@ namespace AccountingSystem.Business
                 {
                     lastException = ex;
                     retryCount++;
-                    
+
                     _logger.LogWarning(
                         "Transient database error detected. Retry {RetryCount}/{MaxRetries}. Error: {Error}",
                         retryCount, maxRetries, ex.Message);
@@ -109,7 +109,7 @@ namespace AccountingSystem.Business
 
                 // التحقق من حالة الاتصال
                 var connection = _dbContext.Database.GetDbConnection();
-                
+
                 if (connection.State != ConnectionState.Open)
                 {
                     _logger.LogInformation("Opening database connection");

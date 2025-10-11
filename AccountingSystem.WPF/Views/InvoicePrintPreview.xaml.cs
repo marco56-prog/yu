@@ -28,7 +28,7 @@ namespace AccountingSystem.WPF.Views
         private readonly AccountingDbContext _context;
         private decimal _previousBalance;
         private const string UnspecifiedText = "غير محدد";
-        
+
         // متغيرات للتنقل
         private List<int> _allInvoiceIds = new();
         private int _currentIndex = -1;
@@ -42,7 +42,7 @@ namespace AccountingSystem.WPF.Views
             InitializeComponent();
 
             _invoiceArg = invoice ?? throw new ArgumentNullException(nameof(invoice));
-            _context    = context  ?? throw new ArgumentNullException(nameof(context));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
 
             // تحميل البيانات عند اكتمال التحميل
             Loaded += async (_, __) => await LoadInvoiceDataAsync();
@@ -76,7 +76,7 @@ namespace AccountingSystem.WPF.Views
 
                 // حساب الرصيد السابق
                 _previousBalance = await CalculatePreviousBalanceAsync(_fullInvoice.Customer?.CustomerId ?? 0, _fullInvoice.InvoiceDate);
-                
+
                 Title = $"معاينة طباعة الفاتورة - {_fullInvoice.InvoiceNumber}";
                 RefreshVisualPreview();
             }
@@ -123,14 +123,14 @@ namespace AccountingSystem.WPF.Views
             // تفاصيل الأصناف (بنظهر عمود "الإجمالي" كـ Quantity * UnitPrice)
             var lines = vm.Lines.Select((l, i) => new InvoiceItemViewModel
             {
-                ItemNumber    = (i + 1).ToString(),
-                ProductName   = l.ProductName,
-                UnitName      = l.UnitName,
-                Quantity      = l.Quantity,
-                UnitPrice     = l.UnitPrice,
-                TotalPrice    = l.Quantity * l.UnitPrice,
-                DiscountAmount= l.DiscountAmount,
-                NetAmount     = l.NetAmount
+                ItemNumber = (i + 1).ToString(),
+                ProductName = l.ProductName,
+                UnitName = l.UnitName,
+                Quantity = l.Quantity,
+                UnitPrice = l.UnitPrice,
+                TotalPrice = l.Quantity * l.UnitPrice,
+                DiscountAmount = l.DiscountAmount,
+                NetAmount = l.NetAmount
             }).ToList();
 
             InvoiceItemsControl.ItemsSource = lines;
@@ -169,7 +169,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     var printVM = ConvertToPrintVM(_fullInvoice, _previousBalance);
                     var doc = DocumentBuilder.BuildInvoiceDocument(printVM);
-                    
+
                     doc.PageHeight = printDlg.PrintableAreaHeight;
                     doc.PageWidth = printDlg.PrintableAreaWidth;
 
@@ -201,7 +201,7 @@ namespace AccountingSystem.WPF.Views
                 // إعدادات A4 مضبوطة (96 DPI)
                 const double A4W = 96.0 * 8.27;  // 793.92
                 const double A4H = 96.0 * 11.69; // 1121.24
-                doc.PageWidth  = A4W;
+                doc.PageWidth = A4W;
                 doc.PageHeight = A4H;
                 doc.PagePadding = new Thickness(40);
                 doc.ColumnWidth = double.PositiveInfinity;
@@ -214,7 +214,7 @@ namespace AccountingSystem.WPF.Views
                 var btnNextDoc = new Button { Content = "التالي ➡", Margin = new Thickness(4), Padding = new Thickness(10, 6, 10, 6) };
                 var btnZoomIn = new Button { Content = "تكبير +", Margin = new Thickness(4), Padding = new Thickness(10, 6, 10, 6) };
                 var btnZoomOut = new Button { Content = "تصغير -", Margin = new Thickness(4), Padding = new Thickness(10, 6, 10, 6) };
-                var btnPrintCmd = new Button { Content = "🖨️ طباعة", Margin = new Thickness(12,4,4,4), Padding = new Thickness(12, 6, 12, 6) };
+                var btnPrintCmd = new Button { Content = "🖨️ طباعة", Margin = new Thickness(12, 4, 4, 4), Padding = new Thickness(12, 6, 12, 6) };
 
                 btnPrevDoc.Click += (_, __) => NavigationCommands.PreviousPage.Execute(null, viewer);
                 btnNextDoc.Click += (_, __) => NavigationCommands.NextPage.Execute(null, viewer);
@@ -257,10 +257,10 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                if (_fullInvoice == null) 
-                { 
-                    ShowWarning("الفاتورة غير جاهزة للحفظ."); 
-                    return; 
+                if (_fullInvoice == null)
+                {
+                    ShowWarning("الفاتورة غير جاهزة للحفظ.");
+                    return;
                 }
 
                 var printVM = ConvertToPrintVM(_fullInvoice, _previousBalance);
@@ -340,16 +340,16 @@ namespace AccountingSystem.WPF.Views
                         .OrderBy(x => x.SalesInvoiceId)
                         .Select(x => x.SalesInvoiceId)
                         .ToListAsync();
-                    
+
                     _currentIndex = _allInvoiceIds.IndexOf(_fullInvoice?.SalesInvoiceId ?? _invoiceArg.SalesInvoiceId);
                 }
 
                 // حساب الفهرس الجديد
                 int newIndex = _currentIndex + direction;
-                
+
                 if (newIndex < 0 || newIndex >= _allInvoiceIds.Count)
                 {
-                    MessageBox.Show(direction < 0 ? "لا توجد فواتير سابقة" : "لا توجد فواتير تالية", 
+                    MessageBox.Show(direction < 0 ? "لا توجد فواتير سابقة" : "لا توجد فواتير تالية",
                         "تنبيه", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
@@ -366,7 +366,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     _fullInvoice = newInvoice;
                     _currentIndex = newIndex;
-                    
+
                     // إعادة حساب الرصيد السابق والتحديث
                     _previousBalance = await CalculatePreviousBalanceAsync(_fullInvoice.Customer?.CustomerId ?? 0, _fullInvoice.InvoiceDate);
                     Title = $"معاينة طباعة الفاتورة - {_fullInvoice.InvoiceNumber}";
@@ -375,7 +375,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"حدث خطأ أثناء التنقل: {ex.Message}", "خطأ", 
+                MessageBox.Show($"حدث خطأ أثناء التنقل: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -386,7 +386,7 @@ namespace AccountingSystem.WPF.Views
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
-            if (e.Key == Key.Left)  btnPrevious_Click(this, new RoutedEventArgs());
+            if (e.Key == Key.Left) btnPrevious_Click(this, new RoutedEventArgs());
             if (e.Key == Key.Right) btnNext_Click(this, new RoutedEventArgs());
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.P)
                 btnPrint_Click(this, new RoutedEventArgs());
@@ -404,7 +404,7 @@ namespace AccountingSystem.WPF.Views
                 CustomerName = invoice.Customer?.CustomerName ?? "عميل نقدي",
                 CustomerPhone = invoice.Customer?.Phone ?? UnspecifiedText,
                 CustomerAddress = invoice.Customer?.Address ?? UnspecifiedText,
-                
+
                 SubTotal = invoice.SubTotal,
                 DiscountAmount = invoice.DiscountAmount,
                 TaxAmount = invoice.TaxAmount,
@@ -427,13 +427,13 @@ namespace AccountingSystem.WPF.Views
         }
 
         // Helper methods لتبسيط رسائل التنبيه
-        private static void ShowError(string message) => 
+        private static void ShowError(string message) =>
             MessageBox.Show(message, "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
 
-        private static void ShowWarning(string message) => 
+        private static void ShowWarning(string message) =>
             MessageBox.Show(message, "تنبيه", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-        private static void ShowInfo(string message) => 
+        private static void ShowInfo(string message) =>
             MessageBox.Show(message, "معلومات", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 

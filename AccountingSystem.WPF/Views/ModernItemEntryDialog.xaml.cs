@@ -245,7 +245,7 @@ namespace AccountingSystem.WPF.Views
             {
                 StatusMessage = $"خطأ في تحميل البيانات: {ex.Message}";
                 ComprehensiveLogger.LogError("فشل تحميل بيانات نافذة إدخال الأصناف", ex, "ModernItemEntryDialog");
-                MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -323,7 +323,7 @@ namespace AccountingSystem.WPF.Views
                     _lastPrices.AddRange(prices);
                     icLastPrices.ItemsSource = _lastPrices;
                     brdLastPrices.Visibility = Visibility.Visible;
-                    
+
                     // Use the most recent price
                     var latestPrice = prices.First();
                     WholePrice = latestPrice.Price;
@@ -366,7 +366,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _selectedProduct = product;
-                
+
                 // Update UI with product info
                 lblProductName.Text = product.ProductName ?? "غير محدد";
                 lblProductCode.Text = product.ProductCode ?? "غير محدد";
@@ -445,7 +445,7 @@ namespace AccountingSystem.WPF.Views
                 }
 
                 lblConversionFactor.Text = _conversionFactor.ToString("F2", _culture);
-                
+
                 // Update available stock for selected unit
                 if (_selectedProduct != null)
                 {
@@ -467,18 +467,18 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _isCalculating = true;
-                
+
                 // Keep the total quantity in base unit constant
                 var totalInBaseUnit = (WholeQty + PartQty) * _conversionFactor;
-                
+
                 // Recalculate for new unit
                 var totalInNewUnit = totalInBaseUnit / _conversionFactor;
                 WholeQty = Math.Floor(totalInNewUnit);
                 PartQty = totalInNewUnit - WholeQty;
             }
-            finally 
-            { 
-                _isCalculating = false; 
+            finally
+            {
+                _isCalculating = false;
             }
         }
 
@@ -501,32 +501,32 @@ namespace AccountingSystem.WPF.Views
         private void CalculatePartQuantity()
         {
             if (_isCalculating) return;
-            
+
             try
             {
                 _isCalculating = true;
                 txtPartQty.Text = "0";
                 OnPropertyChanged(nameof(PartQty));
             }
-            finally 
-            { 
-                _isCalculating = false; 
+            finally
+            {
+                _isCalculating = false;
             }
         }
 
         private void CalculateWholeQuantity()
         {
             if (_isCalculating) return;
-            
+
             try
             {
                 _isCalculating = true;
                 // For now, keep it simple - part quantity doesn't affect whole quantity
                 // This can be enhanced based on specific business rules
             }
-            finally 
-            { 
-                _isCalculating = false; 
+            finally
+            {
+                _isCalculating = false;
             }
         }
 
@@ -549,32 +549,32 @@ namespace AccountingSystem.WPF.Views
         private void CalculatePartPrice()
         {
             if (_isCalculating) return;
-            
+
             try
             {
                 _isCalculating = true;
                 PartPrice = WholePrice * _conversionFactor;
                 txtPartPrice.Text = PartPrice.ToString("F2", _culture);
             }
-            finally 
-            { 
-                _isCalculating = false; 
+            finally
+            {
+                _isCalculating = false;
             }
         }
 
         private void CalculateWholePrice()
         {
             if (_isCalculating) return;
-            
+
             try
             {
                 _isCalculating = true;
                 WholePrice = _conversionFactor > 0 ? PartPrice / _conversionFactor : PartPrice;
                 txtWholePrice.Text = WholePrice.ToString("F2", _culture);
             }
-            finally 
-            { 
-                _isCalculating = false; 
+            finally
+            {
+                _isCalculating = false;
             }
         }
 
@@ -599,11 +599,11 @@ namespace AccountingSystem.WPF.Views
             {
                 var totalQuantity = WholeQty + PartQty;
                 var grossAmount = totalQuantity * WholePrice;
-                
-                var discountValue = DiscountIsPercentage 
-                    ? grossAmount * (DiscountAmount / 100m) 
+
+                var discountValue = DiscountIsPercentage
+                    ? grossAmount * (DiscountAmount / 100m)
                     : DiscountAmount;
-                
+
                 LineTotal = Math.Max(0, grossAmount - discountValue);
                 lblLineTotal.Text = LineTotal.ToString("C", _culture);
             }
@@ -638,7 +638,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     var shortage = requiredInBaseUnit - availableInBaseUnit;
                     var shortageInSelectedUnit = shortage / _conversionFactor;
-                    
+
                     lblStockWarning.Text = $"نقص في المخزون: {shortageInSelectedUnit:F2} {_selectedUnit.UnitName}";
                     brdStockWarning.Visibility = Visibility.Visible;
                     brdValidationStatus.Background = (System.Windows.Media.Brush)FindResource("DangerBrush");
@@ -665,23 +665,23 @@ namespace AccountingSystem.WPF.Views
             {
                 var totalQuantity = WholeQty + PartQty;
                 var grossAmount = totalQuantity * WholePrice;
-                
+
                 if (DiscountIsPercentage && DiscountAmount > 100)
                 {
                     StatusMessage = "نسبة الخصم لا يمكن أن تتجاوز 100%";
                     return;
                 }
-                
-                var discountValue = DiscountIsPercentage 
-                    ? grossAmount * (DiscountAmount / 100m) 
+
+                var discountValue = DiscountIsPercentage
+                    ? grossAmount * (DiscountAmount / 100m)
                     : DiscountAmount;
-                
+
                 if (discountValue > grossAmount)
                 {
                     StatusMessage = "قيمة الخصم تتجاوز إجمالي السطر";
                     return;
                 }
-                
+
                 StatusMessage = "الخصم صالح";
             }
             catch (Exception ex)
@@ -697,20 +697,20 @@ namespace AccountingSystem.WPF.Views
         private void HandleSmartEnter()
         {
             var focusedElement = Keyboard.FocusedElement as FrameworkElement;
-            
+
             if (focusedElement == null) return;
-            
+
             // Special handling for discount field - goes to save
             if (ReferenceEquals(focusedElement, txtDiscount))
             {
                 btnSaveAndAdd.Focus();
                 return;
             }
-            
+
             // Normal tab navigation
             var request = new TraversalRequest(FocusNavigationDirection.Next);
             focusedElement.MoveFocus(request);
-            
+
             // Select all text in text boxes
             if (Keyboard.FocusedElement is TextBox nextTextBox)
                 nextTextBox.SelectAll();
@@ -735,7 +735,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في بحث المنتجات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في بحث المنتجات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -800,8 +800,8 @@ namespace AccountingSystem.WPF.Views
                 SetBusy(true, "جارٍ حفظ الصنف...");
 
                 var totalQuantity = WholeQty + PartQty;
-                var discountValue = DiscountIsPercentage 
-                    ? totalQuantity * WholePrice * (DiscountAmount / 100m) 
+                var discountValue = DiscountIsPercentage
+                    ? totalQuantity * WholePrice * (DiscountAmount / 100m)
                     : DiscountAmount;
 
                 ResultItem = new SalesInvoiceItem
@@ -827,7 +827,7 @@ namespace AccountingSystem.WPF.Views
             catch (Exception ex)
             {
                 StatusMessage = $"خطأ في حفظ الصنف: {ex.Message}";
-                MessageBox.Show($"خطأ في حفظ الصنف: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في حفظ الصنف: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 ComprehensiveLogger.LogError("فشل حفظ صنف الفاتورة", ex, "ModernItemEntryDialog");
                 return false;

@@ -20,17 +20,17 @@ namespace AccountingSystem.WPF.Services
         ChartConfiguration CreateCustomerAnalysisChart(List<CustomerSalesData> data, string title = "");
         ChartConfiguration CreateCashFlowChart(List<CashFlowData> data, string title = "");
         ChartConfiguration CreateComparisonChart(ComparisonAnalysisResult data, string title = "");
-        
+
         // رسوم بيانية مخصصة
         ChartConfiguration CreatePieChart(Dictionary<string, decimal> data, string title = "");
         ChartConfiguration CreateBarChart(Dictionary<string, decimal> data, string title = "", bool horizontal = false);
         ChartConfiguration CreateLineChart(List<(string Label, decimal Value)> data, string title = "");
         ChartConfiguration CreateMultiSeriesChart(Dictionary<string, List<(string Label, decimal Value)>> data, string title = "");
-        
+
         // تصدير الرسوم البيانية
         Task<bool> ExportChartToPngAsync(ChartConfiguration chart, string filePath, int width = 800, int height = 600);
         Task<bool> ExportChartToSvgAsync(ChartConfiguration chart, string filePath);
-        
+
         // ألوان وثيمات
         List<string> GetColorPalette(string theme = "default");
         ChartConfiguration ApplyTheme(ChartConfiguration chart, string theme);
@@ -388,9 +388,9 @@ namespace AccountingSystem.WPF.Services
                     ChartType = "Bar",
                     BackgroundColor = "#2196F3",
                     BorderColor = "#1976D2",
-                    Data = new List<decimal> 
-                    { 
-                        data.SalesComparison.Period1Value, 
+                    Data = new List<decimal>
+                    {
+                        data.SalesComparison.Period1Value,
                         data.ProfitComparison.Period1Value,
                         data.CustomerComparison.Period1Value
                     },
@@ -403,9 +403,9 @@ namespace AccountingSystem.WPF.Services
                     ChartType = "Bar",
                     BackgroundColor = "#FF9800",
                     BorderColor = "#F57C00",
-                    Data = new List<decimal> 
-                    { 
-                        data.SalesComparison.Period2Value, 
+                    Data = new List<decimal>
+                    {
+                        data.SalesComparison.Period2Value,
                         data.ProfitComparison.Period2Value,
                         data.CustomerComparison.Period2Value
                     },
@@ -602,7 +602,7 @@ namespace AccountingSystem.WPF.Services
             {
                 // سيتم تنفيذها لاحقاً مع مكتبة رسم مناسبة
                 await Task.Delay(100);
-                
+
                 ComprehensiveLogger.LogInfo($"تم تصدير الرسم البياني إلى PNG: {filePath}", ComponentName);
                 return true;
             }
@@ -619,7 +619,7 @@ namespace AccountingSystem.WPF.Services
             {
                 // سيتم تنفيذها لاحقاً مع مكتبة رسم مناسبة
                 await Task.Delay(100);
-                
+
                 ComprehensiveLogger.LogInfo($"تم تصدير الرسم البياني إلى SVG: {filePath}", ComponentName);
                 return true;
             }
@@ -636,8 +636,8 @@ namespace AccountingSystem.WPF.Services
 
         public List<string> GetColorPalette(string theme = "default")
         {
-            return _colorPalettes.TryGetValue(theme, out var palette) ? 
-                new List<string>(palette) : 
+            return _colorPalettes.TryGetValue(theme, out var palette) ?
+                new List<string>(palette) :
                 new List<string>(_colorPalettes["default"]);
         }
 
@@ -646,7 +646,7 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 var colors = GetColorPalette(theme);
-                
+
                 for (int i = 0; i < chart.DataSets.Count; i++)
                 {
                     var colorIndex = i % colors.Count;

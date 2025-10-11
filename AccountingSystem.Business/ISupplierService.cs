@@ -47,14 +47,14 @@ namespace AccountingSystem.Business
         {
             // تنظيف الحقول النصية
             supplier.SupplierName = (supplier.SupplierName ?? string.Empty).Trim();
-            supplier.Address      = (supplier.Address      ?? string.Empty).Trim();
-            supplier.Phone        = (supplier.Phone        ?? string.Empty).Trim();
-            supplier.Email        = (supplier.Email        ?? string.Empty).Trim();
+            supplier.Address = (supplier.Address ?? string.Empty).Trim();
+            supplier.Phone = (supplier.Phone ?? string.Empty).Trim();
+            supplier.Email = (supplier.Email ?? string.Empty).Trim();
 
             // التحقق من صحة البيانات باستخدام ValidationService
             var validationResult = ValidationService.ValidateSupplier(
-                supplier.SupplierName, 
-                supplier.Email, 
+                supplier.SupplierName,
+                supplier.Email,
                 supplier.Phone);
 
             if (!validationResult.IsValid)
@@ -84,10 +84,10 @@ namespace AccountingSystem.Business
                 throw new InvalidOperationException("المورّد غير موجود.");
 
             // تنظيف الحقول
-            var newName  = (supplier.SupplierName ?? string.Empty).Trim();
-            var newAddr  = (supplier.Address      ?? string.Empty).Trim();
-            var newPhone = (supplier.Phone        ?? string.Empty).Trim();
-            var newEmail = (supplier.Email        ?? string.Empty).Trim();
+            var newName = (supplier.SupplierName ?? string.Empty).Trim();
+            var newAddr = (supplier.Address ?? string.Empty).Trim();
+            var newPhone = (supplier.Phone ?? string.Empty).Trim();
+            var newEmail = (supplier.Email ?? string.Empty).Trim();
 
             // التحقق من صحة البيانات باستخدام ValidationService
             var validationResult = ValidationService.ValidateSupplier(newName, newEmail, newPhone);
@@ -104,10 +104,10 @@ namespace AccountingSystem.Business
 
             // تحديث الحقول
             existing.SupplierName = newName;
-            existing.Address      = newAddr;
-            existing.Phone        = newPhone;
-            existing.Email        = newEmail;
-            existing.IsActive     = supplier.IsActive;
+            existing.Address = newAddr;
+            existing.Phone = newPhone;
+            existing.Email = newEmail;
+            existing.IsActive = supplier.IsActive;
 
             repo.Update(existing);
             await _unitOfWork.SaveChangesAsync();
@@ -155,8 +155,8 @@ namespace AccountingSystem.Business
                 .FindAsync(s => s.IsActive &&
                                 (
                                     (s.SupplierName != null && s.SupplierName.Contains(term)) ||
-                                    (s.Phone        != null && s.Phone.Contains(term)) ||
-                                    (s.Email        != null && s.Email.Contains(term))
+                                    (s.Phone != null && s.Phone.Contains(term)) ||
+                                    (s.Email != null && s.Email.Contains(term))
                                 ));
         }
 

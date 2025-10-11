@@ -78,7 +78,7 @@ namespace AccountingSystem.Business
 
                 // توحيد الحقول النصية الحساسة
                 cashier.CashierCode = (cashier.CashierCode ?? string.Empty).Trim();
-                cashier.Username   = (cashier.Username   ?? string.Empty).Trim().ToLowerInvariant();
+                cashier.Username = (cashier.Username ?? string.Empty).Trim().ToLowerInvariant();
 
                 // التحقق من عدم تكرار الكود
                 if (!string.IsNullOrWhiteSpace(cashier.CashierCode))
@@ -127,7 +127,7 @@ namespace AccountingSystem.Business
 
                 // توحيد الحقول الحساسة
                 cashier.CashierCode = (cashier.CashierCode ?? string.Empty).Trim();
-                cashier.Username   = (cashier.Username   ?? string.Empty).Trim().ToLowerInvariant();
+                cashier.Username = (cashier.Username ?? string.Empty).Trim().ToLowerInvariant();
 
                 // لو الـPasswordHash موجودة وواضحة (مش Bcrypt)، أعد تشفيرها
                 if (!string.IsNullOrWhiteSpace(cashier.PasswordHash))
@@ -250,14 +250,14 @@ namespace AccountingSystem.Business
                 if (cashier == null) return false;
 
                 // نسخ الصلاحيات للكيان
-                cashier.CanOpenCashDrawer  = permissions.CanOpenCashDrawer;
-                cashier.CanProcessReturns  = permissions.CanProcessReturns;
-                cashier.CanApplyDiscounts  = permissions.CanApplyDiscounts;
+                cashier.CanOpenCashDrawer = permissions.CanOpenCashDrawer;
+                cashier.CanProcessReturns = permissions.CanProcessReturns;
+                cashier.CanApplyDiscounts = permissions.CanApplyDiscounts;
                 cashier.CanVoidTransactions = permissions.CanVoidTransactions;
-                cashier.CanViewReports     = permissions.CanViewReports;
+                cashier.CanViewReports = permissions.CanViewReports;
                 cashier.CanManageInventory = permissions.CanManageInventory;
                 cashier.MaxDiscountPercent = permissions.MaxDiscountPercent;
-                cashier.MaxDiscountAmount  = permissions.MaxDiscountAmount;
+                cashier.MaxDiscountAmount = permissions.MaxDiscountAmount;
 
                 return await UpdateCashierAsync(cashier);
             }
@@ -275,14 +275,14 @@ namespace AccountingSystem.Business
 
             return new CashierPermissions
             {
-                CanOpenCashDrawer  = cashier.CanOpenCashDrawer,
-                CanProcessReturns  = cashier.CanProcessReturns,
-                CanApplyDiscounts  = cashier.CanApplyDiscounts,
+                CanOpenCashDrawer = cashier.CanOpenCashDrawer,
+                CanProcessReturns = cashier.CanProcessReturns,
+                CanApplyDiscounts = cashier.CanApplyDiscounts,
                 CanVoidTransactions = cashier.CanVoidTransactions,
-                CanViewReports     = cashier.CanViewReports,
+                CanViewReports = cashier.CanViewReports,
                 CanManageInventory = cashier.CanManageInventory,
                 MaxDiscountPercent = cashier.MaxDiscountPercent,
-                MaxDiscountAmount  = cashier.MaxDiscountAmount
+                MaxDiscountAmount = cashier.MaxDiscountAmount
             };
         }
 
@@ -514,17 +514,17 @@ namespace AccountingSystem.Business
                 var transactions = await transactionRepo.FindAsync(t => t.SessionId == sessionId && !t.IsVoided);
 
                 // تقسيم العمليات
-                var salesTransactions   = transactions.Where(t => t.TransactionType == "بيع");
-                var returnTransactions  = transactions.Where(t => t.TransactionType == "مرتجع");
+                var salesTransactions = transactions.Where(t => t.TransactionType == "بيع");
+                var returnTransactions = transactions.Where(t => t.TransactionType == "مرتجع");
 
                 // مجاميع محمية من Null
-                session.TotalSales       = salesTransactions.Sum(t => t.Total);
-                session.TotalReturns     = returnTransactions.Sum(t => t.Total);
-                session.TotalDiscounts   = salesTransactions.Sum(t => t.DiscountAmount);
-                session.CashSalesTotal   = salesTransactions.Where(t => t.PaymentMethod == "نقداً").Sum(t => t.Total);
-                session.CardSalesTotal   = salesTransactions.Where(t => t.PaymentMethod == "بطاقة").Sum(t => t.Total);
+                session.TotalSales = salesTransactions.Sum(t => t.Total);
+                session.TotalReturns = returnTransactions.Sum(t => t.Total);
+                session.TotalDiscounts = salesTransactions.Sum(t => t.DiscountAmount);
+                session.CashSalesTotal = salesTransactions.Where(t => t.PaymentMethod == "نقداً").Sum(t => t.Total);
+                session.CardSalesTotal = salesTransactions.Where(t => t.PaymentMethod == "بطاقة").Sum(t => t.Total);
                 session.TransactionsCount = salesTransactions.Count();
-                session.ReturnsCount      = returnTransactions.Count();
+                session.ReturnsCount = returnTransactions.Count();
 
                 // الرصيد المتوقع = رصيد بداية + مبيعات نقدية - المرتجعات
                 session.ExpectedClosingBalance = session.OpeningBalance + session.CashSalesTotal - session.TotalReturns;

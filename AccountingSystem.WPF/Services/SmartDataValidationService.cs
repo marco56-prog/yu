@@ -33,7 +33,7 @@ namespace AccountingSystem.WPF.Services
         {
             _suggestionCache = new Dictionary<string, List<string>>();
             InitializeSuggestionData();
-            
+
             ComprehensiveLogger.LogInfo("تم تهيئة خدمة التحقق الذكي من البيانات", ComponentName);
         }
 
@@ -72,7 +72,7 @@ namespace AccountingSystem.WPF.Services
                     for (int i = 0; i < invoice.Items.Count; i++)
                     {
                         var item = invoice.Items[i];
-                        
+
                         if (string.IsNullOrWhiteSpace(item.ProductName))
                         {
                             result.AddError($"Items[{i}].ProductName", $"اسم المنتج مطلوب في السطر {i + 1}");
@@ -91,7 +91,7 @@ namespace AccountingSystem.WPF.Services
                         // تحقق من الكمية المتاحة
                         if (item.AvailableQuantity < item.Quantity)
                         {
-                            result.AddWarning($"Items[{i}].Quantity", 
+                            result.AddWarning($"Items[{i}].Quantity",
                                 $"الكمية المطلوبة ({item.Quantity}) أكبر من المتاح ({item.AvailableQuantity}) في السطر {i + 1}");
                         }
                     }
@@ -311,7 +311,7 @@ namespace AccountingSystem.WPF.Services
 
             // تنظيف الرقم
             var cleanNumber = Regex.Replace(phoneNumber, @"[^\d+]", "");
-            
+
             // التحقق من الأنماط المختلفة للأرقام
             var patterns = new[]
             {
@@ -346,7 +346,7 @@ namespace AccountingSystem.WPF.Services
 
             // تنظيف الرقم
             var cleanNumber = Regex.Replace(taxNumber, @"[^\d]", "");
-            
+
             // للرقم الضريبي السعودي - 15 رقم
             return cleanNumber.Length == 15 && cleanNumber.All(char.IsDigit);
         }
@@ -411,7 +411,7 @@ namespace AccountingSystem.WPF.Services
                 return false;
 
             // كود المنتج يجب أن يكون 3-20 حرف/رقم
-            return code.Length >= 3 && code.Length <= 20 && 
+            return code.Length >= 3 && code.Length <= 20 &&
                    code.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_');
         }
 

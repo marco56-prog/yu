@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <EnableDefaultPageItems>true</EnableDefaultPageItems>
     <EnableDefaultApplicationDefinition>true</EnableDefaultApplicationDefinition>
     <StartupObject>AccountingSystem.WPF.Program</StartupObject>

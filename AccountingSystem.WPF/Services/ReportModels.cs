@@ -223,26 +223,26 @@ namespace AccountingSystem.WPF.Services
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime GeneratedAt { get; set; }
-        
+
         // المبيعات
         public decimal TotalSales { get; set; }
         public int TotalSalesCount { get; set; }
         public decimal TotalSalesTax { get; set; }
         public decimal TotalCollected { get; set; }
         public decimal TotalAccountsReceivable { get; set; }
-        
+
         // المشتريات
         public decimal TotalPurchases { get; set; }
         public int TotalPurchasesCount { get; set; }
         public decimal TotalPurchasesTax { get; set; }
         public decimal TotalPaid { get; set; }
         public decimal TotalAccountsPayable { get; set; }
-        
+
         // الربحية
         public decimal GrossProfit { get; set; }
         public decimal NetProfit { get; set; }
         public decimal ProfitMargin { get; set; }
-        
+
         // النقدية
         public decimal CashInflow { get; set; }
         public decimal CashOutflow { get; set; }
@@ -344,7 +344,7 @@ namespace AccountingSystem.WPF.Services
         public DateTime Period2Start { get; set; }
         public DateTime Period2End { get; set; }
         public DateTime GeneratedAt { get; set; }
-        
+
         public ComparisonMetrics SalesComparison { get; set; } = new();
         public ComparisonMetrics ProfitComparison { get; set; } = new();
         public ComparisonMetrics CustomerComparison { get; set; } = new();

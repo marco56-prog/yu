@@ -14,7 +14,7 @@ public partial class ThemeTestWindow : Window
     public ThemeTestWindow()
     {
         InitializeComponent();
-        
+
         // الحصول على خدمة الثيمات من DI container
         _themeService = App.ServiceProvider.GetRequiredService<IThemeService>();
     }

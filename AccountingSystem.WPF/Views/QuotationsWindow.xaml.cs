@@ -15,12 +15,12 @@ public partial class QuotationsWindow : Window
     public QuotationsWindow()
     {
         InitializeComponent();
-        
+
         Quotations = new ObservableCollection<QuotationViewModel>();
         LoadSampleData();
-        
+
         lvQuotations.ItemsSource = Quotations;
-        
+
         // إخفاء رسالة "لا توجد بيانات" إذا كانت هناك بيانات
         if (Quotations.Count > 0)
         {
@@ -44,7 +44,7 @@ public partial class QuotationsWindow : Window
 
         Quotations.Add(new QuotationViewModel
         {
-            QuotationNumber = "Q-2024-002", 
+            QuotationNumber = "Q-2024-002",
             CustomerName = "مريم أحمد سالم",
             Date = "2024-09-18",
             ExpiryDate = "2024-10-18",
@@ -67,7 +67,7 @@ public partial class QuotationsWindow : Window
 
     private void btnNewQuotation_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("سيتم فتح نافذة إنشاء عرض أسعار جديد قريباً!", 
+        MessageBox.Show("سيتم فتح نافذة إنشاء عرض أسعار جديد قريباً!",
             "قيد التطوير", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 

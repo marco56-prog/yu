@@ -21,7 +21,7 @@ namespace AccountingSystem.WPF.Views
         public DiscountManagementWindow(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            
+
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discountService = _serviceProvider.GetRequiredService<IDiscountService>();
 
@@ -60,12 +60,12 @@ namespace AccountingSystem.WPF.Views
                                 UsageCount = 0
                             });
 
-                            MessageBox.Show($"تم إضافة خصم '{result}' بنسبة {discountPercentage}% بنجاح", 
+                            MessageBox.Show($"تم إضافة خصم '{result}' بنسبة {discountPercentage}% بنجاح",
                                 "نجح العملية", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
-                            MessageBox.Show("نسبة الخصم يجب أن تكون بين 0 و 100", 
+                            MessageBox.Show("نسبة الخصم يجب أن تكون بين 0 و 100",
                                 "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
@@ -73,7 +73,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في إضافة الخصم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في إضافة الخصم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -82,9 +82,9 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                var result = MessageBox.Show("هل تريد إضافة عرض جديد؟", 
+                var result = MessageBox.Show("هل تريد إضافة عرض جديد؟",
                     "إدارة العروض", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
                     var offerName = Microsoft.VisualBasic.Interaction.InputBox(
@@ -104,14 +104,14 @@ namespace AccountingSystem.WPF.Views
                             Type = "عرض خاص"
                         });
 
-                        MessageBox.Show($"تم إضافة العرض '{offerName}' بنجاح", 
+                        MessageBox.Show($"تم إضافة العرض '{offerName}' بنجاح",
                             "نجح العملية", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في إدارة العروض: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في إدارة العروض: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -135,7 +135,7 @@ namespace AccountingSystem.WPF.Views
         {
             // Simulate loading discounts
             await Task.Delay(100);
-            
+
             Discounts.Clear();
             Discounts.Add(new DiscountViewModel
             {
@@ -147,7 +147,7 @@ namespace AccountingSystem.WPF.Views
                 Status = "نشط",
                 UsageCount = 156
             });
-            
+
             Discounts.Add(new DiscountViewModel
             {
                 Name = "خصم الكمية",
@@ -164,7 +164,7 @@ namespace AccountingSystem.WPF.Views
         {
             // Simulate loading promotional offers
             await Task.Delay(100);
-            
+
             Offers.Clear();
             Offers.Add(new PromoOfferViewModel
             {
@@ -197,12 +197,12 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 await LoadDataAsync();
-                MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث البيانات", 
+                MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث البيانات",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحديث البيانات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحديث البيانات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -223,19 +223,19 @@ namespace AccountingSystem.WPF.Views
                     if (!string.IsNullOrEmpty(newName))
                     {
                         selectedDiscount.Name = newName;
-                        MessageBox.Show("تم تعديل الخصم بنجاح", "نجح العملية", 
+                        MessageBox.Show("تم تعديل الخصم بنجاح", "نجح العملية",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("لا توجد خصومات للتعديل", "تنبيه", 
+                    MessageBox.Show("لا توجد خصومات للتعديل", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تعديل الخصم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تعديل الخصم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -249,23 +249,23 @@ namespace AccountingSystem.WPF.Views
                 {
                     var result = MessageBox.Show($"هل تريد حذف الخصم '{selectedDiscount.Name}'؟",
                         "تأكيد الحذف", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    
+
                     if (result == MessageBoxResult.Yes)
                     {
                         Discounts.Remove(selectedDiscount);
-                        MessageBox.Show("تم حذف الخصم بنجاح", "تم الحذف", 
+                        MessageBox.Show("تم حذف الخصم بنجاح", "تم الحذف",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("لا توجد خصومات للحذف", "تنبيه", 
+                    MessageBox.Show("لا توجد خصومات للحذف", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في حذف الخصم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في حذف الخصم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -274,19 +274,19 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                var result = MessageBox.Show("هل تريد تصدير جميع الخصومات؟", 
+                var result = MessageBox.Show("هل تريد تصدير جميع الخصومات؟",
                     "تصدير الخصومات", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
                     // محاكاة عملية التصدير
-                    MessageBox.Show($"تم تصدير {Discounts.Count} خصم بنجاح\n\nالملف: C:\\Reports\\Discounts_Export.xlsx", 
+                    MessageBox.Show($"تم تصدير {Discounts.Count} خصم بنجاح\n\nالملف: C:\\Reports\\Discounts_Export.xlsx",
                         "تم التصدير", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في التصدير: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في التصدير: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -299,18 +299,18 @@ namespace AccountingSystem.WPF.Views
                 if (selectedDiscount != null)
                 {
                     selectedDiscount.UsageCount++;
-                    MessageBox.Show($"تم تطبيق الخصم '{selectedDiscount.Name}'\nعدد مرات الاستخدام: {selectedDiscount.UsageCount}", 
+                    MessageBox.Show($"تم تطبيق الخصم '{selectedDiscount.Name}'\nعدد مرات الاستخدام: {selectedDiscount.UsageCount}",
                         "تم التطبيق", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    MessageBox.Show("لا توجد خصومات نشطة للتطبيق", "تنبيه", 
+                    MessageBox.Show("لا توجد خصومات نشطة للتطبيق", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تطبيق الخصم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تطبيق الخصم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -326,7 +326,7 @@ namespace AccountingSystem.WPF.Views
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = "";
         public int UsageCount { get; set; }
-        
+
         public string FormattedStartDate => StartDate.ToString("dd/MM/yyyy");
         public string FormattedEndDate => EndDate.ToString("dd/MM/yyyy");
     }
@@ -339,7 +339,7 @@ namespace AccountingSystem.WPF.Views
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = "";
-        
+
         public string FormattedDateRange => $"{StartDate:dd/MM} - {EndDate:dd/MM}";
     }
 }

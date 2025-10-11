@@ -20,12 +20,12 @@ namespace AccountingSystem.WPF
                 try
                 {
                     var errorMsg = $"خطأ في Main: {ex.Message}\n\nFull Exception:\n{ex}";
-                    
+
                     // محاولة كتابة الخطأ في ملف
                     var logsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
                     Directory.CreateDirectory(logsDir);
                     File.WriteAllText(Path.Combine(logsDir, "main_error.log"), errorMsg);
-                    
+
                     // عرض رسالة خطأ
                     MessageBox.Show(errorMsg, "خطأ في تشغيل التطبيق", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -33,7 +33,7 @@ namespace AccountingSystem.WPF
                 {
                     // حتى لو فشل عرض الخطأ
                 }
-                
+
                 return 1;
             }
         }

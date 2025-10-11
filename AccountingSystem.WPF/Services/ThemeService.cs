@@ -81,10 +81,10 @@ namespace AccountingSystem.WPF.Services
                         // حفظ الإعدادات بشكل متتالي
                         await _settingsService.SetSettingAsync("ThemeKind", options.Theme.ToString());
                         await Task.Delay(50); // تأخير صغير لضمان عدم التداخل
-                        
+
                         await _settingsService.SetSettingAsync("AccentKind", options.Accent.ToString());
                         await Task.Delay(50);
-                        
+
                         await _settingsService.SetSettingAsync("FontScaleKind", options.FontScale.ToString());
                     }
                     catch (Exception ex)
@@ -137,7 +137,7 @@ namespace AccountingSystem.WPF.Services
         {
             var md = _app.Resources.MergedDictionaries;
             if (oldDict != null) md.Remove(oldDict);
-            
+
             try
             {
                 var fresh = new ResourceDictionary { Source = newSource };

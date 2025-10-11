@@ -10,7 +10,7 @@ namespace AccountingSystem.WPF.Views
     {
         private readonly CultureInfo _culture;
         public PurchaseInvoice Invoice { get; set; }
-        
+
         public bool GetPrintInvoice() => chkPrintInvoice.IsChecked ?? false;
         public bool GetRecordPayment() => chkRecordPayment.IsChecked ?? false;
         public bool GetOpenNewInvoice() => chkOpenNewInvoice.IsChecked ?? false;
@@ -20,9 +20,9 @@ namespace AccountingSystem.WPF.Views
         {
             InitializeComponent();
             Invoice = invoice ?? throw new ArgumentNullException(nameof(invoice));
-            
+
             _culture = new CultureInfo("ar-EG") { NumberFormat = { CurrencySymbol = "ج.م" } };
-            
+
             LoadInvoiceData();
         }
 
@@ -34,11 +34,11 @@ namespace AccountingSystem.WPF.Views
                 lblSupplierName.Text = Invoice.Supplier?.SupplierName ?? "غير محدد";
                 lblNetTotal.Text = Invoice.NetTotal.ToString("C", _culture);
                 lblRemainingAmount.Text = Invoice.RemainingAmount.ToString("C", _culture);
-                
+
                 // تعيين المبلغ الافتراضي للدفع (كامل المتبقي)
                 txtPaymentAmount.Text = Invoice.RemainingAmount.ToString("F2");
                 UpdateRemainingAmount();
-                
+
                 // إخفاء قسم الدفع إذا كانت الفاتورة مسددة بالكامل
                 if (Invoice.RemainingAmount <= 0)
                 {
@@ -49,7 +49,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل بيانات الفاتورة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل بيانات الفاتورة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -78,10 +78,10 @@ namespace AccountingSystem.WPF.Views
                 {
                     var newRemaining = Invoice.RemainingAmount - paymentAmount;
                     if (newRemaining < 0) newRemaining = 0;
-                    
+
                     lblNewRemainingAmount.Text = newRemaining.ToString("C", _culture);
-                    lblNewRemainingAmount.Foreground = newRemaining == 0 ? 
-                        System.Windows.Media.Brushes.Green : 
+                    lblNewRemainingAmount.Foreground = newRemaining == 0 ?
+                        System.Windows.Media.Brushes.Green :
                         System.Windows.Media.Brushes.Orange;
                 }
                 else
@@ -106,7 +106,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     if (GetPaymentAmount() < 0)
                     {
-                        MessageBox.Show("مبلغ الدفع لا يمكن أن يكون أقل من صفر", "تحذير", 
+                        MessageBox.Show("مبلغ الدفع لا يمكن أن يكون أقل من صفر", "تحذير",
                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         txtPaymentAmount.Focus();
                         return;
@@ -115,9 +115,9 @@ namespace AccountingSystem.WPF.Views
                     if (GetPaymentAmount() > Invoice.RemainingAmount)
                     {
                         var result = MessageBox.Show(
-                            "مبلغ الدفع أكبر من المبلغ المتبقي. هل تريد المتابعة؟", 
+                            "مبلغ الدفع أكبر من المبلغ المتبقي. هل تريد المتابعة؟",
                             "تأكيد", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        
+
                         if (result == MessageBoxResult.No)
                         {
                             txtPaymentAmount.Focus();
@@ -131,7 +131,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في المعالجة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في المعالجة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

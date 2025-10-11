@@ -15,18 +15,18 @@ namespace AccountingSystem.Business
     /// </summary>
     public interface IAuditService
     {
-        Task LogAsync(string operation, string? tableName, int? recordId, object? oldValues, object? newValues, 
+        Task LogAsync(string operation, string? tableName, int? recordId, object? oldValues, object? newValues,
             int userId, string username, string? ipAddress = null, string? details = null, AuditSeverity severity = AuditSeverity.Medium);
-        
+
         Task LogSuccessAsync(string operation, int userId, string username, string? details = null);
         Task LogFailureAsync(string operation, int userId, string username, string errorMessage, string? details = null);
-        
-        Task<IEnumerable<AuditLog>> GetAuditLogsAsync(DateTime? fromDate = null, DateTime? toDate = null, 
+
+        Task<IEnumerable<AuditLog>> GetAuditLogsAsync(DateTime? fromDate = null, DateTime? toDate = null,
             int? userId = null, string? operation = null, int pageSize = 50, int pageNumber = 1);
-        
+
         Task<IEnumerable<AuditLog>> GetEntityHistoryAsync(string tableName, int recordId);
         Task<AuditStatistics> GetAuditStatisticsAsync(DateTime fromDate, DateTime toDate);
-        
+
         Task CleanupOldLogsAsync(int retentionDays = 365);
     }
 
@@ -82,7 +82,7 @@ namespace AccountingSystem.Business
         /// </summary>
         public async Task LogSuccessAsync(string operation, int userId, string username, string? details = null)
         {
-            await LogAsync(operation, null, null, null, null, userId, username, 
+            await LogAsync(operation, null, null, null, null, userId, username,
                 details: details, severity: AuditSeverity.Low);
         }
 
@@ -122,9 +122,9 @@ namespace AccountingSystem.Business
         {
             // استخدام Repository pattern مع LINQ filtering
             var logs = await _unitOfWork.AuditLogs.GetAllAsync();
-            
+
             IEnumerable<AuditLog> filteredLogs = logs;
-            
+
             if (fromDate.HasValue)
                 filteredLogs = filteredLogs.Where(a => a.Timestamp >= fromDate.Value);
 
@@ -235,7 +235,7 @@ namespace AccountingSystem.Business
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
-        public decimal SuccessRate => TotalOperations > 0 ? 
+        public decimal SuccessRate => TotalOperations > 0 ?
             Math.Round((decimal)SuccessfulOperations / TotalOperations * 100, 2) : 0;
     }
 
@@ -252,7 +252,7 @@ namespace AccountingSystem.Business
         {
             var tableName = typeof(T).Name;
             var recordId = GetEntityId(entity);
-            
+
             await auditService.LogAsync(
                 AuditOperations.CreateProduct, // استخدام عملية موجودة
                 tableName,

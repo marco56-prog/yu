@@ -50,23 +50,23 @@ namespace AccountingSystem.WPF.Views
         public PrintTemplateDesignerWindow(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
-            
+
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _currentTemplate = new PrintTemplate();
-            
+
             DataContext = this;
-            
+
             // إعداد المجموعات
             Templates = new ObservableCollection<PrintTemplate>();
             TemplateElements = new ObservableCollection<TemplateElement>();
-            
+
             // ربط البيانات
             lstTemplates.ItemsSource = Templates;
             // designCanvas.ItemsSource = TemplateElements; // Canvas doesn't have ItemsSource
-            
+
             // إعداد أنواع القوالب
             SetupTemplateTypes();
-            
+
             Loaded += async (s, e) => await LoadTemplatesAsync();
         }
 
@@ -81,7 +81,7 @@ namespace AccountingSystem.WPF.Views
             cmbTemplateType.Items.Add("تقرير مخزون");
             cmbTemplateType.Items.Add("شيك");
             cmbTemplateType.Items.Add("مخصص");
-            
+
             cmbTemplateType.SelectedIndex = 0;
         }
 
@@ -90,12 +90,12 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 lblStatus.Text = "جارٍ تحميل القوالب...";
-                
+
                 Templates.Clear();
-                
+
                 // تحميل القوالب المحفوظة من مجلد التطبيق
                 var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PrintTemplates");
-                
+
                 if (!Directory.Exists(templatesPath))
                 {
                     Directory.CreateDirectory(templatesPath);
@@ -103,10 +103,10 @@ namespace AccountingSystem.WPF.Views
 
                 // إضافة قوالب افتراضية إذا لم تكن موجودة
                 await CreateDefaultTemplatesAsync(templatesPath);
-                
+
                 // تحميل القوالب من الملفات
                 var templateFiles = Directory.GetFiles(templatesPath, "*.json");
-                
+
                 foreach (var file in templateFiles)
                 {
                     try
@@ -123,19 +123,19 @@ namespace AccountingSystem.WPF.Views
                         System.Diagnostics.Debug.WriteLine($"خطأ في تحميل قالب {file}: {ex.Message}");
                     }
                 }
-                
+
                 // اختيار القالب الأول افتراضياً
                 if (Templates.Any())
                 {
                     lstTemplates.SelectedItem = Templates.First();
                     await LoadTemplateAsync(Templates.First());
                 }
-                
+
                 lblStatus.Text = $"تم تحميل {Templates.Count} قالب";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل القوالب: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل القوالب: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 lblStatus.Text = "خطأ في تحميل القوالب";
             }
@@ -148,11 +148,11 @@ namespace AccountingSystem.WPF.Views
                 // قالب فاتورة البيع الافتراضي
                 var salesInvoiceTemplate = CreateDefaultSalesInvoiceTemplate();
                 await SaveTemplateAsync(salesInvoiceTemplate, templatesPath);
-                
+
                 // قالب إيصال نقطة البيع
                 var posReceiptTemplate = CreateDefaultPOSReceiptTemplate();
                 await SaveTemplateAsync(posReceiptTemplate, templatesPath);
-                
+
                 // قالب التقرير
                 var reportTemplate = CreateDefaultReportTemplate();
                 await SaveTemplateAsync(reportTemplate, templatesPath);
@@ -403,13 +403,13 @@ namespace AccountingSystem.WPF.Views
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 };
-                
+
                 await LoadTemplateAsync(_currentTemplate);
                 lblStatus.Text = "تم إنشاء قالب جديد";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في إنشاء قالب جديد: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في إنشاء قالب جديد: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -420,21 +420,21 @@ namespace AccountingSystem.WPF.Views
             {
                 if (_currentTemplate == null)
                 {
-                    MessageBox.Show("لا يوجد قالب للحفظ", "تنبيه", 
+                    MessageBox.Show("لا يوجد قالب للحفظ", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                
+
                 // تحديث بيانات القالب
                 _currentTemplate.Name = txtTemplateName.Text?.Trim() ?? "قالب بدون اسم";
                 _currentTemplate.Description = txtTemplateDescription.Text?.Trim() ?? "";
                 _currentTemplate.Type = cmbTemplateType.SelectedItem?.ToString() ?? "مخصص";
                 _currentTemplate.ModifiedDate = DateTime.Now;
-                
+
                 // حفظ القالب
                 var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PrintTemplates");
                 await SaveTemplateAsync(_currentTemplate, templatesPath);
-                
+
                 // تحديث القائمة
                 var existingTemplate = Templates.FirstOrDefault(t => t.Id == _currentTemplate.Id);
                 if (existingTemplate != null)
@@ -446,14 +446,14 @@ namespace AccountingSystem.WPF.Views
                 {
                     Templates.Add(_currentTemplate);
                 }
-                
+
                 lblStatus.Text = "تم حفظ القالب بنجاح";
-                MessageBox.Show("تم حفظ القالب بنجاح!", "نجحت العملية", 
+                MessageBox.Show("تم حفظ القالب بنجاح!", "نجحت العملية",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في حفظ القالب: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في حفظ القالب: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -496,7 +496,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في المعاينة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في المعاينة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -507,33 +507,33 @@ namespace AccountingSystem.WPF.Views
             {
                 if (_currentTemplate == null)
                 {
-                    MessageBox.Show("لا يوجد قالب للتصدير", "تنبيه", 
+                    MessageBox.Show("لا يوجد قالب للتصدير", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                
+
                 var saveDialog = new SaveFileDialog
                 {
                     Filter = "ملفات القوالب|*.json",
                     FileName = $"{_currentTemplate.Name}.json"
                 };
-                
+
                 if (saveDialog.ShowDialog() == true)
                 {
-                    var json = JsonSerializer.Serialize(_currentTemplate, new JsonSerializerOptions 
-                    { 
+                    var json = JsonSerializer.Serialize(_currentTemplate, new JsonSerializerOptions
+                    {
                         WriteIndented = true,
                         Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
                     });
                     await File.WriteAllTextAsync(saveDialog.FileName, json);
-                    
-                    MessageBox.Show("تم تصدير القالب بنجاح!", "نجحت العملية", 
+
+                    MessageBox.Show("تم تصدير القالب بنجاح!", "نجحت العملية",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تصدير القالب: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تصدير القالب: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -547,30 +547,30 @@ namespace AccountingSystem.WPF.Views
                     Filter = "ملفات القوالب|*.json",
                     Multiselect = false
                 };
-                
+
                 if (openDialog.ShowDialog() == true)
                 {
                     var json = await File.ReadAllTextAsync(openDialog.FileName);
                     var template = JsonSerializer.Deserialize<PrintTemplate>(json);
-                    
+
                     if (template != null)
                     {
                         template.Id = 0; // سيتم تعيين معرف جديد من قاعدة البيانات
                         template.CreatedDate = DateTime.Now;
                         template.ModifiedDate = DateTime.Now;
-                        
+
                         Templates.Add(template);
                         lstTemplates.SelectedItem = template;
                         await LoadTemplateAsync(template);
-                        
-                        MessageBox.Show("تم استيراد القالب بنجاح!", "نجحت العملية", 
+
+                        MessageBox.Show("تم استيراد القالب بنجاح!", "نجحت العملية",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في استيراد القالب: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في استيراد القالب: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -584,15 +584,15 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _currentTemplate = template;
-                
+
                 // تحديث واجهة المستخدم
                 txtTemplateName.Text = template.Name;
                 txtTemplateDescription.Text = template.Description;
                 cmbTemplateType.SelectedItem = template.Type;
-                
+
                 // تحديث عناصر القالب
                 TemplateElements.Clear();
-                
+
                 if (template.Elements != null)
                 {
                     foreach (var element in template.Elements)
@@ -600,10 +600,10 @@ namespace AccountingSystem.WPF.Views
                         TemplateElements.Add(element);
                     }
                 }
-                
+
                 // تحديث الخصائص
                 UpdateTemplateProperties(template);
-                
+
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -621,7 +621,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     // يمكن إضافة عناصر التحكم في الهوامش هنا
                 }
-                
+
                 // تحديث لوحة التصميم
                 designCanvas.Background = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString(template.BackgroundColor ?? "#FFFFFF"));
@@ -641,25 +641,29 @@ namespace AccountingSystem.WPF.Views
                     Id = 0,
                     Type = type,
                     Content = content,
-                    X = 50, Y = 50, Width = 100, Height = 20,
-                    FontFamily = "Arial", FontSize = 12,
+                    X = 50,
+                    Y = 50,
+                    Width = 100,
+                    Height = 20,
+                    FontFamily = "Arial",
+                    FontSize = 12,
                     Color = "#000000",
                     TextAlign = "Left"
                 };
-                
+
                 TemplateElements.Add(element);
-                
+
                 // إضافة العنصر للقالب الحالي
                 if (_currentTemplate?.Elements != null)
                 {
                     _currentTemplate.Elements.Add(element);
                 }
-                
+
                 lblStatus.Text = $"تم إضافة عنصر {type}";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في إضافة العنصر: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في إضافة العنصر: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -669,8 +673,8 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 var filePath = Path.Combine(templatesPath, $"{template.Id}.json");
-                var json = JsonSerializer.Serialize(template, new JsonSerializerOptions 
-                { 
+                var json = JsonSerializer.Serialize(template, new JsonSerializerOptions
+                {
                     WriteIndented = true,
                     Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
                 });

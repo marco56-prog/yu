@@ -161,23 +161,22 @@ namespace AccountingSystem.Business
             return exception switch
             {
                 // Database exceptions
-                Microsoft.EntityFrameworkCore.DbUpdateException => (ErrorType.DatabaseError, ErrorSeverity.Critical),
                 Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException => (ErrorType.DatabaseError, ErrorSeverity.Error),
+                Microsoft.EntityFrameworkCore.DbUpdateException => (ErrorType.DatabaseError, ErrorSeverity.Critical),
                 Microsoft.Data.SqlClient.SqlException => (ErrorType.DatabaseError, ErrorSeverity.Critical),
-                
+
                 // Validation exceptions
-                ArgumentNullException => (ErrorType.ValidationError, ErrorSeverity.Warning),
                 ArgumentException => (ErrorType.ValidationError, ErrorSeverity.Warning),
                 InvalidOperationException => (ErrorType.BusinessLogicError, ErrorSeverity.Error),
-                
+
                 // Security exceptions
                 UnauthorizedAccessException => (ErrorType.SecurityError, ErrorSeverity.Critical),
                 System.Security.SecurityException => (ErrorType.SecurityError, ErrorSeverity.Critical),
-                
+
                 // System exceptions
                 OutOfMemoryException => (ErrorType.SystemError, ErrorSeverity.Fatal),
                 StackOverflowException => (ErrorType.SystemError, ErrorSeverity.Fatal),
-                
+
                 // Default
                 _ => (ErrorType.SystemError, ErrorSeverity.Error)
             };

@@ -12,7 +12,7 @@ public static class LoggerExtensions
     /// <summary>
     /// Logs method entry with automatic method name detection
     /// </summary>
-    public static void LogMethodEntry(this ILogger logger, 
+    public static void LogMethodEntry(this ILogger logger,
         [CallerMemberName] string methodName = "",
         [CallerFilePath] string filePath = "")
     {
@@ -40,23 +40,23 @@ public static class LoggerExtensions
     /// <summary>
     /// Logs operation result with timing information
     /// </summary>
-    public static void LogOperationResult(this ILogger logger, 
-        string operation, 
-        bool success, 
+    public static void LogOperationResult(this ILogger logger,
+        string operation,
+        bool success,
         TimeSpan duration,
         string? additionalInfo = null)
     {
         var level = success ? LogLevel.Information : LogLevel.Warning;
         var status = success ? "succeeded" : "failed";
-        
+
         if (string.IsNullOrEmpty(additionalInfo))
         {
-            logger.Log(level, "Operation {Operation} {Status} in {Duration}ms", 
+            logger.Log(level, "Operation {Operation} {Status} in {Duration}ms",
                 operation, status, duration.TotalMilliseconds);
         }
         else
         {
-            logger.Log(level, "Operation {Operation} {Status} in {Duration}ms. Additional info: {Info}", 
+            logger.Log(level, "Operation {Operation} {Status} in {Duration}ms. Additional info: {Info}",
                 operation, status, duration.TotalMilliseconds, additionalInfo);
         }
     }
@@ -64,9 +64,9 @@ public static class LoggerExtensions
     /// <summary>
     /// Logs user action for audit purposes
     /// </summary>
-    public static void LogUserAction(this ILogger logger, 
-        string userName, 
-        string action, 
+    public static void LogUserAction(this ILogger logger,
+        string userName,
+        string action,
         string? details = null)
     {
         if (string.IsNullOrEmpty(details))
@@ -75,7 +75,7 @@ public static class LoggerExtensions
         }
         else
         {
-            logger.LogInformation("User {UserName} performed action: {Action}. Details: {Details}", 
+            logger.LogInformation("User {UserName} performed action: {Action}. Details: {Details}",
                 userName, action, details);
         }
     }

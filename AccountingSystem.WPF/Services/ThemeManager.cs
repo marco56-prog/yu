@@ -53,12 +53,12 @@ namespace AccountingSystem.WPF.Services
                 if (app?.Resources == null) return;
 
                 var dicts = app.Resources.MergedDictionaries;
-                
+
                 // إزالة أي قاموس ثيم سابق
-                var oldTheme = dicts.FirstOrDefault(d => 
-                    d.Source != null && 
+                var oldTheme = dicts.FirstOrDefault(d =>
+                    d.Source != null &&
                     d.Source.OriginalString.Contains("/Themes/Theme."));
-                
+
                 if (oldTheme != null)
                 {
                     dicts.Remove(oldTheme);
@@ -68,9 +68,9 @@ namespace AccountingSystem.WPF.Services
                 var themeName = theme.ToString();
                 var uri = new Uri($"pack://application:,,,/Resources/Themes/Theme.{themeName}.xaml", UriKind.Absolute);
                 var newTheme = new ResourceDictionary { Source = uri };
-                
+
                 dicts.Add(newTheme);
-                
+
                 CurrentTheme = theme;
 
                 // حفظ إعدادات المستخدم
@@ -87,7 +87,7 @@ namespace AccountingSystem.WPF.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"فشل في تطبيق الثيم: {ex.Message}");
-                MessageBox.Show($"خطأ في تطبيق الثيم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تطبيق الثيم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }

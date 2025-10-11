@@ -30,11 +30,11 @@ namespace AccountingSystem.WPF.Views
         private ICollectionView _suppliersView;
         private ICollectionView _productsView;
 
-        private readonly ObservableCollection<Unit> _productUnits;              
-        private readonly ObservableCollection<ProductUnit> _currentProductUnits; 
+        private readonly ObservableCollection<Unit> _productUnits;
+        private readonly ObservableCollection<ProductUnit> _currentProductUnits;
 
         private readonly CultureInfo _culture;
-        private decimal _taxRatePercent = 15m; 
+        private decimal _taxRatePercent = 15m;
 
         private PurchaseInvoice? _currentInvoice;
         private readonly List<int> _invoiceIds = new();
@@ -50,14 +50,14 @@ namespace AccountingSystem.WPF.Views
 
                 _purchaseInvoiceService = serviceProvider.GetRequiredService<IPurchaseInvoiceService>();
                 _supplierService = serviceProvider.GetRequiredService<ISupplierService>();
-                _productService  = serviceProvider.GetRequiredService<IProductService>();
-                _context         = serviceProvider.GetRequiredService<AccountingDbContext>();
+                _productService = serviceProvider.GetRequiredService<IProductService>();
+                _context = serviceProvider.GetRequiredService<AccountingDbContext>();
 
-                _invoiceDetails       = new ObservableCollection<PurchaseInvoiceItem>();
-                _suppliers            = new ObservableCollection<Supplier>();
-                _products             = new ObservableCollection<Product>();
-                _productUnits         = new ObservableCollection<Unit>();
-                _currentProductUnits  = new ObservableCollection<ProductUnit>();
+                _invoiceDetails = new ObservableCollection<PurchaseInvoiceItem>();
+                _suppliers = new ObservableCollection<Supplier>();
+                _products = new ObservableCollection<Product>();
+                _productUnits = new ObservableCollection<Unit>();
+                _currentProductUnits = new ObservableCollection<ProductUnit>();
 
                 // إنشاء CollectionViews للفلترة الديناميكية
                 _suppliersView = CollectionViewSource.GetDefaultView(_suppliers);
@@ -66,10 +66,10 @@ namespace AccountingSystem.WPF.Views
                 _culture = new CultureInfo("ar-EG");
                 _culture.NumberFormat.CurrencySymbol = "ج.م";
 
-                dgItems.ItemsSource   = _invoiceDetails;
+                dgItems.ItemsSource = _invoiceDetails;
                 cmbSupplier.ItemsSource = _suppliersView;
-                cmbProduct.ItemsSource  = _productsView;
-                cmbUnit.ItemsSource     = _productUnits; 
+                cmbProduct.ItemsSource = _productsView;
+                cmbUnit.ItemsSource = _productUnits;
 
                 EnableEditMode(false);
 
@@ -153,7 +153,7 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                _suppliersView.Filter = null; 
+                _suppliersView.Filter = null;
             }
             catch (Exception ex)
             {
@@ -167,14 +167,14 @@ namespace AccountingSystem.WPF.Views
             {
                 var combo = (ComboBox)sender;
                 var searchText = combo.Text + e.Text;
-                
+
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
                     var filterText = searchText.ToLowerInvariant();
                     _suppliersView.Filter = item =>
                         item is Supplier supplier &&
                         supplier.SupplierName?.ToLowerInvariant().Contains(filterText) == true;
-                        
+
                     if (!combo.IsDropDownOpen)
                         combo.IsDropDownOpen = true;
                 }
@@ -223,7 +223,7 @@ namespace AccountingSystem.WPF.Views
         {
             if (cmbProduct?.SelectedItem is Product product && txtStock != null && txtUnitPrice != null)
             {
-                txtStock.Text     = product.CurrentStock.ToString("F2");
+                txtStock.Text = product.CurrentStock.ToString("F2");
                 txtUnitPrice.Text = product.PurchasePrice.ToString("F2"); // استخدام سعر الشراء بدلاً من البيع
 
                 await LoadProductUnitsAsync(product.ProductId);
@@ -234,7 +234,7 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                _productsView.Filter = null; 
+                _productsView.Filter = null;
             }
             catch (Exception ex)
             {
@@ -248,7 +248,7 @@ namespace AccountingSystem.WPF.Views
             {
                 var combo = (ComboBox)sender;
                 var searchText = combo.Text + e.Text;
-                
+
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
                     var filterText = searchText.ToLowerInvariant();
@@ -256,7 +256,7 @@ namespace AccountingSystem.WPF.Views
                         item is Product product &&
                         (product.ProductName?.ToLowerInvariant().Contains(filterText) == true ||
                          product.ProductCode?.ToLowerInvariant().Contains(filterText) == true);
-                         
+
                     if (!combo.IsDropDownOpen)
                         combo.IsDropDownOpen = true;
                 }
@@ -310,7 +310,7 @@ namespace AccountingSystem.WPF.Views
                     Owner = this,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
                 };
-                
+
                 var content = new TextBlock
                 {
                     Text = "قائمة فواتير الشراء\n\nهذه الميزة متاحة الآن - يمكنك البحث والعرض",
@@ -319,7 +319,7 @@ namespace AccountingSystem.WPF.Views
                     FontSize = 16,
                     TextAlignment = TextAlignment.Center
                 };
-                
+
                 purchaseListWindow.Content = content;
                 purchaseListWindow.ShowDialog();
             }
@@ -393,7 +393,7 @@ namespace AccountingSystem.WPF.Views
                 TryParseDecimal(txtUnitPrice.Text, out var unitPrice);
                 TryParseDecimal(txtDiscount.Text, out var discount);
 
-                var gross   = quantity * unitPrice;
+                var gross = quantity * unitPrice;
                 var lineNet = gross - discount;
                 if (lineNet < 0) lineNet = 0;
 
@@ -416,19 +416,19 @@ namespace AccountingSystem.WPF.Views
             {
                 if (_invoiceDetails == null || lblSubTotal == null) return;
 
-                var subTotal       = _invoiceDetails.Sum(d => d.LineTotal);
-                var totalDiscount  = _invoiceDetails.Sum(d => d.DiscountAmount);
-                var taxAmount      = decimal.Round(subTotal * (_taxRatePercent / 100m), 2);
-                var netTotal       = subTotal + taxAmount - totalDiscount;
+                var subTotal = _invoiceDetails.Sum(d => d.LineTotal);
+                var totalDiscount = _invoiceDetails.Sum(d => d.DiscountAmount);
+                var taxAmount = decimal.Round(subTotal * (_taxRatePercent / 100m), 2);
+                var netTotal = subTotal + taxAmount - totalDiscount;
 
                 TryParseDecimal(txtPaidAmount.Text, out var paidAmount);
                 var remainingAmount = netTotal - paidAmount;
 
-                lblSubTotal.Content       = subTotal.ToString("C", _culture);
-                lblTotalDiscount.Content  = totalDiscount.ToString("C", _culture);
-                lblTaxAmount.Content      = taxAmount.ToString("C", _culture);
-                lblNetTotal.Content       = netTotal.ToString("C", _culture);
-                lblRemainingAmount.Content= remainingAmount.ToString("C", _culture);
+                lblSubTotal.Content = subTotal.ToString("C", _culture);
+                lblTotalDiscount.Content = totalDiscount.ToString("C", _culture);
+                lblTaxAmount.Content = taxAmount.ToString("C", _culture);
+                lblNetTotal.Content = netTotal.ToString("C", _culture);
+                lblRemainingAmount.Content = remainingAmount.ToString("C", _culture);
             }
             catch (Exception ex)
             {
@@ -443,7 +443,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 if (cmbProduct.SelectedItem is not Product product ||
-                    cmbUnit.SelectedItem    is not Unit    unit ||
+                    cmbUnit.SelectedItem is not Unit unit ||
                     !TryParseDecimal(txtQuantity.Text, out var quantity) ||
                     !TryParseDecimal(txtUnitPrice.Text, out var unitPrice) ||
                     !TryParseDecimal(txtDiscount.Text, out var discount))
@@ -455,11 +455,11 @@ namespace AccountingSystem.WPF.Views
                 var detail = new PurchaseInvoiceItem
                 {
                     ProductId = product.ProductId,
-                    Product   = product,
-                    UnitId    = unit.UnitId,
-                    Unit      = unit,
-                    Quantity  = quantity,
-                    UnitCost  = unitPrice,
+                    Product = product,
+                    UnitId = unit.UnitId,
+                    Unit = unit,
+                    Quantity = quantity,
+                    UnitCost = unitPrice,
                     LineTotal = quantity * unitPrice,
                     DiscountAmount = discount
                 };
@@ -537,25 +537,25 @@ namespace AccountingSystem.WPF.Views
                     return null;
                 }
 
-                var subTotal     = _invoiceDetails.Sum(d => d.LineTotal);
-                var taxAmount    = decimal.Round(subTotal * (_taxRatePercent / 100m), 2);
-                var netTotal     = subTotal + taxAmount - _invoiceDetails.Sum(d => d.DiscountAmount);
+                var subTotal = _invoiceDetails.Sum(d => d.LineTotal);
+                var taxAmount = decimal.Round(subTotal * (_taxRatePercent / 100m), 2);
+                var netTotal = subTotal + taxAmount - _invoiceDetails.Sum(d => d.DiscountAmount);
                 TryParseDecimal(txtPaidAmount.Text, out var paidAmount);
 
                 var invoice = new PurchaseInvoice
                 {
-                    InvoiceDate        = dpInvoiceDate.SelectedDate ?? DateTime.Now,
-                    SupplierId         = supplier.SupplierId,
-                    SubTotal           = subTotal,
-                    TaxAmount          = taxAmount,
-                    DiscountAmount     = _invoiceDetails.Sum(d => d.DiscountAmount),
-                    NetTotal           = netTotal,
-                    PaidAmount         = paidAmount,
-                    RemainingAmount    = Math.Max(0, netTotal - paidAmount),
-                    Notes              = txtNotes.Text,
-                    Status             = InvoiceStatus.Draft,
-                    CreatedBy          = "system",
-                    Items= _invoiceDetails.ToList()
+                    InvoiceDate = dpInvoiceDate.SelectedDate ?? DateTime.Now,
+                    SupplierId = supplier.SupplierId,
+                    SubTotal = subTotal,
+                    TaxAmount = taxAmount,
+                    DiscountAmount = _invoiceDetails.Sum(d => d.DiscountAmount),
+                    NetTotal = netTotal,
+                    PaidAmount = paidAmount,
+                    RemainingAmount = Math.Max(0, netTotal - paidAmount),
+                    Notes = txtNotes.Text,
+                    Status = InvoiceStatus.Draft,
+                    CreatedBy = "system",
+                    Items = _invoiceDetails.ToList()
                 };
 
                 SetBusy(true);
@@ -573,7 +573,7 @@ namespace AccountingSystem.WPF.Views
                     await _purchaseInvoiceService.PostPurchaseInvoiceAsync(result.PurchaseInvoiceId);
                     _currentInvoice.Status = InvoiceStatus.Confirmed;
                     _currentInvoice.IsPosted = true;
-                    
+
                     // تحديث الواجهة لإظهار الترحيل
                     if (lblStatus != null)
                     {
@@ -638,8 +638,8 @@ namespace AccountingSystem.WPF.Views
             _invoiceDetails.Clear();
             _currentInvoice = null;
             cmbSupplier.SelectedIndex = -1;
-            txtNotes.Text     = "";
-            txtPaidAmount.Text= "0";
+            txtNotes.Text = "";
+            txtPaidAmount.Text = "0";
             dpInvoiceDate.SelectedDate = DateTime.Now;
             ClearItemInputs();
             CalculateInvoiceTotals();
@@ -753,11 +753,11 @@ namespace AccountingSystem.WPF.Views
             {
                 _currentInvoice = invoice;
 
-                lblInvoiceNumber.Content          = invoice.InvoiceNumber;
-                dpInvoiceDate.SelectedDate        = invoice.InvoiceDate;
-                cmbSupplier.SelectedItem          = _suppliers.FirstOrDefault(s => s.SupplierId == invoice.SupplierId);
-                txtNotes.Text                     = invoice.Notes ?? "";
-                txtPaidAmount.Text                = invoice.PaidAmount.ToString("F2");
+                lblInvoiceNumber.Content = invoice.InvoiceNumber;
+                dpInvoiceDate.SelectedDate = invoice.InvoiceDate;
+                cmbSupplier.SelectedItem = _suppliers.FirstOrDefault(s => s.SupplierId == invoice.SupplierId);
+                txtNotes.Text = invoice.Notes ?? "";
+                txtPaidAmount.Text = invoice.PaidAmount.ToString("F2");
 
                 _invoiceDetails.Clear();
                 foreach (var detail in invoice.Items)
@@ -813,7 +813,7 @@ namespace AccountingSystem.WPF.Views
             txtDiscount.IsEnabled = enabled;
 
             btnSearchSupplier.IsEnabled = enabled;
-            btnSearchProduct.IsEnabled  = enabled;
+            btnSearchProduct.IsEnabled = enabled;
 
             UpdateButtonStates();
         }
@@ -821,8 +821,8 @@ namespace AccountingSystem.WPF.Views
         private void UpdateButtonStates()
         {
             var hasInvoice = _currentInvoice != null;
-            var isPosted   = hasInvoice && _currentInvoice!.IsPosted;
-            var canEdit    = hasInvoice && !isPosted;
+            var isPosted = hasInvoice && _currentInvoice!.IsPosted;
+            var canEdit = hasInvoice && !isPosted;
 
             btnPrint.IsEnabled = hasInvoice;
 
@@ -845,10 +845,10 @@ namespace AccountingSystem.WPF.Views
 
         private void SetBusy(bool isBusy)
         {
-            btnSave.IsEnabled      = !isBusy;
-            btnPrint.IsEnabled     = !isBusy;
-            btnCancel.IsEnabled    = !isBusy;
-            btnAddItem.IsEnabled   = !isBusy && ( _currentInvoice == null || !_currentInvoice.IsPosted );
+            btnSave.IsEnabled = !isBusy;
+            btnPrint.IsEnabled = !isBusy;
+            btnCancel.IsEnabled = !isBusy;
+            btnAddItem.IsEnabled = !isBusy && (_currentInvoice == null || !_currentInvoice.IsPosted);
         }
         #endregion
 
@@ -859,7 +859,7 @@ namespace AccountingSystem.WPF.Views
             {
                 if (savedInvoice == null)
                 {
-                    MessageBox.Show("لا يمكن عرض نافذة ما بعد الحفظ - الفاتورة غير صالحة", "خطأ", 
+                    MessageBox.Show("لا يمكن عرض نافذة ما بعد الحفظ - الفاتورة غير صالحة", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
@@ -887,7 +887,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في معالجة ما بعد الحفظ: {ex.Message}\n\nالتفاصيل: {ex.InnerException?.Message}", 
+                MessageBox.Show($"خطأ في معالجة ما بعد الحفظ: {ex.Message}\n\nالتفاصيل: {ex.InnerException?.Message}",
                     "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
                 System.Diagnostics.Debug.WriteLine($"ShowPostSaveDialogAsync Error: {ex}");
             }
@@ -918,7 +918,7 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                invoice.PaidAmount     += paymentAmount;
+                invoice.PaidAmount += paymentAmount;
                 invoice.RemainingAmount = Math.Max(0, invoice.NetTotal - invoice.PaidAmount);
 
                 _context.PurchaseInvoices.Update(invoice);

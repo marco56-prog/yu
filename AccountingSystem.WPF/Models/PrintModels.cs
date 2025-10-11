@@ -17,33 +17,33 @@ namespace AccountingSystem.WPF.Views
     public class PrintTemplate
     {
         public int Id { get; set; }
-        
+
         [Required, StringLength(100)]
         public string Name { get; set; } = string.Empty;
-        
+
         [StringLength(500)]
         public string Description { get; set; } = string.Empty;
-        
+
         [StringLength(50)]
         public string Type { get; set; } = "Invoice"; // Invoice, Receipt, Report
-        
+
         public double Width { get; set; } = 210; // ملليمتر
         public double Height { get; set; } = 297; // ملليمتر
-        
+
         [StringLength(20)]
         public string BackgroundColor { get; set; } = "#FFFFFF";
-        
+
         [StringLength(20)]
         public string Orientation { get; set; } = "Portrait"; // Portrait, Landscape
-        
+
         public TemplateMargins Margins { get; set; } = new();
-        
+
         public List<TemplateElement> Elements { get; set; } = new();
-        
+
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime LastModified { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; } = DateTime.Now; // للتوافق
-        
+
         public bool IsActive { get; set; } = true;
         public bool IsDefault { get; set; } = false;
     }
@@ -53,50 +53,50 @@ namespace AccountingSystem.WPF.Views
     {
         public int Id { get; set; }
         public int TemplateId { get; set; }
-        
+
         [Required, StringLength(20)]
         public string Type { get; set; } = "Text"; // Text, Image, Table, Line, Rectangle, Barcode
-        
+
         public double X { get; set; } // موضع أفقي
         public double Y { get; set; } // موضع عمودي
         public double Width { get; set; }
         public double Height { get; set; }
-        
+
         [StringLength(500)]
         public string Content { get; set; } = string.Empty;
-        
+
         // خصائص النص
         [StringLength(50)]
         public string FontFamily { get; set; } = "Arial";
         public double FontSize { get; set; } = 12;
-        
+
         [StringLength(20)]
         public string FontWeight { get; set; } = "Normal"; // Normal, Bold
-        
+
         [StringLength(20)]
         public string FontStyle { get; set; } = "Normal"; // Normal, Italic
-        
+
         [StringLength(20)]
         public string Color { get; set; } = "#000000";
-        
+
         [StringLength(20)]
         public string BackgroundColor { get; set; } = "Transparent";
-        
+
         [StringLength(20)]
         public string TextAlign { get; set; } = "Left"; // Left, Center, Right, Justify
-        
+
         // خصائص الحدود والصور
         public double BorderWidth { get; set; } = 0;
-        
+
         [StringLength(20)]
         public string BorderColor { get; set; } = "#000000";
-        
+
         [StringLength(200)]
         public string ImagePath { get; set; } = string.Empty;
-        
+
         [StringLength(20)]
         public string ImageStretch { get; set; } = "Uniform"; // None, Fill, Uniform, UniformToFill
-        
+
         // خصائص الترتيب والرؤية
         public int ZIndex { get; set; } = 0;
         public bool IsVisible { get; set; } = true;
@@ -108,24 +108,24 @@ namespace AccountingSystem.WPF.Views
     {
         public Dictionary<string, object?> Fields { get; set; } = new();
         public List<Dictionary<string, object>> TableData { get; set; } = new();
-        
+
         public void SetField(string key, object? value)
         {
             Fields[key] = value;
         }
-        
+
         public T? GetField<T>(string key)
         {
             if (Fields.TryGetValue(key, out var value) && value is T result)
                 return result;
             return default(T);
         }
-        
+
         public void AddTableRow(Dictionary<string, object> row)
         {
             TableData.Add(row);
         }
-        
+
         public void ClearTableData()
         {
             TableData.Clear();
@@ -141,7 +141,7 @@ namespace AccountingSystem.WPF.Views
         public bool Duplex { get; set; } = false;
         public string PaperSize { get; set; } = "A4";
         public int Quality { get; set; } = 300; // DPI
-        
+
         // إعدادات PDF
         public bool OptimizeForWeb { get; set; } = true;
         public bool PasswordProtected { get; set; } = false;

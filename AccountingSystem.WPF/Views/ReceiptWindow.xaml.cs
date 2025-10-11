@@ -23,7 +23,7 @@ public partial class ReceiptWindow : Window
         _amountPaid = amountPaid;
         _change = change;
         _cashierName = cashierName;
-        
+
         LoadReceiptData();
     }
 
@@ -37,35 +37,35 @@ public partial class ReceiptWindow : Window
         // Transaction items
         foreach (var item in _transaction.Items)
         {
-            var itemRow = new StackPanel 
-            { 
+            var itemRow = new StackPanel
+            {
                 Orientation = Orientation.Horizontal,
                 Margin = new Thickness(0, 2, 0, 2)
             };
 
-            itemRow.Children.Add(new TextBlock 
-            { 
+            itemRow.Children.Add(new TextBlock
+            {
                 Text = $"منتج {item.ProductId}", // Use ProductId since no ProductName property
                 Width = 150,
                 TextTrimming = TextTrimming.CharacterEllipsis
             });
-            
-            itemRow.Children.Add(new TextBlock 
-            { 
+
+            itemRow.Children.Add(new TextBlock
+            {
                 Text = $"{item.Quantity}x",
                 Width = 40,
                 TextAlignment = TextAlignment.Center
             });
-            
-            itemRow.Children.Add(new TextBlock 
-            { 
+
+            itemRow.Children.Add(new TextBlock
+            {
                 Text = $"{item.UnitPrice:F2}",
                 Width = 60,
                 TextAlignment = TextAlignment.Right
             });
-            
-            itemRow.Children.Add(new TextBlock 
-            { 
+
+            itemRow.Children.Add(new TextBlock
+            {
                 Text = $"{item.LineTotal:F2}",
                 Width = 80,
                 TextAlignment = TextAlignment.Right,

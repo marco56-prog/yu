@@ -1,8 +1,6 @@
 using System;
 using System.Globalization;
 using System.Net.Mail;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +18,7 @@ public partial class AddCashierWindow : Window
 {
     private readonly ICashierService _cashierService;
     private readonly ISystemSettingsService _settingsService;
+    private readonly ISecurityService _securityService;
     private readonly Cashier? _cashierToEdit;
     private readonly bool _isEditMode;
 
@@ -27,10 +26,11 @@ public partial class AddCashierWindow : Window
 
     private static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
 
-    public AddCashierWindow(ICashierService cashierService, ISystemSettingsService settingsService, Cashier? cashierToEdit = null)
+    public AddCashierWindow(ICashierService cashierService, ISystemSettingsService settingsService, ISecurityService securityService, Cashier? cashierToEdit = null)
     {
         _cashierService = cashierService ?? throw new ArgumentNullException(nameof(cashierService));
         _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+        _securityService = securityService;
         _cashierToEdit = cashierToEdit;
         _isEditMode = cashierToEdit != null;
 
@@ -51,7 +51,7 @@ public partial class AddCashierWindow : Window
             // تحميل إعدادات النظام لتطبيقها على النافذة
             var companyName = await _settingsService.GetCompanyNameAsync();
             this.Title = $"{this.Title} - {companyName}";
-            
+
             // يمكن إضافة المزيد من الإعدادات هنا
         }
         catch (Exception)
@@ -82,22 +82,22 @@ public partial class AddCashierWindow : Window
         if (_cashierToEdit == null) return;
 
         txtCashierCode.Text = _cashierToEdit.CashierCode;
-        txtName.Text        = _cashierToEdit.Name;
-        txtPhone.Text       = _cashierToEdit.Phone ?? string.Empty;
-        txtEmail.Text       = _cashierToEdit.Email ?? string.Empty;
-        txtAddress.Text     = _cashierToEdit.Address ?? string.Empty;
+        txtName.Text = _cashierToEdit.Name;
+        txtPhone.Text = _cashierToEdit.Phone ?? string.Empty;
+        txtEmail.Text = _cashierToEdit.Email ?? string.Empty;
+        txtAddress.Text = _cashierToEdit.Address ?? string.Empty;
         dpHireDate.SelectedDate = _cashierToEdit.HireDate;
-        txtSalary.Text      = _cashierToEdit.Salary.ToString("F2", Invariant);
-        cmbStatus.Text      = _cashierToEdit.Status;
-        txtUsername.Text    = _cashierToEdit.Username ?? string.Empty;
+        txtSalary.Text = _cashierToEdit.Salary.ToString("F2", Invariant);
+        cmbStatus.Text = _cashierToEdit.Status;
+        txtUsername.Text = _cashierToEdit.Username ?? string.Empty;
         chkIsActive.IsChecked = _cashierToEdit.IsActive;
 
         chkCanApplyDiscounts.IsChecked = _cashierToEdit.CanApplyDiscounts;
-        chkCanViewReports.IsChecked    = _cashierToEdit.CanViewReports;
+        chkCanViewReports.IsChecked = _cashierToEdit.CanViewReports;
         chkCanAccessSettings.IsChecked = _cashierToEdit.CanAccessSettings;
 
         txtMaxDiscountPercent.Text = _cashierToEdit.MaxDiscountPercent.ToString("F2", Invariant);
-        txtMaxDiscountAmount.Text  = _cashierToEdit.MaxDiscountAmount.ToString("F2", Invariant);
+        txtMaxDiscountAmount.Text = _cashierToEdit.MaxDiscountAmount.ToString("F2", Invariant);
     }
 
     private static string GenerateNewCashierCode()
@@ -111,10 +111,10 @@ public partial class AddCashierWindow : Window
     {
         if (string.IsNullOrWhiteSpace(s)) return "0";
         return s
-            .Replace('٠','0').Replace('١','1').Replace('٢','2').Replace('٣','3').Replace('٤','4')
-            .Replace('٥','5').Replace('٦','6').Replace('٧','7').Replace('٨','8').Replace('٩','9')
-            .Replace('۰','0').Replace('۱','1').Replace('۲','2').Replace('۳','3').Replace('۴','4')
-            .Replace('۵','5').Replace('۶','6').Replace('۷','7').Replace('۸','8').Replace('۹','9')
+            .Replace('٠', '0').Replace('١', '1').Replace('٢', '2').Replace('٣', '3').Replace('٤', '4')
+            .Replace('٥', '5').Replace('٦', '6').Replace('٧', '7').Replace('٨', '8').Replace('٩', '9')
+            .Replace('۰', '0').Replace('۱', '1').Replace('۲', '2').Replace('۳', '3').Replace('۴', '4')
+            .Replace('۵', '5').Replace('۶', '6').Replace('۷', '7').Replace('۸', '8').Replace('۹', '9')
             .Replace('٫', '.') // decimal arabic
             .Replace("٬", string.Empty) // group separator arabic
             .Replace(",", string.Empty) // remove western thousand sep
@@ -140,27 +140,27 @@ public partial class AddCashierWindow : Window
             var cashier = _isEditMode ? _cashierToEdit! : new Cashier();
 
             cashier.CashierCode = txtCashierCode.Text.Trim();
-            cashier.Name        = txtName.Text.Trim();
-            cashier.Phone       = string.IsNullOrWhiteSpace(txtPhone.Text) ? null : txtPhone.Text.Trim();
-            cashier.Email       = string.IsNullOrWhiteSpace(txtEmail.Text) ? null : txtEmail.Text.Trim();
-            cashier.Address     = string.IsNullOrWhiteSpace(txtAddress.Text) ? null : txtAddress.Text.Trim();
-            cashier.HireDate    = dpHireDate.SelectedDate ?? DateTime.Now;
+            cashier.Name = txtName.Text.Trim();
+            cashier.Phone = string.IsNullOrWhiteSpace(txtPhone.Text) ? null : txtPhone.Text.Trim();
+            cashier.Email = string.IsNullOrWhiteSpace(txtEmail.Text) ? null : txtEmail.Text.Trim();
+            cashier.Address = string.IsNullOrWhiteSpace(txtAddress.Text) ? null : txtAddress.Text.Trim();
+            cashier.HireDate = dpHireDate.SelectedDate ?? DateTime.Now;
 
             TryParseDecimal(txtSalary.Text, out var salary);
             cashier.Salary = salary;
 
-            cashier.Status   = cmbStatus.Text;
+            cashier.Status = cmbStatus.Text;
             cashier.Username = string.IsNullOrWhiteSpace(txtUsername.Text) ? null : txtUsername.Text.Trim();
             cashier.IsActive = chkIsActive.IsChecked == true;
 
-            cashier.CanApplyDiscounts   = chkCanApplyDiscounts.IsChecked == true;
-            cashier.CanViewReports      = chkCanViewReports?.IsChecked == true;
-            cashier.CanAccessSettings   = chkCanAccessSettings?.IsChecked == true;
+            cashier.CanApplyDiscounts = chkCanApplyDiscounts.IsChecked == true;
+            cashier.CanViewReports = chkCanViewReports?.IsChecked == true;
+            cashier.CanAccessSettings = chkCanAccessSettings?.IsChecked == true;
 
             TryParseDecimal(txtMaxDiscountPercent.Text, out var p);
-            TryParseDecimal(txtMaxDiscountAmount.Text,  out var a);
+            TryParseDecimal(txtMaxDiscountAmount.Text, out var a);
             cashier.MaxDiscountPercent = p;
-            cashier.MaxDiscountAmount  = a;
+            cashier.MaxDiscountAmount = a;
 
             // كلمة المرور: عند الإضافة مطلوبة لو اسم المستخدم موجود.
             if (!_isEditMode && !string.IsNullOrWhiteSpace(txtUsername.Text))
@@ -254,12 +254,10 @@ public partial class AddCashierWindow : Window
         return false;
     }
 
-    private static string HashPassword(string password)
+    private string HashPassword(string password)
     {
-        // تنبيه: لأغراض العرض فقط. في الإنتاج استخدم خوارزمية بها Salt مثل PBKDF2/Argon2.
-        using var sha = SHA256.Create();
-        var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return Convert.ToHexString(hash);
+        // Using a secure password hasher from the business layer
+        return _securityService.HashPassword(password);
     }
 
     // مخصّص لاختصارات Ctrl+S و Esc في الـXAML

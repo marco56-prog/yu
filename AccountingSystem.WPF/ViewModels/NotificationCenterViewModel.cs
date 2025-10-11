@@ -130,7 +130,7 @@ namespace AccountingSystem.WPF.ViewModels
                 if (IsLoading) return;
                 IsLoading = true;
 
-                var notifications = await _notificationService.GetAllNotificationsAsync() 
+                var notifications = await _notificationService.GetAllNotificationsAsync()
                                     ?? Enumerable.Empty<Notification>();
 
                 await Application.Current.Dispatcher.InvokeAsync(() =>

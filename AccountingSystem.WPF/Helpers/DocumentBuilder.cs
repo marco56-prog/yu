@@ -23,7 +23,7 @@ public static class DocumentBuilder
         // Ensure Arabic-Egyptian culture for proper currency formatting
         var previousCulture = CultureInfo.CurrentCulture;
         var previousUICulture = CultureInfo.CurrentUICulture;
-        
+
         try
         {
             var culture = CultureInfo.GetCultureInfo("ar-EG");
@@ -33,7 +33,7 @@ public static class DocumentBuilder
             // Load FlowDocument template from resources
             var uri = new Uri("/AccountingSystem.WPF;component/Views/PrintTemplates/InvoiceFlowDoc.xaml", UriKind.Relative);
             var doc = (FlowDocument)Application.LoadComponent(uri);
-            
+
             // Set data context
             doc.DataContext = vm;
 
@@ -108,13 +108,13 @@ public static class DocumentBuilder
             FontFamily = content.FontFamily,
             FontSize = content.FontSize,
             FlowDirection = content.FlowDirection,
-            
+
             // A4 page settings (210mm x 297mm)
             PageWidth = 793.7, // 210mm in WPF units (1/96 inch)
             PageHeight = 1122.5, // 297mm in WPF units
             PagePadding = new Thickness(40), // 20mm margins
             ColumnWidth = double.PositiveInfinity,
-            
+
             // Print-specific settings
             IsOptimalParagraphEnabled = false,
             IsHyphenationEnabled = false
@@ -163,11 +163,11 @@ public static class DocumentBuilder
         foreach (var rowGroup in originalTable.RowGroups)
         {
             var newRowGroup = new TableRowGroup();
-            
+
             foreach (var row in rowGroup.Rows)
             {
                 var newRow = new TableRow();
-                
+
                 foreach (var cell in row.Cells)
                 {
                     var newCell = new TableCell
@@ -192,13 +192,13 @@ public static class DocumentBuilder
                             newCell.Blocks.Add(newP);
                         }
                     }
-                    
+
                     newRow.Cells.Add(newCell);
                 }
-                
+
                 newRowGroup.Rows.Add(newRow);
             }
-            
+
             newTable.RowGroups.Add(newRowGroup);
         }
 

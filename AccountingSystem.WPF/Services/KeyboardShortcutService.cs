@@ -25,7 +25,7 @@ namespace AccountingSystem.WPF.Services
     public class KeyboardShortcutService : IKeyboardShortcutService
     {
         private const string ComponentName = "KeyboardShortcutService";
-        
+
         private readonly Dictionary<KeyGesture, KeyboardShortcut> _shortcuts;
         private bool _isEnabled = true;
 
@@ -33,7 +33,7 @@ namespace AccountingSystem.WPF.Services
         {
             _shortcuts = new Dictionary<KeyGesture, KeyboardShortcut>();
             RegisterDefaultShortcuts();
-            
+
             ComprehensiveLogger.LogInfo("تم تهيئة خدمة اختصارات لوحة المفاتيح", ComponentName);
         }
 
@@ -50,7 +50,7 @@ namespace AccountingSystem.WPF.Services
                 };
 
                 _shortcuts[gesture] = shortcut;
-                
+
                 ComprehensiveLogger.LogInfo($"تم تسجيل اختصار جديد: {gesture} - {action}", ComponentName);
             }
             catch (Exception ex)
@@ -93,13 +93,13 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 var gesture = new KeyGesture(e.Key, Keyboard.Modifiers);
-                
+
                 if (_shortcuts.TryGetValue(gesture, out var shortcut))
                 {
                     shortcut.Callback?.Invoke();
-                    
+
                     ComprehensiveLogger.LogInfo($"تم تنفيذ الاختصار: {gesture} - {shortcut.Action}", ComponentName);
-                    
+
                     e.Handled = true;
                     return true;
                 }
@@ -124,7 +124,7 @@ namespace AccountingSystem.WPF.Services
         {
             try
             {
-                                var helpWindow = new Windows.KeyboardShortcutsHelpWindow();
+                var helpWindow = new Windows.KeyboardShortcutsHelpWindow();
                 helpWindow.ShowDialog();
             }
             catch (Exception ex)

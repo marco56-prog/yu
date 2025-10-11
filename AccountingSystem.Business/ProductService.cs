@@ -65,7 +65,7 @@ namespace AccountingSystem.Business
             return Result<Product>.Success(product);
         }
 
-    public async Task<Result<Product>> CreateProductAsync(Product product)
+        public async Task<Result<Product>> CreateProductAsync(Product product)
         {
             // Validate product name
             var name = (product.ProductName ?? string.Empty).Trim();
@@ -94,9 +94,9 @@ namespace AccountingSystem.Business
             if (string.IsNullOrWhiteSpace(product.ProductCode))
                 product.ProductCode = await GenerateUniqueProductCodeAsync();
 
-            product.Description  = product.Description?.Trim();
-            product.CreatedDate  = DateTime.Now;
-            product.IsActive     = true;
+            product.Description = product.Description?.Trim();
+            product.CreatedDate = DateTime.Now;
+            product.IsActive = true;
             product.CurrentStock = 0;
 
             await _unitOfWork.Repository<Product>().AddAsync(product);
@@ -104,7 +104,7 @@ namespace AccountingSystem.Business
             return Result<Product>.Success(product);
         }
 
-    public async Task<Product> UpdateProductAsync(Product product)
+        public async Task<Product> UpdateProductAsync(Product product)
         {
             var existing = await _unitOfWork.Repository<Product>().GetByIdAsync(product.ProductId);
             if (existing == null)
@@ -117,13 +117,13 @@ namespace AccountingSystem.Business
                 throw new InvalidOperationException("الوحدة الأساسية غير موجودة.");
             }
 
-            existing.ProductName   = (product.ProductName ?? string.Empty).Trim();
-            existing.Description   = product.Description?.Trim();
-            existing.CategoryId    = product.CategoryId;
-            existing.MainUnitId    = product.MainUnitId;
-            existing.MinimumStock  = product.MinimumStock;
+            existing.ProductName = (product.ProductName ?? string.Empty).Trim();
+            existing.Description = product.Description?.Trim();
+            existing.CategoryId = product.CategoryId;
+            existing.MainUnitId = product.MainUnitId;
+            existing.MinimumStock = product.MinimumStock;
             existing.PurchasePrice = product.PurchasePrice;
-            existing.SalePrice     = product.SalePrice;
+            existing.SalePrice = product.SalePrice;
 
             _unitOfWork.Repository<Product>().Update(existing);
             await _unitOfWork.SaveChangesAsync();
@@ -227,18 +227,18 @@ namespace AccountingSystem.Business
                 // حركة مخزون: نخزّن كما أدخلها المستخدم + المكافئ بالأساسية
                 var movement = new StockMovement
                 {
-                    ProductId          = productId,
-                    Product            = product,
-                    MovementType       = movementType,
-                    Quantity           = quantity,          // كما أدخلها المستخدم
-                    UnitId             = unitId,            // الوحدة المختارة
-                    Unit               = unit,
+                    ProductId = productId,
+                    Product = product,
+                    MovementType = movementType,
+                    Quantity = quantity,          // كما أدخلها المستخدم
+                    UnitId = unitId,            // الوحدة المختارة
+                    Unit = unit,
                     QuantityInMainUnit = qtyInMain,         // المكافئ بالأساسية
-                    ReferenceType      = referenceType,
-                    ReferenceId        = referenceId,
-                    Notes              = string.IsNullOrWhiteSpace(notes) ? $"حركة مخزون - {movementType}" : notes,
-                    MovementDate       = DateTime.Now,
-                    CreatedBy          = userId.ToString(CultureInfo.InvariantCulture)
+                    ReferenceType = referenceType,
+                    ReferenceId = referenceId,
+                    Notes = string.IsNullOrWhiteSpace(notes) ? $"حركة مخزون - {movementType}" : notes,
+                    MovementDate = DateTime.Now,
+                    CreatedBy = userId.ToString(CultureInfo.InvariantCulture)
                 };
 
                 await _unitOfWork.Repository<StockMovement>().AddAsync(movement);
@@ -265,7 +265,7 @@ namespace AccountingSystem.Business
             // ابحث علاقة التحويل
             var productUnit = await _unitOfWork.Repository<ProductUnit>()
                 .SingleOrDefaultAsync(pu => pu.ProductId == productId &&
-                                            pu.UnitId    == unitId &&
+                                            pu.UnitId == unitId &&
                                             pu.IsActive);
             if (productUnit == null)
                 throw new InvalidOperationException("معامل التحويل للوحدة غير محدد لهذا المنتج.");

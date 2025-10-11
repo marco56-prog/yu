@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using AccountingSystem.WPF.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AccountingSystem.WPF
 {
@@ -75,7 +76,7 @@ namespace AccountingSystem.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل بيانات لوحة التحكم: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل بيانات لوحة التحكم: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -85,24 +86,24 @@ namespace AccountingSystem.WPF
             try
             {
                 Random random = new Random();
-                
+
                 double totalSales = 125500 + random.Next(-5000, 10000);
                 int totalInvoices = 1247 + random.Next(-50, 100);
                 int activeCustomers = 856 + random.Next(-20, 50);
                 int alertsCount = random.Next(15, 35);
-                
+
                 lblTotalSales.Text = $"{totalSales:N0} ج.م";
                 lblTotalInvoices.Text = totalInvoices.ToString("N0");
                 lblActiveCustomers.Text = activeCustomers.ToString();
                 lblAlerts.Text = alertsCount.ToString();
-                
+
                 if (lblSidebarSales != null)
                     lblSidebarSales.Text = $"{12500 + random.Next(-1000, 2000):N0} ج.م";
                 if (lblSidebarInvoices != null)
                     lblSidebarInvoices.Text = (25 + random.Next(-5, 15)).ToString();
                 if (lblSidebarCustomers != null)
                     lblSidebarCustomers.Text = (8 + random.Next(-2, 8)).ToString();
-                    
+
                 if (lblStatusUser != null)
                     lblStatusUser.Text = "المدير العام - أحمد محمد";
                 if (lblMemoryUsage != null)
@@ -110,13 +111,13 @@ namespace AccountingSystem.WPF
                     int memoryUsage = 65 + random.Next(0, 20);
                     lblMemoryUsage.Text = $"{memoryUsage}%";
                 }
-                
+
                 if (lblConnectionStatus != null)
                 {
                     lblConnectionStatus.Text = "متصل";
                     lblConnectionStatus.Foreground = new SolidColorBrush(Colors.Green);
                 }
-                
+
                 if (lblNetworkStatus != null)
                 {
                     lblNetworkStatus.Text = "متصل";
@@ -125,7 +126,7 @@ namespace AccountingSystem.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل الإحصائيات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل الإحصائيات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -135,7 +136,7 @@ namespace AccountingSystem.WPF
             try
             {
                 lvRecentActivities.Items.Clear();
-                
+
                 var activities = new[]
                 {
                     new { Type = "فاتورة مبيعات", Description = "فاتورة رقم #2024001 - عميل: شركة النور", Date = DateTime.Now.AddHours(-2).ToString("HH:mm"), Amount = "1,250 ج.م", Status = "مكتملة" },
@@ -146,7 +147,7 @@ namespace AccountingSystem.WPF
                     new { Type = "عميل جديد", Description = "إضافة عميل: شركة التقنية الحديثة", Date = DateTime.Now.AddHours(-8).ToString("HH:mm"), Amount = "-", Status = "مضاف" },
                     new { Type = "سند صرف", Description = "سند صرف رقم #EX2024012 - مصروفات إدارية", Date = DateTime.Now.AddHours(-10).ToString("HH:mm"), Amount = "500 ج.م", Status = "مكتملة" }
                 };
-                
+
                 foreach (var activity in activities)
                 {
                     lvRecentActivities.Items.Add(activity);
@@ -154,7 +155,7 @@ namespace AccountingSystem.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل النشاطات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل النشاطات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -165,9 +166,9 @@ namespace AccountingSystem.WPF
             {
                 Random random = new Random();
                 int notificationCount = random.Next(3, 12);
-                
+
                 lblNotificationCount.Text = notificationCount.ToString();
-                
+
                 if (notificationCount > 8)
                 {
                     lblNotificationCount.Foreground = new SolidColorBrush(Colors.Red);
@@ -180,7 +181,7 @@ namespace AccountingSystem.WPF
                 {
                     lblNotificationCount.Foreground = new SolidColorBrush(Color.FromRgb(76, 175, 80));
                 }
-                
+
                 lblStatus.Text = notificationCount > 0 ? $"يوجد {notificationCount} إشعار جديد" : "النظام جاهز";
             }
             catch (Exception ex)
@@ -284,7 +285,7 @@ namespace AccountingSystem.WPF
 
 يمكنك الوصول لجميع الشاشات من القائمة الجانبية (☰) أو شريط القوائم العلوي";
 
-                MessageBox.Show(allScreensMessage, "جميع الشاشات المتوفرة", 
+                MessageBox.Show(allScreensMessage, "جميع الشاشات المتوفرة",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -525,7 +526,8 @@ namespace AccountingSystem.WPF
 
         private void mnuUserManagement_Click(object sender, RoutedEventArgs e)
         {
-            ShowMessage("إدارة المستخدمين");
+            var navigationService = App.ServiceProvider.GetRequiredService<AccountingSystem.WPF.Services.INavigationService>();
+            navigationService.NavigateTo("CashierManagement");
             HideSidebar();
         }
 
@@ -599,7 +601,7 @@ namespace AccountingSystem.WPF
 
         private void mnuExit_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("هل تريد إغلاق البرنامج؟", "تأكيد الخروج", 
+            if (MessageBox.Show("هل تريد إغلاق البرنامج؟", "تأكيد الخروج",
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Application.Current.Shutdown();
@@ -666,7 +668,7 @@ namespace AccountingSystem.WPF
 
 © 2024 جميع الحقوق محفوظة";
 
-            MessageBox.Show(aboutMessage, "حول النظام المحاسبي الشامل", 
+            MessageBox.Show(aboutMessage, "حول النظام المحاسبي الشامل",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -707,7 +709,7 @@ namespace AccountingSystem.WPF
                 if (lblStatus != null)
                 {
                     lblStatus.Text = $"تم النقر على: {message}";
-                    
+
                     var fadeAnimation = new DoubleAnimation
                     {
                         From = 0.3,
@@ -716,7 +718,7 @@ namespace AccountingSystem.WPF
                     };
                     lblStatus.BeginAnimation(OpacityProperty, fadeAnimation);
                 }
-                
+
                 UpdateDateTime();
                 Console.WriteLine($"Button clicked: {message}");
             }

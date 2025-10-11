@@ -15,7 +15,7 @@ public class AccountingDbContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<decimal>().HavePrecision(18, 2);
-        
+
         // ضمان استخدام Unicode لكل النصوص (لدعم العربية)
         configurationBuilder.Properties<string>().AreUnicode(true);
     }
@@ -125,7 +125,7 @@ public class AccountingDbContext : DbContext
 
         // ضمان دعم النصوص العربية
         modelBuilder.ConfigureArabicTextSupport();
-        
+
         ConfigureIndexes(modelBuilder);
         ConfigurePrecision(modelBuilder);
         ConfigureRelationships(modelBuilder);
@@ -485,7 +485,7 @@ public class AccountingDbContext : DbContext
         modelBuilder.Entity<SystemSettings>().ToTable("SystemSettings");
         modelBuilder.Entity<NumberSequence>().ToTable("NumberSequences");
         modelBuilder.Entity<User>().ToTable("Users");
-        
+
         // جداول الكاشير ونقطة البيع
         modelBuilder.Entity<Cashier>().ToTable("Cashiers");
         modelBuilder.Entity<CashierSession>().ToTable("CashierSessions");
@@ -493,7 +493,7 @@ public class AccountingDbContext : DbContext
         modelBuilder.Entity<POSTransactionItem>().ToTable("POSTransactionItems");
         modelBuilder.Entity<POSPayment>().ToTable("POSPayments");
         modelBuilder.Entity<CashDrawerOperation>().ToTable("CashDrawerOperations");
-        
+
         // جداول الخصومات ونقاط الولاء
         modelBuilder.Entity<Discount>().ToTable("Discounts");
         modelBuilder.Entity<LoyaltyProgram>().ToTable("LoyaltyPrograms");
@@ -537,7 +537,7 @@ public class AccountingDbContext : DbContext
         modelBuilder.Entity<ErrorLog>(entity =>
         {
             entity.ToTable("ErrorLogs");
-            
+
             // الفهارس للأداء
             entity.HasIndex(e => e.ErrorId).IsUnique();
             entity.HasIndex(e => e.ErrorType);
@@ -569,7 +569,7 @@ public class AccountingDbContext : DbContext
         modelBuilder.Entity<ErrorLogComment>(entity =>
         {
             entity.ToTable("ErrorLogComments");
-            
+
             // الفهارس
             entity.HasIndex(e => e.ErrorLogId);
             entity.HasIndex(e => e.UserId);
@@ -653,7 +653,7 @@ public class AccountingDbContext : DbContext
         var currentDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Local);
 
         modelBuilder.Entity<NumberSequence>().HasData(
-            new NumberSequence { SequenceId = 1, SequenceType = "SalesInvoice", Prefix = "S",  CurrentNumber = 0, NumberLength = 6, UpdatedDate = currentDate },
+            new NumberSequence { SequenceId = 1, SequenceType = "SalesInvoice", Prefix = "S", CurrentNumber = 0, NumberLength = 6, UpdatedDate = currentDate },
             new NumberSequence { SequenceId = 2, SequenceType = "PurchaseInvoice", Prefix = "P", CurrentNumber = 0, NumberLength = 6, UpdatedDate = currentDate },
             new NumberSequence { SequenceId = 3, SequenceType = "Customer", Prefix = "C", CurrentNumber = 0, NumberLength = 6, UpdatedDate = currentDate },
             new NumberSequence { SequenceId = 4, SequenceType = "Supplier", Prefix = "SP", CurrentNumber = 0, NumberLength = 6, UpdatedDate = currentDate },
@@ -695,7 +695,7 @@ public class AccountingDbContext : DbContext
         // admin => admin
         // accountant => admin  
         // الصيغة: PBKDF2:Iterations:SaltBase64:HashBase64
-        const string adminHash      = "PBKDF2:120000:c6c26yJQmQpsRPYGDmB5nQ==:V5IsjDNiy2POmseczguUobxGvG3j0EJkMTU1W0zH5PM=";
+        const string adminHash = "PBKDF2:120000:c6c26yJQmQpsRPYGDmB5nQ==:V5IsjDNiy2POmseczguUobxGvG3j0EJkMTU1W0zH5PM=";
         const string accountantHash = "PBKDF2:120000:c6c26yJQmQpsRPYGDmB5nQ==:V5IsjDNiy2POmseczguUobxGvG3j0EJkMTU1W0zH5PM=";
 
         modelBuilder.Entity<User>().HasData(
@@ -817,115 +817,115 @@ public class AccountingDbContext : DbContext
         // إضافة فواتير بيع متنوعة عبر الشهر الماضي
         modelBuilder.Entity<SalesInvoice>().HasData(
             // فواتير الأسبوع الأول
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 1, 
-                InvoiceNumber = "S-2024-001", 
-                CustomerId = 1, 
-                InvoiceDate = baseDate.AddDays(-25), 
-                SubTotal = 500.00m, 
-                TaxAmount = 75.00m, 
-                DiscountAmount = 25.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 1,
+                InvoiceNumber = "S-2024-001",
+                CustomerId = 1,
+                InvoiceDate = baseDate.AddDays(-25),
+                SubTotal = 500.00m,
+                TaxAmount = 75.00m,
+                DiscountAmount = 25.00m,
                 TotalAmount = 550.00m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-25) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-25)
             },
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 2, 
-                InvoiceNumber = "S-2024-002", 
-                CustomerId = 2, 
-                InvoiceDate = baseDate.AddDays(-23), 
-                SubTotal = 1200.00m, 
-                TaxAmount = 180.00m, 
-                DiscountAmount = 0.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 2,
+                InvoiceNumber = "S-2024-002",
+                CustomerId = 2,
+                InvoiceDate = baseDate.AddDays(-23),
+                SubTotal = 1200.00m,
+                TaxAmount = 180.00m,
+                DiscountAmount = 0.00m,
                 TotalAmount = 1380.00m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-23) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-23)
             },
-            
+
             // فواتير الأسبوع الثاني
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 3, 
-                InvoiceNumber = "S-2024-003", 
-                CustomerId = 3, 
-                InvoiceDate = baseDate.AddDays(-18), 
-                SubTotal = 750.00m, 
-                TaxAmount = 112.50m, 
-                DiscountAmount = 50.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 3,
+                InvoiceNumber = "S-2024-003",
+                CustomerId = 3,
+                InvoiceDate = baseDate.AddDays(-18),
+                SubTotal = 750.00m,
+                TaxAmount = 112.50m,
+                DiscountAmount = 50.00m,
                 TotalAmount = 812.50m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-18) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-18)
             },
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 4, 
-                InvoiceNumber = "S-2024-004", 
-                CustomerId = 4, 
-                InvoiceDate = baseDate.AddDays(-15), 
-                SubTotal = 2200.00m, 
-                TaxAmount = 330.00m, 
-                DiscountAmount = 100.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 4,
+                InvoiceNumber = "S-2024-004",
+                CustomerId = 4,
+                InvoiceDate = baseDate.AddDays(-15),
+                SubTotal = 2200.00m,
+                TaxAmount = 330.00m,
+                DiscountAmount = 100.00m,
                 TotalAmount = 2430.00m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-15) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-15)
             },
-            
+
             // فواتير الأسبوع الثالث
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 5, 
-                InvoiceNumber = "S-2024-005", 
-                CustomerId = 5, 
-                InvoiceDate = baseDate.AddDays(-12), 
-                SubTotal = 850.00m, 
-                TaxAmount = 127.50m, 
-                DiscountAmount = 30.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 5,
+                InvoiceNumber = "S-2024-005",
+                CustomerId = 5,
+                InvoiceDate = baseDate.AddDays(-12),
+                SubTotal = 850.00m,
+                TaxAmount = 127.50m,
+                DiscountAmount = 30.00m,
                 TotalAmount = 947.50m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-12) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-12)
             },
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 6, 
-                InvoiceNumber = "S-2024-006", 
-                CustomerId = 6, 
-                InvoiceDate = baseDate.AddDays(-10), 
-                SubTotal = 3500.00m, 
-                TaxAmount = 525.00m, 
-                DiscountAmount = 200.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 6,
+                InvoiceNumber = "S-2024-006",
+                CustomerId = 6,
+                InvoiceDate = baseDate.AddDays(-10),
+                SubTotal = 3500.00m,
+                TaxAmount = 525.00m,
+                DiscountAmount = 200.00m,
                 TotalAmount = 3825.00m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-10) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-10)
             },
-            
+
             // فواتير الأسبوع الحالي
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 7, 
-                InvoiceNumber = "S-2024-007", 
-                CustomerId = 1, 
-                InvoiceDate = baseDate.AddDays(-3), 
-                SubTotal = 420.00m, 
-                TaxAmount = 63.00m, 
-                DiscountAmount = 0.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 7,
+                InvoiceNumber = "S-2024-007",
+                CustomerId = 1,
+                InvoiceDate = baseDate.AddDays(-3),
+                SubTotal = 420.00m,
+                TaxAmount = 63.00m,
+                DiscountAmount = 0.00m,
                 TotalAmount = 483.00m,
-                Status = InvoiceStatus.Confirmed, 
-                CreatedDate = baseDate.AddDays(-3) 
+                Status = InvoiceStatus.Confirmed,
+                CreatedDate = baseDate.AddDays(-3)
             },
-            new SalesInvoice 
-            { 
-                SalesInvoiceId = 8, 
-                InvoiceNumber = "S-2024-008", 
-                CustomerId = 2, 
-                InvoiceDate = baseDate.AddDays(-1), 
-                SubTotal = 18500.00m, 
-                TaxAmount = 2775.00m, 
-                DiscountAmount = 500.00m, 
+            new SalesInvoice
+            {
+                SalesInvoiceId = 8,
+                InvoiceNumber = "S-2024-008",
+                CustomerId = 2,
+                InvoiceDate = baseDate.AddDays(-1),
+                SubTotal = 18500.00m,
+                TaxAmount = 2775.00m,
+                DiscountAmount = 500.00m,
                 TotalAmount = 20775.00m,
-                Status = InvoiceStatus.Draft, 
-                CreatedDate = baseDate.AddDays(-1) 
+                Status = InvoiceStatus.Draft,
+                CreatedDate = baseDate.AddDays(-1)
             }
         );
 
@@ -976,75 +976,75 @@ public class AccountingDbContext : DbContext
     private static void SeedSampleNotifications(ModelBuilder modelBuilder, DateTime baseDate)
     {
         modelBuilder.Entity<Notification>().HasData(
-            new Notification 
-            { 
-                NotificationId = 1, 
-                Title = "تحذير: نفاد مخزون", 
-                Message = "مخزون المنتج 'قهوة محمصة' أصبح أقل من الحد الأدنى (5 من أصل 20)", 
-                Type = NotificationType.LowStock, 
+            new Notification
+            {
+                NotificationId = 1,
+                Title = "تحذير: نفاد مخزون",
+                Message = "مخزون المنتج 'قهوة محمصة' أصبح أقل من الحد الأدنى (5 من أصل 20)",
+                Type = NotificationType.LowStock,
                 Priority = NotificationPriority.High,
                 Status = NotificationStatus.Unread,
                 ReferenceType = "Product",
                 ReferenceId = 18,
-                CreatedDate = baseDate.AddHours(-2) 
+                CreatedDate = baseDate.AddHours(-2)
             },
-            new Notification 
-            { 
-                NotificationId = 2, 
-                Title = "تحذير: نفاد مخزون", 
-                Message = "مخزون المنتج 'جبنة رومي' أصبح أقل من الحد الأدنى (8 من أصل 15)", 
-                Type = NotificationType.LowStock, 
+            new Notification
+            {
+                NotificationId = 2,
+                Title = "تحذير: نفاد مخزون",
+                Message = "مخزون المنتج 'جبنة رومي' أصبح أقل من الحد الأدنى (8 من أصل 15)",
+                Type = NotificationType.LowStock,
                 Priority = NotificationPriority.Medium,
                 Status = NotificationStatus.Unread,
                 ReferenceType = "Product",
                 ReferenceId = 19,
-                CreatedDate = baseDate.AddHours(-5) 
+                CreatedDate = baseDate.AddHours(-5)
             },
-            new Notification 
-            { 
-                NotificationId = 3, 
-                Title = "فاتورة جديدة", 
-                Message = "تم إنشاء فاتورة مبيعات جديدة S-2024-008 بقيمة 20,775 جنيه", 
-                Type = NotificationType.SalesTarget, 
+            new Notification
+            {
+                NotificationId = 3,
+                Title = "فاتورة جديدة",
+                Message = "تم إنشاء فاتورة مبيعات جديدة S-2024-008 بقيمة 20,775 جنيه",
+                Type = NotificationType.SalesTarget,
                 Priority = NotificationPriority.Medium,
                 Status = NotificationStatus.Read,
                 ReferenceType = "SalesInvoice",
                 ReferenceId = 8,
-                CreatedDate = baseDate.AddDays(-1), 
-                ReadDate = baseDate.AddHours(-1) 
+                CreatedDate = baseDate.AddDays(-1),
+                ReadDate = baseDate.AddHours(-1)
             },
-            new Notification 
-            { 
-                NotificationId = 4, 
-                Title = "دفعة مستحقة", 
-                Message = "يوجد مبلغ مستحق للمورد 'شركة الأهرام للمواد الغذائية' قدره 15,000 جنيه", 
-                Type = NotificationType.SupplierPayment, 
+            new Notification
+            {
+                NotificationId = 4,
+                Title = "دفعة مستحقة",
+                Message = "يوجد مبلغ مستحق للمورد 'شركة الأهرام للمواد الغذائية' قدره 15,000 جنيه",
+                Type = NotificationType.SupplierPayment,
                 Priority = NotificationPriority.High,
                 Status = NotificationStatus.Acknowledged,
                 ReferenceType = "Supplier",
                 ReferenceId = 1,
-                CreatedDate = baseDate.AddDays(-7) 
+                CreatedDate = baseDate.AddDays(-7)
             },
-            new Notification 
-            { 
-                NotificationId = 5, 
-                Title = "هدف المبيعات", 
-                Message = "تم تحقيق 85% من هدف مبيعات الشهر الحالي. المطلوب: 50,000 ج.م، المُحقق: 42,500 ج.م", 
-                Type = NotificationType.SalesTarget, 
+            new Notification
+            {
+                NotificationId = 5,
+                Title = "هدف المبيعات",
+                Message = "تم تحقيق 85% من هدف مبيعات الشهر الحالي. المطلوب: 50,000 ج.م، المُحقق: 42,500 ج.م",
+                Type = NotificationType.SalesTarget,
                 Priority = NotificationPriority.Low,
                 Status = NotificationStatus.Read,
-                CreatedDate = baseDate.AddDays(-3), 
-                ReadDate = baseDate.AddDays(-2) 
+                CreatedDate = baseDate.AddDays(-3),
+                ReadDate = baseDate.AddDays(-2)
             },
-            new Notification 
-            { 
-                NotificationId = 6, 
-                Title = "نشاط المستخدم", 
-                Message = "المستخدم 'admin' قام بتسجيل الدخول من عنوان IP جديد", 
-                Type = NotificationType.UserActivity, 
+            new Notification
+            {
+                NotificationId = 6,
+                Title = "نشاط المستخدم",
+                Message = "المستخدم 'admin' قام بتسجيل الدخول من عنوان IP جديد",
+                Type = NotificationType.UserActivity,
                 Priority = NotificationPriority.Low,
                 Status = NotificationStatus.Dismissed,
-                CreatedDate = baseDate.AddDays(-1) 
+                CreatedDate = baseDate.AddDays(-1)
             }
         );
     }
@@ -1053,84 +1053,84 @@ public class AccountingDbContext : DbContext
     {
         modelBuilder.Entity<StockMovement>().HasData(
             // حركات بيع (خروج)
-            new StockMovement 
-            { 
-                StockMovementId = 1, 
-                ProductId = 1, 
-                MovementType = StockMovementType.Out, 
-                Quantity = -5.0m, 
+            new StockMovement
+            {
+                StockMovementId = 1,
+                ProductId = 1,
+                MovementType = StockMovementType.Out,
+                Quantity = -5.0m,
                 UnitCost = 28.50m,  // سعر التكلفة
                 ReferenceNumber = "S-2024-001",
                 ReferenceType = "SalesInvoice",
                 ReferenceId = 1,
                 MovementDate = baseDate.AddDays(-25),
-                Notes = "بيع فاتورة S-2024-001" 
+                Notes = "بيع فاتورة S-2024-001"
             },
-            new StockMovement 
-            { 
-                StockMovementId = 2, 
-                ProductId = 2, 
-                MovementType = StockMovementType.Out, 
-                Quantity = -8.0m, 
+            new StockMovement
+            {
+                StockMovementId = 2,
+                ProductId = 2,
+                MovementType = StockMovementType.Out,
+                Quantity = -8.0m,
                 UnitCost = 48.00m,
                 ReferenceNumber = "S-2024-002",
                 ReferenceType = "SalesInvoice",
                 ReferenceId = 2,
                 MovementDate = baseDate.AddDays(-23),
-                Notes = "بيع فاتورة S-2024-002" 
+                Notes = "بيع فاتورة S-2024-002"
             },
-            new StockMovement 
-            { 
-                StockMovementId = 3, 
-                ProductId = 15, 
-                MovementType = StockMovementType.Out, 
-                Quantity = -1.0m, 
+            new StockMovement
+            {
+                StockMovementId = 3,
+                ProductId = 15,
+                MovementType = StockMovementType.Out,
+                Quantity = -1.0m,
                 UnitCost = 8500.00m,
                 ReferenceNumber = "S-2024-006",
                 ReferenceType = "SalesInvoice",
                 ReferenceId = 6,
                 MovementDate = baseDate.AddDays(-10),
-                Notes = "بيع تليفزيون سامسونج" 
+                Notes = "بيع تليفزيون سامسونج"
             },
-            
+
             // حركات شراء (دخول)
-            new StockMovement 
-            { 
-                StockMovementId = 4, 
-                ProductId = 18, 
-                MovementType = StockMovementType.In, 
-                Quantity = 50.0m, 
+            new StockMovement
+            {
+                StockMovementId = 4,
+                ProductId = 18,
+                MovementType = StockMovementType.In,
+                Quantity = 50.0m,
                 UnitCost = 45.00m,
                 ReferenceNumber = "P-2024-001",
                 ReferenceType = "Purchase",
                 MovementDate = baseDate.AddDays(-30),
-                Notes = "شراء قهوة محمصة من المورد" 
+                Notes = "شراء قهوة محمصة من المورد"
             },
-            new StockMovement 
-            { 
-                StockMovementId = 5, 
-                ProductId = 18, 
-                MovementType = StockMovementType.Out, 
-                Quantity = -45.0m, 
+            new StockMovement
+            {
+                StockMovementId = 5,
+                ProductId = 18,
+                MovementType = StockMovementType.Out,
+                Quantity = -45.0m,
                 UnitCost = 45.00m,
                 ReferenceNumber = "Multiple Sales",
                 ReferenceType = "Sales",
                 MovementDate = baseDate.AddDays(-10),
-                Notes = "مبيعات متعددة خلال الشهر" 
+                Notes = "مبيعات متعددة خلال الشهر"
             },
-            
+
             // حركات تسوية المخزون
-            new StockMovement 
-            { 
-                StockMovementId = 6, 
-                ProductId = 19, 
-                MovementType = StockMovementType.Adjustment, 
-                Quantity = -2.0m, 
+            new StockMovement
+            {
+                StockMovementId = 6,
+                ProductId = 19,
+                MovementType = StockMovementType.Adjustment,
+                Quantity = -2.0m,
                 UnitCost = 120.00m,
                 ReferenceNumber = "ADJ-001",
                 ReferenceType = "Adjustment",
                 MovementDate = baseDate.AddDays(-5),
-                Notes = "تسوية: جبنة منتهية الصلاحية" 
+                Notes = "تسوية: جبنة منتهية الصلاحية"
             }
         );
     }

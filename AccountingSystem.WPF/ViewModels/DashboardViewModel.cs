@@ -23,9 +23,9 @@ namespace AccountingSystem.WPF.ViewModels
         {
             _salesService = salesService;
             _productService = productService;
-            
+
             RefreshCommand = new RelayCommand(async () => await LoadDataAsync());
-            
+
             // تحميل البيانات عند التهيئة
             _ = Task.Run(LoadDataAsync);
         }
@@ -71,7 +71,7 @@ namespace AccountingSystem.WPF.ViewModels
                 // تحميل بيانات المبيعات اليومية (آخر 7 أيام)
                 var today = DateTime.Today;
                 var startDate = today.AddDays(-7);
-                
+
                 var salesSummary = await _salesService.GetSalesSummaryAsync(startDate, today);
                 TodaySales = salesSummary.TotalAmount;
                 TodayInvoicesCount = salesSummary.InvoiceCount;

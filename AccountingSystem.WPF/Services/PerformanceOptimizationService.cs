@@ -39,7 +39,7 @@ namespace AccountingSystem.WPF.Services
 
         public PerformanceOptimizationService(
             IMemoryCache cache,
-            ICustomerService customerService, 
+            ICustomerService customerService,
             IProductService productService)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
@@ -59,7 +59,7 @@ namespace AccountingSystem.WPF.Services
             }
 
             var lockObject = _lockObjects.GetOrAdd(key, _ => new object());
-            
+
             lock (lockObject)
             {
                 // Double-check after acquiring lock
@@ -67,9 +67,9 @@ namespace AccountingSystem.WPF.Services
                     return cachedCustomers;
 
                 ComprehensiveLogger.LogPerformanceOperation("بدء تحميل العملاء من قاعدة البيانات", ComponentName);
-                
+
                 var customers = Task.Run(async () => await _customerService.GetAllCustomersAsync()).Result;
-                
+
                 var cacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
@@ -78,7 +78,7 @@ namespace AccountingSystem.WPF.Services
                 };
 
                 _cache.Set(key, customers, cacheOptions);
-                
+
                 ComprehensiveLogger.LogPerformanceOperation("تم تحميل وحفظ العملاء في الكاش", ComponentName, customers.Count());
                 return customers.ToList();
             }
@@ -95,7 +95,7 @@ namespace AccountingSystem.WPF.Services
             }
 
             var lockObject = _lockObjects.GetOrAdd(key, _ => new object());
-            
+
             lock (lockObject)
             {
                 // Double-check after acquiring lock
@@ -103,9 +103,9 @@ namespace AccountingSystem.WPF.Services
                     return cachedProducts;
 
                 ComprehensiveLogger.LogPerformanceOperation("بدء تحميل المنتجات من قاعدة البيانات", ComponentName);
-                
+
                 var products = Task.Run(async () => await _productService.GetAllProductsAsync()).Result;
-                
+
                 var cacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
@@ -114,7 +114,7 @@ namespace AccountingSystem.WPF.Services
                 };
 
                 _cache.Set(key, products, cacheOptions);
-                
+
                 ComprehensiveLogger.LogPerformanceOperation("تم تحميل وحفظ المنتجات في الكاش", ComponentName, products.Count());
                 return products.ToList();
             }
@@ -130,7 +130,7 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 var customer = await _customerService.GetCustomerByIdAsync(customerId);
-                
+
                 if (customer != null)
                 {
                     var cacheOptions = new MemoryCacheEntryOptions
@@ -162,7 +162,7 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 var product = await _productService.GetProductByIdAsync(productId);
-                
+
                 if (product != null)
                 {
                     var cacheOptions = new MemoryCacheEntryOptions

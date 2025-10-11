@@ -35,7 +35,7 @@ namespace AccountingSystem.WPF.Views
 
         private readonly ObservableCollection<Product> _products;
         private readonly ObservableCollection<ProductUnit> _productUnits;
-        
+
         private readonly int _customerId;
         private decimal _currentUnitFactor = 1m;
         private Product? _selectedProduct;
@@ -285,8 +285,8 @@ namespace AccountingSystem.WPF.Views
 
                 // تحديث الرصيد المتاح
                 lblAvailableStock.Text = _selectedProduct.CurrentStock.ToString("F2");
-                lblStockStatus.Foreground = _selectedProduct.CurrentStock > 0 
-                    ? System.Windows.Media.Brushes.Green 
+                lblStockStatus.Foreground = _selectedProduct.CurrentStock > 0
+                    ? System.Windows.Media.Brushes.Green
                     : System.Windows.Media.Brushes.Red;
                 lblStockStatus.ToolTip = $"متاح: {_selectedProduct.CurrentStock:F2}";
 

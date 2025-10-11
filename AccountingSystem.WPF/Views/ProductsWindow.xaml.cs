@@ -25,7 +25,7 @@ public partial class ProductsWindow : Window
         _products = new ObservableCollection<Product>();
         _allProducts = new List<Product>();
         dgProducts.ItemsSource = _products;
-        
+
         Loaded += async (s, e) => await LoadData();
         SetupCurrencyDisplay();
     }
@@ -34,7 +34,7 @@ public partial class ProductsWindow : Window
     {
         var currencySymbol = _context.SystemSettings
             .FirstOrDefault(s => s.SettingKey == "CurrencySymbol")?.SettingValue ?? "ج.م";
-        
+
         Title = $"إدارة المنتجات والمخزون - العملة: {currencySymbol}";
     }
 
@@ -46,24 +46,24 @@ public partial class ProductsWindow : Window
             var products = await _productService.GetAllProductsAsync();
             _allProducts = products.ToList();
             _products.Clear();
-            
+
             foreach (var product in _allProducts)
             {
                 _products.Add(product);
             }
-            
+
             lblCount.Text = $"عدد المنتجات: {_products.Count}";
-            
+
             // حساب إجمالي قيمة المخزون بالجنيه المصري
             var totalStockValue = _allProducts.Sum(p => p.CurrentStock * p.PurchasePrice);
             var currencySymbol = _context.SystemSettings
                 .FirstOrDefault(s => s.SettingKey == "CurrencySymbol")?.SettingValue ?? "ج.م";
-            
+
             lblStatus.Text = "تم تحميل بيانات المنتجات بنجاح";
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
             lblStatus.Text = "خطأ في تحميل البيانات";
         }
@@ -81,7 +81,7 @@ public partial class ProductsWindow : Window
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
-            
+
             var content = new TextBlock
             {
                 Text = "نموذج إضافة منتج جديد\n\nالمميزات المتاحة:\n- إدخال بيانات المنتج\n- تحديد الوحدات\n- ضبط الأسعار\n\nيتم التطوير...",
@@ -90,7 +90,7 @@ public partial class ProductsWindow : Window
                 FontSize = 14,
                 TextAlignment = TextAlignment.Center
             };
-            
+
             productForm.Content = content;
             productForm.ShowDialog();
         }
@@ -98,18 +98,19 @@ public partial class ProductsWindow : Window
         {
             MessageBox.Show($"خطأ في فتح نافذة المنتج الجديد: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-    }    private void btnEdit_Click(object sender, RoutedEventArgs e)
+    }
+    private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
         if (dgProducts.SelectedItem is Product selectedProduct)
         {
             MessageBox.Show($"تعديل المنتج: {selectedProduct.ProductName}\n" +
                           $"المخزون الحالي: {selectedProduct.CurrentStock:N2}\n" +
-                          $"سعر البيع: {selectedProduct.SalePrice:N2} ج.م", 
+                          $"سعر البيع: {selectedProduct.SalePrice:N2} ج.م",
                           "قيد التطوير", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         else
         {
-            MessageBox.Show("يرجى اختيار منتج للتعديل", "تنبيه", 
+            MessageBox.Show("يرجى اختيار منتج للتعديل", "تنبيه",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
@@ -121,11 +122,11 @@ public partial class ProductsWindow : Window
             var result = MessageBox.Show(
                 $"هل أنت متأكد من حذف المنتج '{selectedProduct.ProductName}'؟\n\n" +
                 $"المخزون الحالي: {selectedProduct.CurrentStock:N2}\n" +
-                $"قيمة المخزون: {(selectedProduct.CurrentStock * selectedProduct.PurchasePrice):N2} ج.م", 
-                "تأكيد الحذف", 
-                MessageBoxButton.YesNo, 
+                $"قيمة المخزون: {(selectedProduct.CurrentStock * selectedProduct.PurchasePrice):N2} ج.م",
+                "تأكيد الحذف",
+                MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
-            
+
             if (result == MessageBoxResult.Yes)
             {
                 try
@@ -136,14 +137,14 @@ public partial class ProductsWindow : Window
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"خطأ في حذف المنتج: {ex.Message}", "خطأ", 
+                    MessageBox.Show($"خطأ في حذف المنتج: {ex.Message}", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
         else
         {
-            MessageBox.Show("يرجى اختيار منتج للحذف", "تنبيه", 
+            MessageBox.Show("يرجى اختيار منتج للحذف", "تنبيه",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
@@ -161,12 +162,12 @@ public partial class ProductsWindow : Window
             MessageBox.Show($"تسوية مخزون المنتج: {selectedProduct.ProductName}\n" +
                           $"المخزون الحالي: {selectedProduct.CurrentStock:N2}\n" +
                           $"الحد الأدنى: {selectedProduct.MinimumStock:N2}\n\n" +
-                          "سيتم تطوير نافذة تسوية المخزون قريباً", 
+                          "سيتم تطوير نافذة تسوية المخزون قريباً",
                           "تسوية المخزون", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         else
         {
-            MessageBox.Show("يرجى اختيار منتج لتسوية مخزونه", "تنبيه", 
+            MessageBox.Show("يرجى اختيار منتج لتسوية مخزونه", "تنبيه",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
@@ -186,7 +187,7 @@ public partial class ProductsWindow : Window
         // تطبيق فلتر البحث
         if (!string.IsNullOrEmpty(searchText))
         {
-            filtered = filtered.Where(p => 
+            filtered = filtered.Where(p =>
                 p.ProductName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                 p.ProductCode.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                 (p.Description != null && p.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase))

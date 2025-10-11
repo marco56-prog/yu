@@ -35,7 +35,7 @@ public class WindowHelper
         {
             using var scope = _serviceProvider.CreateScope();
             var window = scope.ServiceProvider.GetRequiredService<T>();
-            
+
             return ShowWindow(window, isDialog, scope);
         }
         catch (Exception ex)
@@ -69,7 +69,7 @@ public class WindowHelper
 
             using var scope = _serviceProvider.CreateScope();
             var window = (System.Windows.Window)scope.ServiceProvider.GetRequiredService(windowType);
-            
+
             return ShowWindow(window, isDialog, scope);
         }
         catch (Exception ex)
@@ -118,7 +118,7 @@ public class WindowHelper
             var currentAssembly = Assembly.GetExecutingAssembly();
             var type = currentAssembly.GetTypes()
                 .FirstOrDefault(t => t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
-            
+
             if (type != null)
                 return type;
 
@@ -132,7 +132,7 @@ public class WindowHelper
                 {
                     type = assembly.GetTypes()
                         .FirstOrDefault(t => t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
-                    
+
                     if (type != null)
                         return type;
                 }

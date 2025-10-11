@@ -76,7 +76,7 @@ namespace AccountingSystem.WPF.Services
                     return NavigationResult.Error("لا يمكن تحميل الفاتورة التالية");
                 }
 
-                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة التالية بنجاح", ComponentName, 
+                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة التالية بنجاح", ComponentName,
                     $"من {currentInvoiceId} إلى {nextInvoiceId}");
 
                 return NavigationResult.Success(invoice, currentIndex + 1, invoiceIds.Count);
@@ -116,7 +116,7 @@ namespace AccountingSystem.WPF.Services
                     return NavigationResult.Error("لا يمكن تحميل الفاتورة السابقة");
                 }
 
-                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة السابقة بنجاح", ComponentName, 
+                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة السابقة بنجاح", ComponentName,
                     $"من {currentInvoiceId} إلى {previousInvoiceId}");
 
                 return NavigationResult.Success(invoice, currentIndex - 1, invoiceIds.Count);
@@ -144,7 +144,7 @@ namespace AccountingSystem.WPF.Services
                 var invoiceIds = await GetInvoiceIdsAsync();
                 var position = invoiceIds.IndexOf(invoiceId) + 1;
 
-                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة المحددة بنجاح", ComponentName, 
+                ComprehensiveLogger.LogUIOperation("تم التنقل للفاتورة المحددة بنجاح", ComponentName,
                     $"الفاتورة: {invoice.InvoiceNumber}");
 
                 return NavigationResult.Success(invoice, position, invoiceIds.Count);
@@ -176,7 +176,7 @@ namespace AccountingSystem.WPF.Services
 
                 _lastCacheUpdate = DateTime.Now;
 
-                ComprehensiveLogger.LogDataOperation("تم تحديث قائمة معرفات الفواتير", ComponentName, 
+                ComprehensiveLogger.LogDataOperation("تم تحديث قائمة معرفات الفواتير", ComponentName,
                     $"عدد الفواتير: {_cachedInvoiceIds.Count}");
 
                 return _cachedInvoiceIds;
@@ -244,7 +244,7 @@ namespace AccountingSystem.WPF.Services
                 };
                 window.InputBindings.Add(nextBinding);
 
-                ComprehensiveLogger.LogUIOperation("تم تسجيل اختصارات التنقل الذكي", ComponentName, 
+                ComprehensiveLogger.LogUIOperation("تم تسجيل اختصارات التنقل الذكي", ComponentName,
                     "F5: السابق، F6: التالي");
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace AccountingSystem.WPF.Services
                 // Fire event to request save from the UI
                 var args = new NavigationEventArgs { Action = NavigationAction.RequestSave };
                 NavigationRequested?.Invoke(this, args);
-                
+
                 // Wait for the result (this is a simplified implementation)
                 // In a real scenario, you'd use a more sophisticated callback mechanism
                 await Task.Delay(100); // Give UI time to process
@@ -399,8 +399,8 @@ namespace AccountingSystem.WPF.Services
             {
                 var args = new NavigationEventArgs
                 {
-                    Action = _direction == NavigationDirection.Previous 
-                        ? NavigationAction.NavigatePrevious 
+                    Action = _direction == NavigationDirection.Previous
+                        ? NavigationAction.NavigatePrevious
                         : NavigationAction.NavigateNext
                 };
 

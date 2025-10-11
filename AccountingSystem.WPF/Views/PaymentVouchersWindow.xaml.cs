@@ -14,13 +14,13 @@ public partial class PaymentVouchersWindow : Window
 
     private void btnNewPayment_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("سيتم فتح نافذة إنشاء سند صرف جديد قريباً!", 
+        MessageBox.Show("سيتم فتح نافذة إنشاء سند صرف جديد قريباً!",
             "قيد التطوير", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("سيتم إضافة البحث المتقدم قريباً!", 
+        MessageBox.Show("سيتم إضافة البحث المتقدم قريباً!",
             "قيد التطوير", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

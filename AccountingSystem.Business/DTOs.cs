@@ -57,7 +57,7 @@ namespace AccountingSystem.Business
         public void Normalize()
         {
             InvoiceNumber = (InvoiceNumber ?? string.Empty).Trim();
-            CustomerName  = (CustomerName  ?? string.Empty).Trim();
+            CustomerName = (CustomerName ?? string.Empty).Trim();
             PaymentStatus = (PaymentStatus ?? string.Empty).Trim();
         }
     }
@@ -104,26 +104,26 @@ namespace AccountingSystem.Business
             decimal stockValue,
             string status)
         {
-            ProductCode   = productCode ?? "";
-            ProductName   = productName ?? "";
-            CategoryName  = categoryName ?? "";
-            UnitName      = unitName ?? "";
-            CurrentStock  = currentStock;
-            MinimumStock  = minimumStock;
+            ProductCode = productCode ?? "";
+            ProductName = productName ?? "";
+            CategoryName = categoryName ?? "";
+            UnitName = unitName ?? "";
+            CurrentStock = currentStock;
+            MinimumStock = minimumStock;
             PurchasePrice = purchasePrice;
-            SalePrice     = salePrice;
-            StockValue    = stockValue;
-            Status        = status ?? "";
+            SalePrice = salePrice;
+            StockValue = stockValue;
+            Status = status ?? "";
         }
 
         /// <summary>تنظيف نصوص الحقول (Trim) — اختياري.</summary>
         public void Normalize()
         {
-            ProductCode  = (ProductCode  ?? string.Empty).Trim();
-            ProductName  = (ProductName  ?? string.Empty).Trim();
+            ProductCode = (ProductCode ?? string.Empty).Trim();
+            ProductName = (ProductName ?? string.Empty).Trim();
             CategoryName = (CategoryName ?? string.Empty).Trim();
-            UnitName     = (UnitName     ?? string.Empty).Trim();
-            Status       = (Status       ?? string.Empty).Trim();
+            UnitName = (UnitName ?? string.Empty).Trim();
+            Status = (Status ?? string.Empty).Trim();
         }
     }
 
@@ -163,14 +163,14 @@ namespace AccountingSystem.Business
             decimal netProfit,
             decimal profitMargin)
         {
-            Date             = date;
-            Period           = period ?? "";
-            Revenue          = revenue;
-            CostOfGoodsSold  = costOfGoodsSold;
-            GrossProfit      = grossProfit;
-            Expenses         = expenses;
-            NetProfit        = netProfit;
-            ProfitMargin     = profitMargin;
+            Date = date;
+            Period = period ?? "";
+            Revenue = revenue;
+            CostOfGoodsSold = costOfGoodsSold;
+            GrossProfit = grossProfit;
+            Expenses = expenses;
+            NetProfit = netProfit;
+            ProfitMargin = profitMargin;
         }
 
         /// <summary>تنظيف نصوص الحقول (Trim) — اختياري.</summary>
@@ -216,14 +216,14 @@ namespace AccountingSystem.Business
             int salesTransactions,
             decimal averagePrice)
         {
-            Rank               = rank;
-            ProductCode        = productCode ?? "";
-            ProductName        = productName ?? "";
-            TotalQuantitySold  = totalQuantitySold;
-            TotalSalesValue    = totalSalesValue;
-            TotalProfit        = totalProfit;
-            SalesTransactions  = salesTransactions;
-            AveragePrice       = averagePrice;
+            Rank = rank;
+            ProductCode = productCode ?? "";
+            ProductName = productName ?? "";
+            TotalQuantitySold = totalQuantitySold;
+            TotalSalesValue = totalSalesValue;
+            TotalProfit = totalProfit;
+            SalesTransactions = salesTransactions;
+            AveragePrice = averagePrice;
         }
 
         /// <summary>تنظيف نصوص الحقول (Trim) — اختياري.</summary>
@@ -254,10 +254,10 @@ namespace AccountingSystem.Business
 
         public FinancialSummaryDto(decimal totalSales, decimal totalPurchases, decimal netProfit, int totalInvoices)
         {
-            TotalSales     = totalSales;
+            TotalSales = totalSales;
             TotalPurchases = totalPurchases;
-            NetProfit      = netProfit;
-            TotalInvoices  = totalInvoices;
+            NetProfit = netProfit;
+            TotalInvoices = totalInvoices;
         }
     }
 

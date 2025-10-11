@@ -231,18 +231,18 @@ namespace AccountingSystem.Business
             {
                 // تحديث الكائن المتتبع بالفعل - لا نحتاج لاستدعاء Update لأنه متتبع
                 existing.SettingValue = value ?? string.Empty;
-                existing.Description  = description;
-                existing.UpdatedDate  = DateTime.Now;
+                existing.Description = description;
+                existing.UpdatedDate = DateTime.Now;
                 // لا نستدعي repo.Update لأن الكائن متتبع بالفعل من FindAsync
             }
             else
             {
                 var s = new SystemSettings
                 {
-                    SettingKey   = key,
+                    SettingKey = key,
                     SettingValue = value ?? string.Empty,
-                    Description  = description,
-                    UpdatedDate  = DateTime.Now
+                    Description = description,
+                    UpdatedDate = DateTime.Now
                 };
                 await repo.AddAsync(s);
             }
@@ -267,10 +267,10 @@ namespace AccountingSystem.Business
                     result[kv.Key] = kv.Value;
                     await repo.AddAsync(new SystemSettings
                     {
-                        SettingKey   = kv.Key,
+                        SettingKey = kv.Key,
                         SettingValue = kv.Value,
-                        Description  = $"قيمة افتراضية لـ {kv.Key}",
-                        UpdatedDate  = DateTime.Now
+                        Description = $"قيمة افتراضية لـ {kv.Key}",
+                        UpdatedDate = DateTime.Now
                     });
                     hasNew = true;
                 }

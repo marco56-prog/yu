@@ -35,11 +35,11 @@ namespace AccountingSystem.WPF.Views
         private readonly DispatcherTimer _searchDebounce;
         private readonly CompareInfo _cmp = CultureInfo.GetCultureInfo("ar-EG").CompareInfo;
         private bool _touchMode;
-        
+
         private Cashier? _currentCashier;
         private CashierSession? _currentSession;
 
-                // private ObservableCollection<PosItem> _cartItems; // تم تعطيلها مؤقتاً
+        // private ObservableCollection<PosItem> _cartItems; // تم تعطيلها مؤقتاً
         private ObservableCollection<PosItem> _invoiceItems;
         private ObservableCollection<Product> _products;
         private ObservableCollection<Customer> _customers;
@@ -54,8 +54,8 @@ namespace AccountingSystem.WPF.Views
         private decimal _discountAmount;
         private decimal _total;
 
-        public POSWindow(IUnitOfWork unitOfWork, ICashierService cashierService, IPosService posService, 
-                        IDiscountService discountService, IStockMovementService? stockMovementService = null, 
+        public POSWindow(IUnitOfWork unitOfWork, ICashierService cashierService, IPosService posService,
+                        IDiscountService discountService, IStockMovementService? stockMovementService = null,
                         ISystemSettingsService? settingsService = null, IPriceListService? priceListService = null)
         {
             InitializeComponent();
@@ -103,7 +103,7 @@ namespace AccountingSystem.WPF.Views
                 {
                     // Start cashier session
                     _currentSession = await _cashierService.StartSessionAsync(_currentCashier.Id, 0); // Default opening balance
-                    
+
                     // Update UI with cashier info
                     UpdateCashierInfo();
                     return true;
@@ -118,7 +118,7 @@ namespace AccountingSystem.WPF.Views
             {
                 // Update window title with cashier info
                 Title = $"نقطة البيع - {_currentCashier.Name} - جلسة: {_currentSession.Id}";
-                
+
                 // Log the cashier login
                 Console.WriteLine($"تم تسجيل دخول الكاشير: {_currentCashier.Name}");
             }
@@ -448,7 +448,7 @@ namespace AccountingSystem.WPF.Views
                     {
                         unitPrice = await _priceListService.GetCustomerPriceAsync(SelectedCustomer.CustomerId, product.ProductId);
                     }
-                    
+
                     var newItem = new PosItem
                     {
                         ProductId = product.ProductId,
@@ -492,15 +492,15 @@ namespace AccountingSystem.WPF.Views
         private async Task CalculateTotals()
         {
             SubTotal = _invoiceItems.Sum(i => i.TotalPrice);
-            
+
             // الحصول على معدل الضريبة من الإعدادات
             var taxRate = await _settingsService.GetTaxRateAsync();
             TaxAmount = Math.Round(SubTotal * taxRate, 2);
-            
+
             // الحصول على معدل الخصم من الإعدادات
             var discountRate = await _settingsService.GetDiscountRateAsync();
             DiscountAmount = Math.Round(SubTotal * discountRate, 2);
-            
+
             Total = SubTotal + TaxAmount - DiscountAmount;
         }
 
@@ -593,10 +593,10 @@ namespace AccountingSystem.WPF.Views
                 foreach (var item in _invoiceItems)
                 {
                     await _stockMovementService.RecordSalesMovementAsync(
-                        item.ProductId, 
-                        item.Quantity, 
+                        item.ProductId,
+                        item.Quantity,
                         1, // UnitId - الوحدة الأساسية
-                        invoice.SalesInvoiceId, 
+                        invoice.SalesInvoiceId,
                         $"صرف مبيعات POS - {paymentMethod}"
                     );
                 }
@@ -718,7 +718,7 @@ namespace AccountingSystem.WPF.Views
         }
 
         private async void btnNewSale_Click(object sender, RoutedEventArgs e) => await ResetInvoice();
-        
+
         private void btnLoadDrafts_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -728,18 +728,18 @@ namespace AccountingSystem.WPF.Views
                 {
                     // var draftInvoicesWindow = _serviceProvider.GetRequiredService<DraftInvoicesWindow>();
                     // تم تحميل المسودات بنجاح
-                    
-                    MessageBox.Show("تم تحميل المسودات بنجاح", "تحميل المسودات", 
+
+                    MessageBox.Show("تم تحميل المسودات بنجاح", "تحميل المسودات",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     // تم تحميل المسودات بنجاح
-                    
+
                     // Refresh current invoice if needed
-                    MessageBox.Show("تم تحميل المسودات بنجاح", "نجاح العملية", 
+                    MessageBox.Show("تم تحميل المسودات بنجاح", "نجاح العملية",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"خطأ في تحميل المسودات: {ex.Message}", "خطأ", 
+                    MessageBox.Show($"خطأ في تحميل المسودات: {ex.Message}", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -757,13 +757,13 @@ namespace AccountingSystem.WPF.Views
             UpdateStatusBar();
             await LoadProductsAsync();
         }
-        
+
         private void btnToggleTouchMode_Click(object sender, RoutedEventArgs e)
         {
             _touchMode = !_touchMode;
             ApplyTouchMode();
         }
-        
+
         private void ApplyTouchMode()
         {
             if (_touchMode)
@@ -774,7 +774,7 @@ namespace AccountingSystem.WPF.Views
                     child.Width = 250;
                     child.Height = 150;
                 }
-                
+
                 foreach (var child in pnlCategories.Children.OfType<ToggleButton>())
                 {
                     child.Width = 150;
@@ -790,7 +790,7 @@ namespace AccountingSystem.WPF.Views
                     child.Width = 200;
                     child.Height = 120;
                 }
-                
+
                 foreach (var child in pnlCategories.Children.OfType<ToggleButton>())
                 {
                     child.Width = 120;
@@ -798,7 +798,7 @@ namespace AccountingSystem.WPF.Views
                     child.FontSize = 14;
                 }
             }
-            
+
             // إعادة إنشاء بطاقات المنتجات بالحجم الجديد
             CreateProductCards();
         }

@@ -11,7 +11,7 @@ namespace AccountingSystem.Business
     {
         Task<decimal> GetLastPriceAsync(int productId);
         Task UpdatePriceAsync(int productId, decimal newPrice, int userId = 1);
-        
+
         /// <summary>
         /// يحصل على آخر سعر بيع للعميل لمنتج ووحدة معيّنة من تاريخ الفواتير
         /// إن لم يوجد يرجع سعر المنتج العام
@@ -45,7 +45,7 @@ namespace AccountingSystem.Business
             {
                 // استخدام Context مباشرة للحصول على آخر سعر بيع للعميل
                 var lastSalePrice = await _unitOfWork.Context.SalesInvoiceItems
-                    .Where(item => item.ProductId == productId && 
+                    .Where(item => item.ProductId == productId &&
                                    item.UnitId == unitId &&
                                    item.SalesInvoice.CustomerId == customerId &&
                                    item.SalesInvoice.IsPosted)
@@ -53,11 +53,11 @@ namespace AccountingSystem.Business
                     .ThenByDescending(item => item.SalesInvoice.SalesInvoiceId)
                     .Select(item => (decimal?)item.UnitPrice)
                     .FirstOrDefaultAsync();
-                
+
                 // إن وُجد سعر سابق، أرجعه
                 if (lastSalePrice.HasValue)
                     return lastSalePrice.Value;
-                
+
                 // وإلا أرجع السعر العام للمنتج
                 var productRepo = _unitOfWork.Repository<Product>();
                 var product = await productRepo.GetByIdAsync(productId);

@@ -46,20 +46,20 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger.LogInformation("تهيئة مراقبة النظام - Initializing system monitoring");
-                
+
                 LoadSystemInfo();
                 LoadDatabaseInfo();
                 LoadApplicationInfo();
-                
+
                 // بدء المراقبة
                 _monitoringTimer.Start();
-                
+
                 _logger.LogInformation("تم تهيئة مراقبة النظام بنجاح - System monitoring initialized successfully");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "خطأ في تهيئة مراقبة النظام - Error initializing system monitoring");
-                MessageBox.Show($"خطأ في تهيئة المراقبة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تهيئة المراقبة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -86,7 +86,7 @@ namespace AccountingSystem.WPF.Views
                 var machineName = Environment.MachineName;
                 var userName = Environment.UserName;
                 var processors = Environment.ProcessorCount;
-                
+
                 _logger.LogInformation($"معلومات النظام - OS: {osInfo}, Machine: {machineName}, User: {userName}, Processors: {processors}");
             }
             catch (Exception ex)
@@ -102,9 +102,9 @@ namespace AccountingSystem.WPF.Views
                 // تحميل معلومات قاعدة البيانات الأساسية
                 var databaseName = "AccountingSystemDb";
                 var serverInstance = "(localdb)\\mssqllocaldb";
-                
+
                 _logger.LogInformation($"معلومات قاعدة البيانات - Database: {databaseName}, Server: {serverInstance}");
-                
+
                 // يمكن إضافة المزيد من التفاصيل هنا مثل حجم قاعدة البيانات، عدد الجداول، إلخ
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace AccountingSystem.WPF.Views
                 var process = Process.GetCurrentProcess();
                 var startTime = process.StartTime;
                 var workingSet = process.WorkingSet64;
-                
+
                 _logger.LogInformation($"معلومات التطبيق - Start: {startTime}, Memory: {workingSet / 1024 / 1024} MB");
             }
             catch (Exception ex)
@@ -136,11 +136,11 @@ namespace AccountingSystem.WPF.Views
                 var cpuUsage = _cpuCounter.NextValue();
                 var availableRAM = _ramCounter.NextValue();
                 var totalRAM = GC.GetTotalMemory(false) / (1024 * 1024); // MB
-                
+
                 // تحديث واجهة المستخدم بالقيم الجديدة (يمكن ربطها بـ TextBlocks في XAML)
-                _logger.LogDebug("System Metrics - CPU: {CpuUsage}%, Available RAM: {AvailableRAM}MB, Total Memory: {TotalRAM}MB", 
+                _logger.LogDebug("System Metrics - CPU: {CpuUsage}%, Available RAM: {AvailableRAM}MB, Total Memory: {TotalRAM}MB",
                     cpuUsage, availableRAM, totalRAM);
-                
+
                 await Task.CompletedTask;
             }
             catch (Exception ex)
@@ -157,10 +157,10 @@ namespace AccountingSystem.WPF.Views
                 var connectionCount = 1; // عدد الاتصالات النشطة
                 var databaseSize = 50.5; // حجم قاعدة البيانات MB
                 var queryCount = 150; // عدد الاستعلامات
-                
-                _logger.LogDebug("Database Metrics - Connections: {ConnectionCount}, Size: {DatabaseSize}MB, Queries: {QueryCount}", 
+
+                _logger.LogDebug("Database Metrics - Connections: {ConnectionCount}, Size: {DatabaseSize}MB, Queries: {QueryCount}",
                     connectionCount, databaseSize, queryCount);
-                
+
                 await Task.CompletedTask;
             }
             catch (Exception ex)
@@ -177,11 +177,11 @@ namespace AccountingSystem.WPF.Views
                 var memoryUsage = process.WorkingSet64 / (1024 * 1024); // MB
                 var threadCount = process.Threads.Count;
                 var uptime = DateTime.Now - process.StartTime;
-                
+
                 // تحديث معلومات التطبيق في واجهة المستخدم
-                _logger.LogDebug("Application Metrics - Memory: {MemoryUsage}MB, Threads: {ThreadCount}, Uptime: {Uptime}", 
+                _logger.LogDebug("Application Metrics - Memory: {MemoryUsage}MB, Threads: {ThreadCount}, Uptime: {Uptime}",
                     memoryUsage, threadCount, uptime.ToString(@"hh\:mm\:ss"));
-                
+
                 await Task.CompletedTask;
             }
             catch (Exception ex)
@@ -197,7 +197,7 @@ namespace AccountingSystem.WPF.Views
             {
                 _logger.LogInformation("تحديث بيانات المراقبة - Refreshing monitoring data");
                 InitializeMonitoring();
-                MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث", 
+                MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -216,12 +216,12 @@ namespace AccountingSystem.WPF.Views
                 var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 var fileName = $"system_monitoring_{timestamp}.csv";
                 var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
-                
+
                 var csvContent = "Time,CPU%,Memory MB,Disk%,Threads,Database Size MB\n";
                 csvContent += $"{DateTime.Now:yyyy-MM-dd HH:mm:ss},{new Random().NextDouble() * 100:F2},{GC.GetTotalMemory(false) / 1024 / 1024},{new Random().NextDouble() * 100:F2},{System.Diagnostics.Process.GetCurrentProcess().Threads.Count},{50.5}\n";
-                
+
                 File.WriteAllText(filePath, csvContent);
-                MessageBox.Show($"تم تصدير سجل المراقبة بنجاح إلى:\n{filePath}", "تصدير ناجح", 
+                MessageBox.Show($"تم تصدير سجل المراقبة بنجاح إلى:\n{filePath}", "تصدير ناجح",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -237,14 +237,14 @@ namespace AccountingSystem.WPF.Views
             {
                 _logger.LogInformation("مسح سجل المراقبة - Clearing monitoring log");
                 // مسح سجل المراقبة بعد تأكيد المستخدم
-                var result = MessageBox.Show("هل أنت متأكد من مسح جميع سجلات المراقبة؟\nلن يمكن استعادتها بعد الحذف.", 
+                var result = MessageBox.Show("هل أنت متأكد من مسح جميع سجلات المراقبة؟\nلن يمكن استعادتها بعد الحذف.",
                     "تأكيد مسح السجل", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                
+
                 if (result == MessageBoxResult.Yes)
                 {
                     // محاكاة مسح السجل
                     _logger.LogInformation("تم مسح سجل المراقبة بواسطة المستخدم");
-                    MessageBox.Show("تم مسح سجل المراقبة بنجاح", "مسح ناجح", 
+                    MessageBox.Show("تم مسح سجل المراقبة بنجاح", "مسح ناجح",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -261,7 +261,7 @@ namespace AccountingSystem.WPF.Views
             {
                 _logger.LogInformation("بدء المراقبة - Starting monitoring");
                 _monitoringTimer.Start();
-                MessageBox.Show("تم بدء المراقبة", "مراقبة", 
+                MessageBox.Show("تم بدء المراقبة", "مراقبة",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -277,7 +277,7 @@ namespace AccountingSystem.WPF.Views
             {
                 _logger.LogInformation("إيقاف المراقبة - Stopping monitoring");
                 _monitoringTimer.Stop();
-                MessageBox.Show("تم إيقاف المراقبة", "مراقبة", 
+                MessageBox.Show("تم إيقاف المراقبة", "مراقبة",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -301,8 +301,8 @@ namespace AccountingSystem.WPF.Views
                              $"عدد الخيوط: {process.Threads.Count}\n" +
                              $"وقت البدء: {process.StartTime:yyyy-MM-dd HH:mm:ss}\n" +
                              $"وقت التشغيل: {DateTime.Now - process.StartTime:hh\\:mm\\:ss}";
-                
-                MessageBox.Show(details, "تفاصيل النظام", 
+
+                MessageBox.Show(details, "تفاصيل النظام",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -319,26 +319,26 @@ namespace AccountingSystem.WPF.Views
                 _logger.LogInformation("فحص صحة النظام - Checking system health");
                 // فحص صحة النظام وعرض النتائج
                 _logger.LogInformation("بدء فحص صحة النظام");
-                
+
                 var healthStatus = new System.Text.StringBuilder();
                 healthStatus.AppendLine("نتائج فحص صحة النظام:");
                 healthStatus.AppendLine();
-                
+
                 // فحص استهلاك الذاكرة
                 var memoryMB = GC.GetTotalMemory(false) / 1024 / 1024;
                 healthStatus.AppendLine($"✅ استهلاك الذاكرة: {memoryMB} MB - طبيعي");
-                
+
                 // فحص العمليات
                 var processCount = Process.GetProcesses().Length;
                 healthStatus.AppendLine($"✅ عدد العمليات: {processCount} - طبيعي");
-                
+
                 // فحص الاتصال بقاعدة البيانات
                 healthStatus.AppendLine("✅ قاعدة البيانات: متصلة وتعمل بشكل طبيعي");
-                
+
                 healthStatus.AppendLine();
                 healthStatus.AppendLine("✨ النظام يعمل بشكل ممتاز! ✨");
-                
-                MessageBox.Show(healthStatus.ToString(), "فحص صحة النظام", 
+
+                MessageBox.Show(healthStatus.ToString(), "فحص صحة النظام",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -355,28 +355,28 @@ namespace AccountingSystem.WPF.Views
                 _logger.LogInformation("تحسين النظام - Optimizing system");
                 // تحسين أداء النظام
                 _logger.LogInformation("بدء تحسين أداء النظام");
-                
+
                 var optimizationSteps = new System.Text.StringBuilder();
                 optimizationSteps.AppendLine("جاري تحسين النظام...");
                 optimizationSteps.AppendLine();
-                
+
                 // تنظيف الذاكرة
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
                 optimizationSteps.AppendLine("✅ تم تنظيف الذاكرة");
-                
+
                 // محاكاة تحسين قاعدة البيانات
                 optimizationSteps.AppendLine("✅ تم تحسين أداء قاعدة البيانات");
-                
+
                 // محاكاة تحسين الذاكرة المؤقتة
                 optimizationSteps.AppendLine("✅ تم تنظيف الملفات المؤقتة");
-                
+
                 optimizationSteps.AppendLine();
                 optimizationSteps.AppendLine("✨ تم تحسين النظام بنجاح! ✨");
                 optimizationSteps.AppendLine("تحسن الأداء بنسبة 15-20%");
-                
-                MessageBox.Show(optimizationSteps.ToString(), "تحسين النظام", 
+
+                MessageBox.Show(optimizationSteps.ToString(), "تحسين النظام",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -391,12 +391,12 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger.LogInformation("إنشاء تقرير مراقبة النظام - Generating system monitoring report");
-                
+
                 var report = new System.Text.StringBuilder();
                 report.AppendLine("=== تقرير مراقبة النظام ===");
                 report.AppendLine($"التاريخ: {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
                 report.AppendLine();
-                
+
                 // معلومات النظام
                 report.AppendLine("📊 معلومات النظام:");
                 report.AppendLine($"• نظام التشغيل: {Environment.OSVersion}");
@@ -404,7 +404,7 @@ namespace AccountingSystem.WPF.Views
                 report.AppendLine($"• اسم الجهاز: {Environment.MachineName}");
                 report.AppendLine($"• المستخدم: {Environment.UserName}");
                 report.AppendLine();
-                
+
                 // أداء التطبيق
                 using (var process = System.Diagnostics.Process.GetCurrentProcess())
                 {
@@ -413,17 +413,17 @@ namespace AccountingSystem.WPF.Views
                     report.AppendLine($"• وقت التشغيل: {DateTime.Now - process.StartTime:hh\\:mm\\:ss}");
                     report.AppendLine($"• عدد الخيوط: {process.Threads.Count}");
                 }
-                
+
                 report.AppendLine();
                 report.AppendLine("✅ تم إنشاء التقرير بنجاح");
-                
-                MessageBox.Show(report.ToString(), "تقرير مراقبة النظام", 
+
+                MessageBox.Show(report.ToString(), "تقرير مراقبة النظام",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "خطأ في إنشاء تقرير مراقبة النظام");
-                MessageBox.Show($"خطأ في إنشاء التقرير: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في إنشاء التقرير: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -433,11 +433,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _logger.LogInformation("فحص صحة النظام - Checking system health");
-                
+
                 var healthCheck = new System.Text.StringBuilder();
                 healthCheck.AppendLine("🔍 فحص صحة النظام:");
                 healthCheck.AppendLine();
-                
+
                 // فحص المساحة المتاحة
                 var drives = System.IO.DriveInfo.GetDrives();
                 foreach (var drive in drives.Where(d => d.IsReady))
@@ -445,13 +445,13 @@ namespace AccountingSystem.WPF.Views
                     var freeSpaceGB = drive.AvailableFreeSpace / 1024 / 1024 / 1024;
                     var totalSpaceGB = drive.TotalSize / 1024 / 1024 / 1024;
                     var usagePercent = ((double)(totalSpaceGB - freeSpaceGB) / totalSpaceGB) * 100;
-                    
+
                     var status = usagePercent > 90 ? "⚠️" : usagePercent > 70 ? "🟡" : "✅";
                     healthCheck.AppendLine($"{status} القرص {drive.Name}: {freeSpaceGB:F1} GB متاح من {totalSpaceGB:F1} GB");
                 }
-                
+
                 healthCheck.AppendLine();
-                
+
                 // فحص الذاكرة
                 using (var process = System.Diagnostics.Process.GetCurrentProcess())
                 {
@@ -459,17 +459,17 @@ namespace AccountingSystem.WPF.Views
                     var memStatus = memUsageMB > 500 ? "⚠️" : memUsageMB > 200 ? "🟡" : "✅";
                     healthCheck.AppendLine($"{memStatus} استهلاك الذاكرة: {memUsageMB:F1} MB");
                 }
-                
+
                 healthCheck.AppendLine();
                 healthCheck.AppendLine("📈 النتيجة الإجمالية: النظام يعمل بكفاءة جيدة");
-                
-                MessageBox.Show(healthCheck.ToString(), "فحص صحة النظام", 
+
+                MessageBox.Show(healthCheck.ToString(), "فحص صحة النظام",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "خطأ في فحص صحة النظام");
-                MessageBox.Show($"خطأ في فحص النظام: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في فحص النظام: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

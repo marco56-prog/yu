@@ -15,7 +15,7 @@ namespace AccountingSystem.WPF.Windows
     public partial class SecurityLockWindow : Window, INotifyPropertyChanged
     {
         private const string ComponentName = "SecurityLockWindow";
-        
+
         private string _username = string.Empty;
         private string _statusMessage = "النظام مقفل - الرجاء إدخال كلمة المرور";
         private bool _isUnlocking = false;
@@ -46,16 +46,16 @@ namespace AccountingSystem.WPF.Windows
         {
             InitializeComponent();
             DataContext = this;
-            
+
             Username = lockedUserName;
-            
+
             // إعداد النافذة
             SetupWindow();
-            
+
             // تسجيل العملية
             ComprehensiveLogger.LogSecurityOperation(
-                $"تم عرض شاشة القفل للمستخدم: {lockedUserName}", 
-                ComponentName, 
+                $"تم عرض شاشة القفل للمستخدم: {lockedUserName}",
+                ComponentName,
                 lockedUserName);
         }
 
@@ -68,10 +68,10 @@ namespace AccountingSystem.WPF.Windows
                 ResizeMode = ResizeMode.NoResize;
                 Topmost = true;
                 WindowState = WindowState.Maximized;
-                
+
                 // منع Alt+F4
                 KeyDown += SecurityLockWindow_KeyDown;
-                
+
                 // تركيز على حقل كلمة المرور
                 Loaded += (s, e) => PasswordBox.Focus();
             }
@@ -85,12 +85,12 @@ namespace AccountingSystem.WPF.Windows
         {
             // منع Alt+F4 و Ctrl+Alt+Del
             if ((e.Key == Key.F4 && (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt) ||
-                (e.Key == Key.Delete && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && 
+                (e.Key == Key.Delete && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control &&
                  (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt))
             {
                 e.Handled = true;
             }
-            
+
             // Enter لإلغاء القفل
             if (e.Key == Key.Enter)
             {
@@ -108,7 +108,7 @@ namespace AccountingSystem.WPF.Windows
                 StatusMessage = "جاري التحقق...";
 
                 var password = PasswordBox.Password;
-                
+
                 if (string.IsNullOrWhiteSpace(password))
                 {
                     StatusMessage = "الرجاء إدخال كلمة المرور";
@@ -122,12 +122,12 @@ namespace AccountingSystem.WPF.Windows
                 if (isValid)
                 {
                     ComprehensiveLogger.LogSecurityOperation(
-                        $"تم إلغاء قفل النظام بنجاح للمستخدم: {Username}", 
-                        ComponentName, 
+                        $"تم إلغاء قفل النظام بنجاح للمستخدم: {Username}",
+                        ComponentName,
                         Username);
 
                     StatusMessage = "تم إلغاء القفل بنجاح";
-                    
+
                     // إغلاق النافذة مع نتيجة إيجابية
                     DialogResult = true;
                     Close();
@@ -135,20 +135,20 @@ namespace AccountingSystem.WPF.Windows
                 else
                 {
                     _attemptCount++;
-                    
+
                     ComprehensiveLogger.LogSecurityOperation(
-                        $"محاولة إلغاء قفل فاشلة رقم {_attemptCount} للمستخدم: {Username}", 
-                        ComponentName, 
+                        $"محاولة إلغاء قفل فاشلة رقم {_attemptCount} للمستخدم: {Username}",
+                        ComponentName,
                         Username);
 
                     if (_attemptCount >= MaxAttempts)
                     {
                         StatusMessage = $"تم استنفاد المحاولات المسموحة ({MaxAttempts})";
                         UnlockButton.IsEnabled = false;
-                        
+
                         ComprehensiveLogger.LogSecurityOperation(
-                            $"تم تعطيل إلغاء القفل بعد {MaxAttempts} محاولات فاشلة", 
-                            ComponentName, 
+                            $"تم تعطيل إلغاء القفل بعد {MaxAttempts} محاولات فاشلة",
+                            ComponentName,
                             Username);
                     }
                     else
@@ -156,7 +156,7 @@ namespace AccountingSystem.WPF.Windows
                         var remainingAttempts = MaxAttempts - _attemptCount;
                         StatusMessage = $"كلمة مرور خاطئة - المحاولات المتبقية: {remainingAttempts}";
                     }
-                    
+
                     PasswordBox.Clear();
                     PasswordBox.Focus();
                 }
@@ -176,15 +176,9 @@ namespace AccountingSystem.WPF.Windows
         {
             // محاكاة التحقق من كلمة المرور
             await System.Threading.Tasks.Task.Delay(1000);
-            
-            // تطبيق بسيط للاختبار
-            return username.ToLower() switch
-            {
-                "admin" => password == "admin123",
-                "manager" => password == "manager123",
-                "user" => password == "user123",
-                _ => password == "default"
-            };
+
+            // TODO: Implement secure password validation. Do not use hard-coded passwords.
+            return false;
         }
 
         protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)

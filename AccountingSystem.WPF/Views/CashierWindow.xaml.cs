@@ -16,11 +16,11 @@ namespace AccountingSystem.WPF.Views
 
         private void CancelInvoice_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("هل تريد إلغاء الفاتورة الحالية؟", "تأكيد الإلغاء", 
+            if (MessageBox.Show("هل تريد إلغاء الفاتورة الحالية؟", "تأكيد الإلغاء",
                                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 // إلغاء الفاتورة
-                MessageBox.Show("تم إلغاء الفاتورة بنجاح", "تم الإلغاء", 
+                MessageBox.Show("تم إلغاء الفاتورة بنجاح", "تم الإلغاء",
                                MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }

@@ -24,14 +24,14 @@ public partial class UnitsWindow : Window
         try
         {
             lblStatus.Text = "جاري تحميل البيانات...";
-            
+
             // بيانات تجريبية للوحدات الأساسية
             _units.Add(new Unit { UnitId = 1, UnitName = "قطعة", UnitSymbol = "قطعة", IsActive = true });
             _units.Add(new Unit { UnitId = 2, UnitName = "كيلو", UnitSymbol = "كجم", IsActive = true });
             _units.Add(new Unit { UnitId = 3, UnitName = "لتر", UnitSymbol = "لتر", IsActive = true });
             _units.Add(new Unit { UnitId = 4, UnitName = "متر", UnitSymbol = "م", IsActive = true });
             _units.Add(new Unit { UnitId = 5, UnitName = "علبة", UnitSymbol = "علبة", IsActive = true });
-            
+
             lblCount.Text = $"عدد الوحدات: {_units.Count}";
             lblStatus.Text = "تم تحميل البيانات بنجاح";
         }

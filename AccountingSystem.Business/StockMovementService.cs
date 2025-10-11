@@ -48,18 +48,18 @@ namespace AccountingSystem.Business
             {
                 var movement = new StockMovement
                 {
-                    ProductId          = productId,
-                    Product            = product,
-                    MovementType       = StockMovementType.Out,
-                    Quantity           = quantity,  // كما أدخلها المستخدم
-                    UnitId             = unitId,
-                    Unit               = unit,
+                    ProductId = productId,
+                    Product = product,
+                    MovementType = StockMovementType.Out,
+                    Quantity = quantity,  // كما أدخلها المستخدم
+                    UnitId = unitId,
+                    Unit = unit,
                     QuantityInMainUnit = qtyMain,   // مكافئ الأساسية
-                    ReferenceType      = "SalesInvoice",
-                    ReferenceId        = salesInvoiceId,
-                    Notes              = string.IsNullOrWhiteSpace(notes) ? $"صرف مبيعات - فاتورة رقم {salesInvoiceId}" : notes,
-                    MovementDate       = DateTime.UtcNow,
-                    CreatedBy          = "1"
+                    ReferenceType = "SalesInvoice",
+                    ReferenceId = salesInvoiceId,
+                    Notes = string.IsNullOrWhiteSpace(notes) ? $"صرف مبيعات - فاتورة رقم {salesInvoiceId}" : notes,
+                    MovementDate = DateTime.UtcNow,
+                    CreatedBy = "1"
                 };
 
                 await _unitOfWork.Repository<StockMovement>().AddAsync(movement);
@@ -91,18 +91,18 @@ namespace AccountingSystem.Business
             {
                 var movement = new StockMovement
                 {
-                    ProductId          = productId,
-                    Product            = product,
-                    MovementType       = StockMovementType.In,
-                    Quantity           = quantity,
-                    UnitId             = unitId,
-                    Unit               = unit,
+                    ProductId = productId,
+                    Product = product,
+                    MovementType = StockMovementType.In,
+                    Quantity = quantity,
+                    UnitId = unitId,
+                    Unit = unit,
                     QuantityInMainUnit = qtyMain,
-                    ReferenceType      = "PurchaseInvoice",
-                    ReferenceId        = purchaseInvoiceId,
-                    Notes              = string.IsNullOrWhiteSpace(notes) ? $"وارد مشتريات - فاتورة رقم {purchaseInvoiceId}" : notes,
-                    MovementDate       = DateTime.UtcNow,
-                    CreatedBy          = "1"
+                    ReferenceType = "PurchaseInvoice",
+                    ReferenceId = purchaseInvoiceId,
+                    Notes = string.IsNullOrWhiteSpace(notes) ? $"وارد مشتريات - فاتورة رقم {purchaseInvoiceId}" : notes,
+                    MovementDate = DateTime.UtcNow,
+                    CreatedBy = "1"
                 };
 
                 await _unitOfWork.Repository<StockMovement>().AddAsync(movement);
@@ -146,18 +146,18 @@ namespace AccountingSystem.Business
             {
                 var movement = new StockMovement
                 {
-                    ProductId          = productId,
-                    Product            = product,
-                    MovementType       = StockMovementType.Adjustment,
-                    Quantity           = quantity,
-                    UnitId             = unitId,
-                    Unit               = unit,
+                    ProductId = productId,
+                    Product = product,
+                    MovementType = StockMovementType.Adjustment,
+                    Quantity = quantity,
+                    UnitId = unitId,
+                    Unit = unit,
                     QuantityInMainUnit = qtyMain,
-                    ReferenceType      = "Adjustment",
-                    ReferenceId        = null,
-                    Notes              = string.IsNullOrWhiteSpace(notes) ? "تسوية مخزون" : notes,
-                    MovementDate       = DateTime.UtcNow,
-                    CreatedBy          = userId.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                    ReferenceType = "Adjustment",
+                    ReferenceId = null,
+                    Notes = string.IsNullOrWhiteSpace(notes) ? "تسوية مخزون" : notes,
+                    MovementDate = DateTime.UtcNow,
+                    CreatedBy = userId.ToString(System.Globalization.CultureInfo.InvariantCulture)
                 };
 
                 await _unitOfWork.Repository<StockMovement>().AddAsync(movement);
@@ -189,7 +189,7 @@ namespace AccountingSystem.Business
                 .AsNoTracking()
                 .Where(m => m.ProductId == productId);
 
-            var inSum  = await baseQ.Where(m => m.MovementType == StockMovementType.In)
+            var inSum = await baseQ.Where(m => m.MovementType == StockMovementType.In)
                                     .SumAsync(m => (decimal?)m.QuantityInMainUnit) ?? 0m;
 
             var outSum = await baseQ.Where(m => m.MovementType == StockMovementType.Out)
@@ -220,7 +220,7 @@ namespace AccountingSystem.Business
                        ?? throw new ArgumentException($"الوحدة برقم {unitId} غير موجودة", nameof(unitId));
 
             if (!product.IsActive) throw new InvalidOperationException("المنتج غير نشط.");
-            if (!unit.IsActive)    throw new InvalidOperationException("الوحدة غير نشطة.");
+            if (!unit.IsActive) throw new InvalidOperationException("الوحدة غير نشطة.");
 
             return (product, unit);
         }
@@ -236,7 +236,7 @@ namespace AccountingSystem.Business
 
             var productUnit = await _unitOfWork.Repository<ProductUnit>()
                 .SingleOrDefaultAsync(pu => pu.ProductId == product.ProductId &&
-                                            pu.UnitId    == unitId &&
+                                            pu.UnitId == unitId &&
                                             pu.IsActive);
 
             if (productUnit == null || productUnit.ConversionFactor <= 0)

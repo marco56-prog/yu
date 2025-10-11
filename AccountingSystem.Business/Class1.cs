@@ -43,9 +43,9 @@ public class CustomerService : ICustomerService
     {
         // توحيد وتهيئة المدخلات
         customer.CustomerName = (customer.CustomerName ?? string.Empty).Trim();
-        customer.Address      = (customer.Address      ?? string.Empty).Trim();
-        customer.Phone        = (customer.Phone        ?? string.Empty).Trim();
-        customer.Email        = (customer.Email        ?? string.Empty).Trim();
+        customer.Address = (customer.Address ?? string.Empty).Trim();
+        customer.Phone = (customer.Phone ?? string.Empty).Trim();
+        customer.Email = (customer.Email ?? string.Empty).Trim();
 
         // التحقق من تكرار الاسم (حسّاس لحالة الأحرف بشكل مُوحّد)
         var nameNorm = customer.CustomerName;
@@ -73,10 +73,10 @@ public class CustomerService : ICustomerService
             throw new InvalidOperationException("العميل غير موجود.");
 
         // توحيد وتهيئة المدخلات
-        var newName   = (customer.CustomerName ?? string.Empty).Trim();
-        var newAddr   = (customer.Address      ?? string.Empty).Trim();
-        var newPhone  = (customer.Phone        ?? string.Empty).Trim();
-        var newEmail  = (customer.Email        ?? string.Empty).Trim();
+        var newName = (customer.CustomerName ?? string.Empty).Trim();
+        var newAddr = (customer.Address ?? string.Empty).Trim();
+        var newPhone = (customer.Phone ?? string.Empty).Trim();
+        var newEmail = (customer.Email ?? string.Empty).Trim();
 
         // منع التكرار لنفس الاسم لعميل آخر نشط
         var duplicateCustomer = await _unitOfWork.Repository<Customer>()
@@ -86,9 +86,9 @@ public class CustomerService : ICustomerService
             throw new InvalidOperationException("اسم العميل موجود بالفعل.");
 
         existingCustomer.CustomerName = newName;
-        existingCustomer.Address      = newAddr;
-        existingCustomer.Phone        = newPhone;
-        existingCustomer.Email        = newEmail;
+        existingCustomer.Address = newAddr;
+        existingCustomer.Phone = newPhone;
+        existingCustomer.Email = newEmail;
 
         repo.Update(existingCustomer);
         await _unitOfWork.SaveChangesAsync();

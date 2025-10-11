@@ -4,6 +4,7 @@ using AccountingSystem.WPF.Services;
 using AccountingSystem.WPF.ViewModels;
 using System;
 using System.Windows;
+using AccountingSystem.Business;
 
 namespace AccountingSystem.WPF
 {
@@ -13,14 +14,15 @@ namespace AccountingSystem.WPF
         {
             // خدمات النظام الأساسية
             services.AddSingleton<INavigationService, NavigationService>();
-            
+            services.AddTransient<ISecurityService, SecurityService>();
+
             // ViewModels
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<SidebarViewModel>();
-            
+
             // Windows - يتم إنشاؤها كـ Transient لأنها قد تفتح عدة مرات
             services.AddTransient<MainWindow>();
-            
+
             return services;
         }
     }
@@ -38,7 +40,7 @@ namespace AccountingSystem.WPF
         {
             if (_serviceProvider == null)
                 throw new InvalidOperationException("Service provider not initialized. Call Initialize first.");
-                
+
             return _serviceProvider.GetRequiredService<T>();
         }
 
@@ -46,7 +48,7 @@ namespace AccountingSystem.WPF
         {
             if (_serviceProvider == null)
                 throw new InvalidOperationException("Service provider not initialized. Call Initialize first.");
-                
+
             return _serviceProvider.GetRequiredService(serviceType);
         }
     }

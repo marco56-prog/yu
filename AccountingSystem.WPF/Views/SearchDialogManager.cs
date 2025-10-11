@@ -37,11 +37,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 var productItems = products.Select(p => ProductSearchItem.Create(
-                    p.ProductId, 
-                    p.ProductCode ?? $"P{p.ProductId:000}", 
-                    p.ProductName, 
-                    p.MainUnit?.UnitName ?? "قطعة", 
-                    p.SalePrice, 
+                    p.ProductId,
+                    p.ProductCode ?? $"P{p.ProductId:000}",
+                    p.ProductName,
+                    p.MainUnit?.UnitName ?? "قطعة",
+                    p.SalePrice,
                     p.CurrentStock)).ToList();
 
                 var dialog = new ProductSearchDialog(productItems) { Owner = parent };

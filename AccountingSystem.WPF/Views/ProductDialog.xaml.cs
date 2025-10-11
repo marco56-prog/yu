@@ -14,31 +14,31 @@ namespace AccountingSystem.WPF.Views
     public partial class ProductDialog : Window, INotifyPropertyChanged
     {
         #region Constants
-        
+
         private const string ComponentName = "ProductDialog";
         private const string InfoCaption = "معلومات";
         private const string ErrorCaption = "خطأ";
         private const string SuccessCaption = "نجح";
         private const string HelpCaption = "مساعدة";
         private const string ConfirmCaption = "تأكيد الأرشفة";
-        
+
         #endregion
 
         #region Fields
-        
+
         private Product? _currentProduct;
         private bool _isEditMode;
         private bool _isDirty;
         private bool _isLoading;
-        
+
         #endregion
 
         #region Events
-        
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<Product>? ProductSaved;
         public event EventHandler<Product>? ProductDeleted;
-        
+
         #endregion
 
         #region Constructors
@@ -49,7 +49,7 @@ namespace AccountingSystem.WPF.Views
             _isEditMode = false;
             _isDirty = false;
             Title = "منتج جديد";
-            
+
             System.Diagnostics.Debug.WriteLine("تم إنشاء نافذة المنتج - وضع جديد");
         }
 
@@ -58,9 +58,9 @@ namespace AccountingSystem.WPF.Views
             _currentProduct = product ?? throw new ArgumentNullException(nameof(product));
             _isEditMode = true;
             Title = $"تحرير المنتج: {product.ProductName}";
-            
+
             System.Diagnostics.Debug.WriteLine($"تم إنشاء نافذة المنتج - وضع تحرير: {product.ProductName}");
-            
+
             _ = LoadProductDataAsync();
         }
 
@@ -244,17 +244,17 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 System.Diagnostics.Debug.WriteLine("تم ضغط F4 - العمليات الخاصة");
-                
+
                 var options = new string[]
                 {
                     "نسخ المنتج",
-                    "تصدير البيانات", 
+                    "تصدير البيانات",
                     "استيراد الصورة",
                     "طباعة باركود",
                     "عرض التقارير"
                 };
 
-                MessageBox.Show($"العمليات المتاحة:\n{string.Join("\n", options)}", 
+                MessageBox.Show($"العمليات المتاحة:\n{string.Join("\n", options)}",
                     "العمليات الخاصة (F4)", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -314,13 +314,13 @@ namespace AccountingSystem.WPF.Views
                 var subCodes = new string[]
                 {
                     "كود المورد الأساسي",
-                    "كود الباركود الثانوي", 
+                    "كود الباركود الثانوي",
                     "كود التصنيف الداخلي",
                     "كود المخزن",
                     "كود الجرد"
                 };
 
-                MessageBox.Show($"الأكواد الفرعية المتاحة:\n{string.Join("\n", subCodes)}", 
+                MessageBox.Show($"الأكواد الفرعية المتاحة:\n{string.Join("\n", subCodes)}",
                     "الأكواد الفرعية", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -342,11 +342,11 @@ namespace AccountingSystem.WPF.Views
                 System.Diagnostics.Debug.WriteLine($"تم تبديل وضع التحرير إلى: {(IsEditMode ? "تحرير" : "عرض")}");
 
                 UpdateUIState();
-                
-                var message = IsEditMode ? 
+
+                var message = IsEditMode ?
                     "تم تفعيل وضع التحرير" : "تم تفعيل وضع العرض فقط";
-                
-                MessageBox.Show(message, InfoCaption, 
+
+                MessageBox.Show(message, InfoCaption,
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -375,15 +375,15 @@ namespace AccountingSystem.WPF.Views
                 {
                     IsDirty = false;
                     System.Diagnostics.Debug.WriteLine("تم حفظ المنتج بنجاح");
-                    
+
                     MessageBox.Show("تم حفظ المنتج بنجاح", SuccessCaption,
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    
+
                     if (_currentProduct != null)
                     {
                         ProductSaved?.Invoke(this, _currentProduct);
                     }
-                    
+
                     DialogResult = true;
                 }
             }
@@ -417,16 +417,16 @@ namespace AccountingSystem.WPF.Views
                 if (result == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Debug.WriteLine($"أرشفة المنتج: {_currentProduct.ProductName}");
-                    
+
                     _currentProduct.IsActive = false;
-                    
+
                     if (SaveProductData())
                     {
                         MessageBox.Show("تم أرشفة المنتج بنجاح", SuccessCaption,
                             MessageBoxButton.OK, MessageBoxImage.Information);
 
                         ProductDeleted?.Invoke(this, _currentProduct);
-                        
+
                         DialogResult = true;
                     }
                 }
@@ -529,12 +529,12 @@ namespace AccountingSystem.WPF.Views
 
                 if (validationErrors.Count > 0)
                 {
-                    var message = "يرجى تصحيح الأخطاء التالية:\n\n" + 
+                    var message = "يرجى تصحيح الأخطاء التالية:\n\n" +
                                 string.Join("\n• ", validationErrors);
-                    
-                    MessageBox.Show(message, "أخطاء في البيانات", 
+
+                    MessageBox.Show(message, "أخطاء في البيانات",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
-                    
+
                     return false;
                 }
 
@@ -696,7 +696,7 @@ namespace AccountingSystem.WPF.Views
 • يمكن التراجع عن التغييرات بإغلاق النافذة بدون حفظ
 • الحقول المطلوبة محددة بعلامة *";
 
-                MessageBox.Show(helpText, HelpCaption, 
+                MessageBox.Show(helpText, HelpCaption,
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

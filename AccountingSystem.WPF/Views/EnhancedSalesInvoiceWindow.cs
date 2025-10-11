@@ -139,18 +139,18 @@ namespace AccountingSystem.WPF.Views
                 {
                     // Load invoice to form
                     await LoadInvoiceToFormAsync(result.Invoice);
-                    
+
                     // Update status
                     UpdateNavigationStatus(result);
-                    
+
                     ComprehensiveLogger.LogUIOperation(
-                        $"تم التنقل بنجاح للفاتورة {result.Invoice.InvoiceNumber}", 
+                        $"تم التنقل بنجاح للفاتورة {result.Invoice.InvoiceNumber}",
                         "EnhancedSalesInvoiceWindow");
                 }
                 else
                 {
-                    ShowMessage(result.Message, result.Type == NavigationResultType.EndReached 
-                        ? MessageBoxImage.Information 
+                    ShowMessage(result.Message, result.Type == NavigationResultType.EndReached
+                        ? MessageBoxImage.Information
                         : MessageBoxImage.Warning);
                 }
             }
@@ -180,7 +180,7 @@ namespace AccountingSystem.WPF.Views
             {
                 // Handle theme change
                 ComprehensiveLogger.LogUIOperation(
-                    $"تم تغيير الثيم من {e.PreviousTheme?.Name} إلى {e.NewTheme?.Name}", 
+                    $"تم تغيير الثيم من {e.PreviousTheme?.Name} إلى {e.NewTheme?.Name}",
                     "EnhancedSalesInvoiceWindow");
             }
             catch (Exception ex)
@@ -197,8 +197,8 @@ namespace AccountingSystem.WPF.Views
                 if (!e.IsValid)
                 {
                     ComprehensiveLogger.LogBusinessOperation(
-                        "تحذير: حسابات غير صحيحة", 
-                        $"نوع الحساب: {e.CalculationType}", 
+                        "تحذير: حسابات غير صحيحة",
+                        $"نوع الحساب: {e.CalculationType}",
                         isSuccess: false);
                 }
             }

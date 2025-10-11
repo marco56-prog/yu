@@ -43,13 +43,13 @@ namespace AccountingSystem.Business
 
     public class PosService : IPosService
     {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IDiscountService _discountService;
-    private readonly ICashDrawerService _cashDrawerService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDiscountService _discountService;
+        private readonly ICashDrawerService _cashDrawerService;
 
-    private const string PaymentMethodCash = "نقداً";
-    private const string PaymentMethodCard = "بطاقة";
-    private const string PaymentMethodMultiple = "متعدد";
+        private const string PaymentMethodCash = "نقداً";
+        private const string PaymentMethodCard = "بطاقة";
+        private const string PaymentMethodMultiple = "متعدد";
 
         public PosService(IUnitOfWork unitOfWork, IDiscountService discountService, ICashDrawerService cashDrawerService)
         {

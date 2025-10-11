@@ -20,7 +20,7 @@ namespace AccountingSystem.WPF.Views
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly DispatcherTimer _timer;
-        
+
         private SalesInvoice _currentInvoice = new();
         private ObservableCollection<ReturnInvoiceItem> _invoiceItems = new();
         private ObservableCollection<ReturnRecord> _returnsHistory = new();
@@ -49,25 +49,25 @@ namespace AccountingSystem.WPF.Views
         public ReturnsManagementWindow(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
-            
+
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            
+
             DataContext = this;
-            
+
             // إعداد المجموعات
             InvoiceItems = new ObservableCollection<ReturnInvoiceItem>();
             ReturnsHistory = new ObservableCollection<ReturnRecord>();
-            
+
             // ربط البيانات
             dgInvoiceItems.ItemsSource = InvoiceItems;
             dgReturnsHistory.ItemsSource = ReturnsHistory;
-            
+
             // إعداد المؤقت
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
             _timer.Start();
-            
+
             Loaded += async (s, e) => await LoadInitialDataAsync();
         }
 
@@ -77,18 +77,18 @@ namespace AccountingSystem.WPF.Views
             {
                 lblCurrentDate.Text = DateTime.Now.ToString("yyyy/MM/dd");
                 lblCurrentTime.Text = DateTime.Now.ToString("HH:mm:ss");
-                
+
                 // تحميل سجل المرتجعات
                 await LoadReturnsHistoryAsync();
-                
+
                 // تحديث الإحصائيات
                 await UpdateStatisticsAsync();
-                
+
                 lblStatusMessage.Text = "تم تحميل البيانات بنجاح";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 lblStatusMessage.Text = "خطأ في تحميل البيانات";
             }
@@ -111,16 +111,16 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 var invoiceNumber = txtInvoiceNumber.Text?.Trim();
-                
+
                 if (string.IsNullOrEmpty(invoiceNumber))
                 {
-                    MessageBox.Show("يرجى إدخال رقم الفاتورة", "تنبيه", 
+                    MessageBox.Show("يرجى إدخال رقم الفاتورة", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 lblStatusMessage.Text = "جارٍ البحث عن الفاتورة...";
-                
+
                 // البحث عن الفاتورة
                 var invoices = await _unitOfWork.Repository<SalesInvoice>().GetAllAsync();
                 _currentInvoice = invoices.FirstOrDefault(i => i.InvoiceNumber == invoiceNumber) ?? new SalesInvoice();
@@ -138,19 +138,19 @@ namespace AccountingSystem.WPF.Views
                 // التحقق من إمكانية المرتجع
                 if (_currentInvoice.InvoiceDate < DateTime.Now.AddDays(-30))
                 {
-                    MessageBox.Show("لا يمكن إرجاع هذه الفاتورة (انتهت فترة الإرجاع - 30 يوم)", 
+                    MessageBox.Show("لا يمكن إرجاع هذه الفاتورة (انتهت فترة الإرجاع - 30 يوم)",
                         "تنبيه", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 // عرض معلومات الفاتورة
                 await DisplayInvoiceInfoAsync();
-                
+
                 lblStatusMessage.Text = "تم العثور على الفاتورة بنجاح";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في البحث عن الفاتورة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في البحث عن الفاتورة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 lblStatusMessage.Text = "خطأ في البحث عن الفاتورة";
             }
@@ -165,46 +165,46 @@ namespace AccountingSystem.WPF.Views
                 lblInvoiceDate.Text = _currentInvoice.InvoiceDate.ToString("yyyy/MM/dd");
                 lblCustomerName.Text = _currentInvoice.Customer?.CustomerName ?? "عميل نقدي";
                 lblInvoiceTotal.Text = $"{_currentInvoice.NetTotal:N2} ج.م";
-                
+
                 lblInvoiceStatus.Text = "موجودة ويمكن إرجاعها";
                 lblInvoiceStatus.Foreground = System.Windows.Media.Brushes.Green;
-                
+
                 InvoiceInfoPanel.Visibility = Visibility.Visible;
 
                 // تحضير عناصر الفاتورة للإرجاع
                 InvoiceItems.Clear();
-                
+
                 // محاكاة عناصر الفاتورة - يجب تحميلها من قاعدة البيانات
                 await LoadInvoiceItemsAsync(_currentInvoice);
 
                 if (!InvoiceItems.Any())
                 {
-                    MessageBox.Show("جميع عناصر هذه الفاتورة تم إرجاعها مسبقاً", 
+                    MessageBox.Show("جميع عناصر هذه الفاتورة تم إرجاعها مسبقاً",
                         "تنبيه", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في عرض معلومات الفاتورة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في عرض معلومات الفاتورة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-    private async Task LoadInvoiceItemsAsync(SalesInvoice invoice)
+        private async Task LoadInvoiceItemsAsync(SalesInvoice invoice)
         {
             try
             {
-        _ = invoice; // mark parameter as used
+                _ = invoice; // mark parameter as used
                 // محاكاة عناصر الفاتورة - في التطبيق الحقيقي يجب تحميلها من قاعدة البيانات
                 await Task.Delay(100);
-                
+
                 // إضافة عناصر تجريبية
                 for (int i = 1; i <= 3; i++)
                 {
                     var previousReturns = await GetPreviousReturnsForItemAsync(i);
                     var quantity = 5m;
                     var availableQuantity = quantity - previousReturns;
-                    
+
                     if (availableQuantity > 0)
                     {
                         InvoiceItems.Add(new ReturnInvoiceItem
@@ -261,16 +261,16 @@ namespace AccountingSystem.WPF.Views
             {
                 if (_currentInvoice == null)
                 {
-                    MessageBox.Show("يرجى البحث عن فاتورة أولاً", "تنبيه", 
+                    MessageBox.Show("يرجى البحث عن فاتورة أولاً", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 var selectedItems = InvoiceItems.Where(i => i.IsSelected && i.ReturnQuantity > 0).ToList();
-                
+
                 if (!selectedItems.Any())
                 {
-                    MessageBox.Show("يرجى اختيار عناصر للإرجاع وتحديد الكمية", "تنبيه", 
+                    MessageBox.Show("يرجى اختيار عناصر للإرجاع وتحديد الكمية", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -279,7 +279,7 @@ namespace AccountingSystem.WPF.Views
                 var invalidItems = selectedItems.Where(i => i.ReturnQuantity > i.AvailableQuantity).ToList();
                 if (invalidItems.Any())
                 {
-                    MessageBox.Show($"كمية الإرجاع أكبر من المتاح للمنتج: {invalidItems.First().ProductName}", 
+                    MessageBox.Show($"كمية الإرجاع أكبر من المتاح للمنتج: {invalidItems.First().ProductName}",
                         "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
@@ -288,7 +288,7 @@ namespace AccountingSystem.WPF.Views
                 var itemsWithoutReason = selectedItems.Where(i => string.IsNullOrEmpty(i.ReturnReason)).ToList();
                 if (itemsWithoutReason.Any())
                 {
-                    MessageBox.Show("يرجى تحديد سبب الإرجاع لجميع العناصر المحددة", "تنبيه", 
+                    MessageBox.Show("يرجى تحديد سبب الإرجاع لجميع العناصر المحددة", "تنبيه",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -335,14 +335,14 @@ namespace AccountingSystem.WPF.Views
                 // تحديث الإحصائيات
                 await UpdateStatisticsAsync();
 
-                MessageBox.Show($"تم تنفيذ المرتجع بنجاح\nرقم المرتجع: {returnRecord.ReturnNumber}", 
+                MessageBox.Show($"تم تنفيذ المرتجع بنجاح\nرقم المرتجع: {returnRecord.ReturnNumber}",
                     "نجحت العملية", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 lblStatusMessage.Text = "تم تنفيذ المرتجع بنجاح";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في معالجة المرتجع: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في معالجة المرتجع: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 lblStatusMessage.Text = "خطأ في معالجة المرتجع";
             }
@@ -412,10 +412,10 @@ namespace AccountingSystem.WPF.Views
             txtInvoiceNumber.Text = "";
             txtReturnNotes.Text = "";
             lblReturnTotal.Text = "0.00 ج.م";
-            
+
             InvoiceInfoPanel.Visibility = Visibility.Collapsed;
             InvoiceItems.Clear();
-            
+
             lblInvoiceStatus.Text = "لم يتم البحث";
             lblInvoiceStatus.Foreground = System.Windows.Media.Brushes.Gray;
         }
@@ -435,10 +435,10 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 ReturnsHistory.Clear();
-                
+
                 // مؤقتاً - تحميل بيانات تجريبية
                 var sampleReturns = GenerateSampleReturns();
-                
+
                 foreach (var returnRecord in sampleReturns)
                 {
                     ReturnsHistory.Add(returnRecord);
@@ -448,7 +448,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل سجل المرتجعات: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل سجل المرتجعات: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -506,7 +506,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 lblStatusMessage.Text = "جارٍ البحث في المرتجعات...";
-                
+
                 // تطبيق المرشحات
                 var filteredReturns = ReturnsHistory.AsEnumerable();
 
@@ -525,7 +525,7 @@ namespace AccountingSystem.WPF.Views
                 var searchText = txtSearchReturns.Text?.Trim();
                 if (!string.IsNullOrEmpty(searchText))
                 {
-                    filteredReturns = filteredReturns.Where(r => 
+                    filteredReturns = filteredReturns.Where(r =>
                         r.InvoiceNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         r.CustomerName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         r.ReturnNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase));
@@ -533,18 +533,18 @@ namespace AccountingSystem.WPF.Views
 
                 // تطبيق النتائج
                 var results = filteredReturns.ToList();
-                
+
                 // تحديث الجدول
                 dgReturnsHistory.ItemsSource = null;
                 dgReturnsHistory.ItemsSource = results;
 
                 lblStatusMessage.Text = $"تم العثور على {results.Count} مرتجع";
-                
+
                 await Task.Delay(1);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في البحث: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في البحث: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 lblStatusMessage.Text = "خطأ في البحث";
             }
@@ -555,7 +555,7 @@ namespace AccountingSystem.WPF.Views
             dpFromDate.SelectedDate = null;
             dpToDate.SelectedDate = null;
             txtSearchReturns.Text = "";
-            
+
             dgReturnsHistory.ItemsSource = ReturnsHistory;
             lblStatusMessage.Text = "تم مسح المرشحات";
         }
@@ -578,7 +578,7 @@ namespace AccountingSystem.WPF.Views
                     details += $"\n\nملاحظات:\n{returnRecord.Notes}";
                 }
 
-                MessageBox.Show(details, "تفاصيل المرتجع", 
+                MessageBox.Show(details, "تفاصيل المرتجع",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -651,7 +651,7 @@ namespace AccountingSystem.WPF.Views
                 lblTotalReturnValue.Text = $"{totalValue:N2} ج.م";
                 lblTodayReturns.Text = todayReturns.ToString();
                 lblAverageReturnValue.Text = $"{averageValue:N2} ج.م";
-                
+
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -683,20 +683,20 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 var totalReturn = 0m;
-                
+
                 foreach (var item in InvoiceItems)
                 {
                     // تحديث إجمالي العنصر
                     item.ReturnTotal = item.ReturnQuantity * item.UnitPrice;
-                    
+
                     if (item.IsSelected)
                     {
                         totalReturn += item.ReturnTotal;
                     }
                 }
-                
+
                 lblReturnTotal.Text = $"{totalReturn:N2} ج.م";
-                
+
                 // إعادة تحميل الجدول لعرض التحديثات
                 dgInvoiceItems.Items.Refresh();
             }
@@ -741,7 +741,7 @@ namespace AccountingSystem.WPF.Views
         public required string Unit { get; set; }
         public decimal OriginalQuantity { get; set; }
         public decimal AvailableQuantity { get; set; }
-        
+
         private decimal _returnQuantity;
         public decimal ReturnQuantity
         {
@@ -757,9 +757,9 @@ namespace AccountingSystem.WPF.Views
                 }
             }
         }
-        
+
         public decimal UnitPrice { get; set; }
-        
+
         private decimal _returnTotal;
         public decimal ReturnTotal
         {
@@ -773,7 +773,7 @@ namespace AccountingSystem.WPF.Views
                 }
             }
         }
-        
+
         public required string ReturnReason { get; set; }
         public bool IsSelected { get; set; }
 

@@ -25,7 +25,7 @@ public partial class SuppliersWindow : Window
         _suppliers = new ObservableCollection<Supplier>();
         _allSuppliers = new List<Supplier>();
         dgSuppliers.ItemsSource = _suppliers;
-        
+
         Loaded += async (s, e) => await LoadData();
         SetupCurrencyDisplay();
     }
@@ -34,7 +34,7 @@ public partial class SuppliersWindow : Window
     {
         var currencySymbol = _context.SystemSettings
             .FirstOrDefault(s => s.SettingKey == "CurrencySymbol")?.SettingValue ?? "ج.م";
-        
+
         Title = $"إدارة الموردين - العملة: {currencySymbol}";
     }
 
@@ -46,24 +46,24 @@ public partial class SuppliersWindow : Window
             var suppliers = await _supplierService.GetAllSuppliersAsync();
             _allSuppliers = suppliers.ToList();
             _suppliers.Clear();
-            
+
             foreach (var supplier in _allSuppliers)
             {
                 _suppliers.Add(supplier);
             }
-            
+
             lblCount.Text = $"عدد الموردين: {_suppliers.Count}";
-            
+
             // حساب إجمالي الأرصدة بالجنيه المصري
             var totalBalance = _allSuppliers.Sum(s => s.Balance);
             var currencySymbol = _context.SystemSettings
                 .FirstOrDefault(s => s.SettingKey == "CurrencySymbol")?.SettingValue ?? "ج.م";
-            
+
             lblStatus.Text = "تم تحميل بيانات الموردين بنجاح";
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
             lblStatus.Text = "خطأ في تحميل البيانات";
         }
@@ -74,12 +74,12 @@ public partial class SuppliersWindow : Window
         try
         {
             // سيتم إنشاء SupplierDialog لاحقاً
-            MessageBox.Show("سيتم إضافة نافذة المورد الجديد قريباً", "قيد التطوير", 
+            MessageBox.Show("سيتم إضافة نافذة المورد الجديد قريباً", "قيد التطوير",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في إضافة المورد: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في إضافة المورد: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -90,18 +90,18 @@ public partial class SuppliersWindow : Window
         {
             try
             {
-                MessageBox.Show($"تحديث بيانات المورد: {selectedSupplier.SupplierName}", "قيد التطوير", 
+                MessageBox.Show($"تحديث بيانات المورد: {selectedSupplier.SupplierName}", "قيد التطوير",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحديث المورد: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحديث المورد: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
         {
-            MessageBox.Show("يرجى اختيار مورد للتعديل", "تنبيه", 
+            MessageBox.Show("يرجى اختيار مورد للتعديل", "تنبيه",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
@@ -112,11 +112,11 @@ public partial class SuppliersWindow : Window
         {
             var result = MessageBox.Show(
                 $"هل أنت متأكد من حذف المورد '{selectedSupplier.SupplierName}'؟\n\n" +
-                $"الرصيد الحالي: {selectedSupplier.Balance:N2} ج.م", 
-                "تأكيد الحذف", 
-                MessageBoxButton.YesNo, 
+                $"الرصيد الحالي: {selectedSupplier.Balance:N2} ج.م",
+                "تأكيد الحذف",
+                MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
-            
+
             if (result == MessageBoxResult.Yes)
             {
                 try
@@ -127,14 +127,14 @@ public partial class SuppliersWindow : Window
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"خطأ في حذف المورد: {ex.Message}", "خطأ", 
+                    MessageBox.Show($"خطأ في حذف المورد: {ex.Message}", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
         else
         {
-            MessageBox.Show("يرجى اختيار مورد للحذف", "تنبيه", 
+            MessageBox.Show("يرجى اختيار مورد للحذف", "تنبيه",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
@@ -148,7 +148,7 @@ public partial class SuppliersWindow : Window
     private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
     {
         var searchText = txtSearch.Text.Trim();
-        
+
         if (string.IsNullOrEmpty(searchText))
         {
             _suppliers.Clear();
@@ -159,7 +159,7 @@ public partial class SuppliersWindow : Window
         }
         else
         {
-            var filteredSuppliers = _allSuppliers.Where(s => 
+            var filteredSuppliers = _allSuppliers.Where(s =>
                 s.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                 (s.Phone != null && s.Phone.Contains(searchText)) ||
                 (s.Email != null && s.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase)) ||
@@ -172,7 +172,7 @@ public partial class SuppliersWindow : Window
                 _suppliers.Add(supplier);
             }
         }
-        
+
         lblCount.Text = $"عدد الموردين: {_suppliers.Count}";
     }
 

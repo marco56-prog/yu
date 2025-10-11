@@ -15,7 +15,7 @@ namespace AccountingSystem.WPF.Views
     public partial class ProductSearchDialog : Window
     {
         #region Fields
-        
+
         private readonly ObservableCollection<ProductSearchItem> _originalItems;
         private readonly ObservableCollection<ProductSearchItem> _filteredItems;
         private string _searchText = "";

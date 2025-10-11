@@ -20,7 +20,7 @@ public partial class SystemSettingsWindow : Window
     private const string WARNING_TITLE = "تنبيه";
     private const string ERROR_TITLE = "خطأ";
     private const string SUCCESS_TITLE = "نجح";
-    
+
     private readonly IServiceProvider _serviceProvider;
     private readonly ISystemSettingsService _settingsService;
 
@@ -43,56 +43,56 @@ public partial class SystemSettingsWindow : Window
             txtCompanyEmail.Text = await _settingsService.GetSettingValueAsync("CompanyEmail") ?? "info@company.com";
             txtCompanyWebsite.Text = await _settingsService.GetSettingValueAsync("CompanyWebsite") ?? "";
             txtCompanyLogo.Text = await _settingsService.GetSettingValueAsync("CompanyLogo") ?? "";
-            
+
             // إعدادات المحاسبة
             var taxRate = await _settingsService.GetTaxRateAsync();
             txtTaxRate.Text = (taxRate * 100).ToString("0.##");
             txtTaxNumber.Text = await _settingsService.GetSettingValueAsync("CompanyTaxNumber") ?? "";
             txtCommercialRegister.Text = await _settingsService.GetSettingValueAsync("CommercialRegister") ?? "";
-            
+
             // السنة المالية
             var fiscalStart = await _settingsService.GetSettingValueAsync("FiscalYearStart");
             var fiscalEnd = await _settingsService.GetSettingValueAsync("FiscalYearEnd");
-            
-            dpFiscalYearStart.SelectedDate = DateTime.TryParse(fiscalStart, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var startDate) ? 
+
+            dpFiscalYearStart.SelectedDate = DateTime.TryParse(fiscalStart, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var startDate) ?
                 startDate : new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local);
-            dpFiscalYearEnd.SelectedDate = DateTime.TryParse(fiscalEnd, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var endDate) ? 
+            dpFiscalYearEnd.SelectedDate = DateTime.TryParse(fiscalEnd, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var endDate) ?
                 endDate : new DateTime(DateTime.Now.Year, 12, 31, 0, 0, 0, DateTimeKind.Local);
-            
+
             // العملة
             var currency = await _settingsService.GetSettingValueAsync("DefaultCurrency") ?? "جنيه مصري";
             SetComboBoxValue(cmbDefaultCurrency, currency);
             SetComboBoxValue(cmbCurrency, currency);
-            
+
             // النسخ الاحتياطي
-            txtBackupPath.Text = await _settingsService.GetSettingValueAsync("BackupPath") ?? 
+            txtBackupPath.Text = await _settingsService.GetSettingValueAsync("BackupPath") ??
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AccountingBackups");
-            
+
             // إعدادات نقطة البيع
             chkRequireCustomer.IsChecked = await _settingsService.GetSettingValueAsync<bool>("RequireCustomerSelection") ?? false;
             chkAutoOpenCashDrawer.IsChecked = await _settingsService.GetSettingValueAsync<bool>("AutoOpenCashDrawer") ?? true;
             txtPOSProductsPerPage.Text = (await _settingsService.GetSettingValueAsync<int>("POSProductsPerPage") ?? 50).ToString();
             chkShowProductImages.IsChecked = await _settingsService.GetSettingValueAsync<bool>("ShowProductImages") ?? true;
-            
+
             // إعدادات المخزون
             chkAllowNegativeStock.IsChecked = await _settingsService.GetSettingValueAsync<bool>("AllowNegativeStock") ?? false;
             chkStockWarnings.IsChecked = await _settingsService.GetSettingValueAsync<bool>("StockWarningsEnabled") ?? true;
             txtMinStockWarning.Text = (await _settingsService.GetSettingValueAsync<int>("MinStockWarningLevel") ?? 10).ToString();
-            
+
             // إعدادات الأمان
             txtSessionTimeout.Text = (await _settingsService.GetSettingValueAsync<int>("SessionTimeoutMinutes") ?? 30).ToString();
             chkRequirePasswordForDelete.IsChecked = await _settingsService.GetSettingValueAsync<bool>("RequirePasswordForDelete") ?? true;
             chkLogUserActions.IsChecked = await _settingsService.GetSettingValueAsync<bool>("LogUserActions") ?? true;
-            
+
             // إعدادات الطباعة
             await LoadPrintSettingsAsync();
-            
+
             // إعدادات الأمان المتقدمة
             await LoadSecuritySettingsAsync();
-            
+
             // إعدادات التكامل
             await LoadIntegrationSettingsAsync();
-            
+
             // تحميل تسلسل الأرقام الحقيقي
             await LoadNumberSequencesAsync();
         }
@@ -126,38 +126,38 @@ public partial class SystemSettingsWindow : Window
             // تحميل الطابعات المتاحة
             cmbDefaultPrinter.Items.Clear();
             cmbThermalPrinter.Items.Clear();
-            
+
             foreach (string printerName in PrinterSettings.InstalledPrinters)
             {
                 cmbDefaultPrinter.Items.Add(printerName);
                 cmbThermalPrinter.Items.Add(printerName);
             }
-            
+
             // تحميل الطابعات المحفوظة
             var defaultPrinter = await _settingsService.GetSettingValueAsync("DefaultPrinter");
             var thermalPrinter = await _settingsService.GetSettingValueAsync("ThermalPrinter");
-            
+
             if (string.IsNullOrEmpty(defaultPrinter))
                 defaultPrinter = new PrinterSettings().PrinterName;
-                
+
             if (!string.IsNullOrWhiteSpace(defaultPrinter))
             {
                 cmbDefaultPrinter.SelectedItem = defaultPrinter;
                 if (string.IsNullOrEmpty(thermalPrinter))
                     cmbThermalPrinter.SelectedItem = defaultPrinter;
             }
-            
+
             if (!string.IsNullOrEmpty(thermalPrinter))
                 cmbThermalPrinter.SelectedItem = thermalPrinter;
-                
+
             // إعدادات الطباعة الأخرى
             chkAutoPrint.IsChecked = await _settingsService.GetSettingValueAsync<bool>("AutoPrintInvoices") ?? false;
             chkPrintDirectly.IsChecked = await _settingsService.GetSettingValueAsync<bool>("PrintDirectly") ?? true;
             chkPrintPreview.IsChecked = await _settingsService.GetSettingValueAsync<bool>("ShowPrintPreview") ?? false;
-            
+
             var paperSize = await _settingsService.GetSettingValueAsync("PaperSize") ?? "A4";
             SetComboBoxValue(cmbPaperSize, paperSize);
-            
+
             // الهوامش
             txtPrintMarginTop.Text = (await _settingsService.GetSettingValueAsync<int>("PrintMarginTop") ?? 10).ToString();
             txtPrintMarginBottom.Text = (await _settingsService.GetSettingValueAsync<int>("PrintMarginBottom") ?? 10).ToString();
@@ -183,7 +183,7 @@ public partial class SystemSettingsWindow : Window
                 new() { SequenceType = "المنتجات", Prefix = "PRD", CurrentNumber = 1, Suffix = "", NumberLength = 4 },
                 new() { SequenceType = "معاملات الخزينة", Prefix = "CSH", CurrentNumber = 1, Suffix = "", NumberLength = 4 }
             };
-            
+
             dgNumberSequences.ItemsSource = sequences;
             await Task.Delay(1); // للسماح بتحديث الواجهة
         }
@@ -206,7 +206,7 @@ public partial class SystemSettingsWindow : Window
                 CheckFileExists = false,
                 CheckPathExists = false
             };
-            
+
             if (dialog.ShowDialog() == true)
             {
                 var selectedPath = Path.GetDirectoryName(dialog.FileName);
@@ -242,8 +242,8 @@ public partial class SystemSettingsWindow : Window
             await SaveIntegrationSettingsAsync();
             await SavePOSSettingsAsync();
             await SaveInventorySettingsAsync();
-            
-            MessageBox.Show("تم حفظ جميع الإعدادات بنجاح", "نجح", 
+
+            MessageBox.Show("تم حفظ جميع الإعدادات بنجاح", "نجح",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -256,13 +256,13 @@ public partial class SystemSettingsWindow : Window
     {
         try
         {
-            var result = MessageBox.Show("هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافتراضية؟", 
+            var result = MessageBox.Show("هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافتراضية؟",
                 "تأكيد إعادة التعيين", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            
+
             if (result == MessageBoxResult.Yes)
             {
                 ResetAllSettings();
-                MessageBox.Show("تم إعادة تعيين جميع الإعدادات بنجاح", "نجح", 
+                MessageBox.Show("تم إعادة تعيين جميع الإعدادات بنجاح", "نجح",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -281,7 +281,7 @@ public partial class SystemSettingsWindow : Window
         txtCompanyEmail.Text = "";
         txtCompanyWebsite.Text = "";
         txtCompanyLogo.Text = "";
-        
+
         // إعادة تعيين إعدادات المحاسبة
         txtTaxNumber.Text = "";
         txtCommercialRegister.Text = "";
@@ -296,10 +296,10 @@ public partial class SystemSettingsWindow : Window
 
         // إعادة تعيين إعدادات الطباعة
         _ = LoadPrintSettingsAsync();
-        
+
         // إعادة تعيين إعدادات الأمان
         _ = LoadSecuritySettingsAsync();
-        
+
         // إعادة تعيين إعدادات التكامل
         _ = LoadIntegrationSettingsAsync();
     }
@@ -326,7 +326,7 @@ public partial class SystemSettingsWindow : Window
             // محاكاة إنشاء النسخة الاحتياطية
             File.WriteAllText(fullPath, $"نسخة احتياطية تم إنشاؤها في {DateTime.Now}");
 
-            MessageBox.Show($"تم إنشاء النسخة الاحتياطية بنجاح\n{fullPath}", SUCCESS_TITLE, 
+            MessageBox.Show($"تم إنشاء النسخة الاحتياطية بنجاح\n{fullPath}", SUCCESS_TITLE,
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -354,7 +354,7 @@ public partial class SystemSettingsWindow : Window
                 if (result == MessageBoxResult.Yes)
                 {
                     // محاكاة استعادة النسخة الاحتياطية
-                    MessageBox.Show("تم استعادة النسخة الاحتياطية بنجاح\nيرجى إعادة تشغيل البرنامج", 
+                    MessageBox.Show("تم استعادة النسخة الاحتياطية بنجاح\nيرجى إعادة تشغيل البرنامج",
                         "نجح", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -406,7 +406,7 @@ public partial class SystemSettingsWindow : Window
             txtSMTPServer.Text = await _settingsService.GetSettingValueAsync("SMTPServer") ?? "smtp.gmail.com";
             txtSMTPPort.Text = (await _settingsService.GetSettingValueAsync<int>("SMTPPort") ?? 587).ToString();
             txtEmailUsername.Text = await _settingsService.GetSettingValueAsync("EmailUsername") ?? "";
-            
+
             chkSMSIntegration.IsChecked = await _settingsService.GetSettingValueAsync<bool>("SMSIntegrationEnabled") ?? false;
             txtSMSProvider.Text = await _settingsService.GetSettingValueAsync("SMSProvider") ?? "";
             txtSMSAPIKey.Text = await _settingsService.GetSettingValueAsync("SMSAPIKey") ?? "";
@@ -427,7 +427,7 @@ public partial class SystemSettingsWindow : Window
                 return;
             }
 
-            MessageBox.Show("تم إرسال رسالة تجريبية بنجاح!", "نجح", 
+            MessageBox.Show("تم إرسال رسالة تجريبية بنجاح!", "نجح",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -446,7 +446,7 @@ public partial class SystemSettingsWindow : Window
                 return;
             }
 
-            MessageBox.Show("تم إرسال رسالة نصية تجريبية بنجاح!", "نجح", 
+            MessageBox.Show("تم إرسال رسالة نصية تجريبية بنجاح!", "نجح",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -489,24 +489,24 @@ public partial class SystemSettingsWindow : Window
             await _settingsService.SetSettingAsync("CompanyEmail", txtCompanyEmail.Text, "بريد الشركة الإلكتروني");
             await _settingsService.SetSettingAsync("CompanyWebsite", txtCompanyWebsite.Text, "موقع الشركة");
             await _settingsService.SetSettingAsync("CompanyLogo", txtCompanyLogo.Text, "شعار الشركة");
-            
+
             // حفظ إعدادات المحاسبة
             if (decimal.TryParse(txtTaxRate.Text, out var taxRate))
                 await _settingsService.SetSettingAsync("TaxRate", (taxRate / 100).ToString(System.Globalization.CultureInfo.InvariantCulture), "نسبة الضريبة");
-                
+
             await _settingsService.SetSettingAsync("CompanyTaxNumber", txtTaxNumber.Text, "الرقم الضريبي");
             await _settingsService.SetSettingAsync("CommercialRegister", txtCommercialRegister.Text, "السجل التجاري");
-            
+
             // حفظ العملة
             var selectedCurrency = (cmbDefaultCurrency.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "جنيه مصري";
             await _settingsService.SetSettingAsync("DefaultCurrency", selectedCurrency, "العملة الافتراضية");
-            
+
             // حفظ السنة المالية
             if (dpFiscalYearStart.SelectedDate.HasValue)
                 await _settingsService.SetSettingAsync("FiscalYearStart", dpFiscalYearStart.SelectedDate.Value.ToString("yyyy-MM-dd"), "بداية السنة المالية");
             if (dpFiscalYearEnd.SelectedDate.HasValue)
                 await _settingsService.SetSettingAsync("FiscalYearEnd", dpFiscalYearEnd.SelectedDate.Value.ToString("yyyy-MM-dd"), "نهاية السنة المالية");
-                
+
             // حفظ مسار النسخ الاحتياطي
             await _settingsService.SetSettingAsync("BackupPath", txtBackupPath.Text, "مسار النسخ الاحتياطي");
             await _settingsService.SetSettingAsync("AutoBackupEnabled", chkAutoBackup.IsChecked?.ToString() ?? "false", "النسخ الاحتياطي التلقائي");
@@ -525,14 +525,14 @@ public partial class SystemSettingsWindow : Window
             // حفظ إعدادات الطباعة
             await _settingsService.SetSettingAsync("DefaultPrinter", cmbDefaultPrinter.SelectedItem?.ToString() ?? "", "الطابعة الافتراضية");
             await _settingsService.SetSettingAsync("ThermalPrinter", cmbThermalPrinter.SelectedItem?.ToString() ?? "", "طابعة الإيصالات الحرارية");
-            
+
             var paperSize = (cmbPaperSize.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "A4";
             await _settingsService.SetSettingAsync("PaperSize", paperSize, "حجم الورق");
-            
+
             await _settingsService.SetSettingAsync("AutoPrintInvoices", chkAutoPrint.IsChecked?.ToString() ?? "false", "الطباعة التلقائية للفواتير");
             await _settingsService.SetSettingAsync("PrintDirectly", chkPrintDirectly.IsChecked?.ToString() ?? "true", "الطباعة المباشرة");
             await _settingsService.SetSettingAsync("ShowPrintPreview", chkPrintPreview.IsChecked?.ToString() ?? "false", "معاينة الطباعة");
-            
+
             // حفظ الهوامش
             await _settingsService.SetSettingAsync("PrintMarginTop", txtPrintMarginTop.Text, "الهامش العلوي");
             await _settingsService.SetSettingAsync("PrintMarginBottom", txtPrintMarginBottom.Text, "الهامش السفلي");
@@ -556,7 +556,7 @@ public partial class SystemSettingsWindow : Window
             await _settingsService.SetSettingAsync("AutoLogoffEnabled", chkAutoLogoff.IsChecked?.ToString() ?? "false", "تسجيل الخروج التلقائي");
             await _settingsService.SetSettingAsync("AutoLogoffMinutes", txtAutoLogoffMinutes.Text, "دقائق عدم النشاط للخروج التلقائي");
             await _settingsService.SetSettingAsync("AuditTrailEnabled", chkAuditTrail.IsChecked?.ToString() ?? "true", "تسجيل سجل المراجعة");
-            
+
             await _settingsService.SetSettingAsync("SessionTimeoutMinutes", txtSessionTimeout.Text, "مهلة انتهاء الجلسة بالدقائق");
             await _settingsService.SetSettingAsync("RequirePasswordForDelete", chkRequirePasswordForDelete.IsChecked?.ToString() ?? "true", "مطالبة بكلمة مرور عند الحذف");
             await _settingsService.SetSettingAsync("LogUserActions", chkLogUserActions.IsChecked?.ToString() ?? "true", "تسجيل عمليات المستخدمين");
@@ -577,10 +577,10 @@ public partial class SystemSettingsWindow : Window
             await _settingsService.SetSettingAsync("SMTPServer", txtSMTPServer.Text, "خادم SMTP");
             await _settingsService.SetSettingAsync("SMTPPort", txtSMTPPort.Text, "منفذ SMTP");
             await _settingsService.SetSettingAsync("EmailUsername", txtEmailUsername.Text, "اسم مستخدم البريد");
-            
+
             if (!string.IsNullOrEmpty(txtEmailPassword.Password))
                 await _settingsService.SetSettingAsync("EmailPassword", txtEmailPassword.Password, "كلمة مرور البريد");
-            
+
             // حفظ إعدادات الرسائل النصية
             await _settingsService.SetSettingAsync("SMSIntegrationEnabled", chkSMSIntegration.IsChecked?.ToString() ?? "false", "تكامل الرسائل النصية");
             await _settingsService.SetSettingAsync("SMSProvider", txtSMSProvider.Text, "مزود خدمة الرسائل النصية");

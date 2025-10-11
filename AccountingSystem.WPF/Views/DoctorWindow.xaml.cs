@@ -17,7 +17,7 @@ namespace AccountingSystem.WPF.Views
             _viewModel = viewModel;
             _logger = logger;
             DataContext = _viewModel;
-            
+
             _logger.LogInformation("نافذة طبيب النظام تم إنشاؤها بنجاح");
         }
 
@@ -50,14 +50,14 @@ namespace AccountingSystem.WPF.Views
                 Close();
                 e.Handled = true;
             }
-            
+
             base.OnKeyDown(e);
         }
 
         protected override void OnSourceInitialized(System.EventArgs e)
         {
             base.OnSourceInitialized(e);
-            
+
             // تطبيق إعدادات RTL
             FlowDirection = FlowDirection.RightToLeft;
         }

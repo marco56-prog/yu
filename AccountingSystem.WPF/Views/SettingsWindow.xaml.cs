@@ -35,17 +35,17 @@ namespace AccountingSystem.WPF.Views
 
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("تم حفظ الإعدادات بنجاح!", "حفظ الإعدادات", 
+            MessageBox.Show("تم حفظ الإعدادات بنجاح!", "حفظ الإعدادات",
                            MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void RestoreDefaults_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("هل تريد استعادة الإعدادات الافتراضية؟\nسيتم فقدان جميع التخصيصات الحالية.", 
-                               "استعادة الإعدادات الافتراضية", 
+            if (MessageBox.Show("هل تريد استعادة الإعدادات الافتراضية؟\nسيتم فقدان جميع التخصيصات الحالية.",
+                               "استعادة الإعدادات الافتراضية",
                                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                MessageBox.Show("تم استعادة الإعدادات الافتراضية بنجاح!", "استعادة الإعدادات", 
+                MessageBox.Show("تم استعادة الإعدادات الافتراضية بنجاح!", "استعادة الإعدادات",
                                MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }

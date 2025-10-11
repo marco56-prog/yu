@@ -98,9 +98,9 @@ namespace AccountingSystem.Business
             {
                 // توليد رقم الفاتورة
                 invoice.InvoiceNumber = await GenerateInvoiceNumberAsync();
-                invoice.CreatedDate   = DateTime.Now;
-                invoice.Status        = InvoiceStatus.Draft;
-                invoice.IsPosted      = false;
+                invoice.CreatedDate = DateTime.Now;
+                invoice.Status = InvoiceStatus.Draft;
+                invoice.IsPosted = false;
 
                 // حفظ الفاتورة
                 _context.PurchaseInvoices.Add(invoice);
@@ -148,15 +148,15 @@ namespace AccountingSystem.Business
                 var oldSupplierId = existing.SupplierId;
 
                 // تحديث رأس الفاتورة
-                existing.InvoiceDate     = invoice.InvoiceDate;
-                existing.SupplierId      = invoice.SupplierId;
-                existing.SubTotal        = invoice.SubTotal;
-                existing.TaxAmount       = invoice.TaxAmount;
-                existing.DiscountAmount  = invoice.DiscountAmount;
-                existing.NetTotal        = invoice.NetTotal;
-                existing.PaidAmount      = invoice.PaidAmount;
+                existing.InvoiceDate = invoice.InvoiceDate;
+                existing.SupplierId = invoice.SupplierId;
+                existing.SubTotal = invoice.SubTotal;
+                existing.TaxAmount = invoice.TaxAmount;
+                existing.DiscountAmount = invoice.DiscountAmount;
+                existing.NetTotal = invoice.NetTotal;
+                existing.PaidAmount = invoice.PaidAmount;
                 existing.RemainingAmount = invoice.RemainingAmount;
-                existing.Notes           = invoice.Notes;
+                existing.Notes = invoice.Notes;
 
                 // استبدال التفاصيل
                 _context.PurchaseInvoiceItems.RemoveRange(existing.Items);
@@ -288,25 +288,25 @@ namespace AccountingSystem.Business
                     // حركة مخزون (نخزن الكمية كما أدخلها المستخدم + المكافئ بالأساسية)
                     var movement = new StockMovement
                     {
-                        ProductId          = detail.ProductId,
-                        Product            = product,
-                        MovementType       = StockMovementType.In,
-                        Quantity           = detail.Quantity,   // كما أدخلها المستخدم
-                        UnitId             = detail.UnitId,     // الوحدة المختارة
-                        Unit               = await _context.Units.FindAsync(detail.UnitId)
+                        ProductId = detail.ProductId,
+                        Product = product,
+                        MovementType = StockMovementType.In,
+                        Quantity = detail.Quantity,   // كما أدخلها المستخدم
+                        UnitId = detail.UnitId,     // الوحدة المختارة
+                        Unit = await _context.Units.FindAsync(detail.UnitId)
                                               ?? throw new InvalidOperationException("الوحدة غير موجودة."),
                         QuantityInMainUnit = qtyInMain,        // المكافئ بالأساسية
-                        ReferenceType      = "PurchaseInvoice",
-                        ReferenceId        = invoice.PurchaseInvoiceId,
-                        MovementDate       = now,
-                        CreatedBy          = invoice.CreatedBy,
-                        Notes              = $"مشتريات - فاتورة رقم {invoice.InvoiceNumber}"
+                        ReferenceType = "PurchaseInvoice",
+                        ReferenceId = invoice.PurchaseInvoiceId,
+                        MovementDate = now,
+                        CreatedBy = invoice.CreatedBy,
+                        Notes = $"مشتريات - فاتورة رقم {invoice.InvoiceNumber}"
                     };
                     await _context.StockMovements.AddAsync(movement);
                 }
 
                 // تحديث حالة الفاتورة
-                invoice.Status   = InvoiceStatus.Confirmed;
+                invoice.Status = InvoiceStatus.Confirmed;
                 invoice.IsPosted = true;
 
                 _context.PurchaseInvoices.Update(invoice);
@@ -371,7 +371,7 @@ namespace AccountingSystem.Business
             var productUnit = await _context.ProductUnits
                 .AsNoTracking()
                 .FirstOrDefaultAsync(pu => pu.ProductId == product.ProductId &&
-                                           pu.UnitId    == fromUnitId &&
+                                           pu.UnitId == fromUnitId &&
                                            pu.IsActive);
             if (productUnit == null)
                 throw new InvalidOperationException("لا توجد علاقة تحويل للوحدة المختارة.");

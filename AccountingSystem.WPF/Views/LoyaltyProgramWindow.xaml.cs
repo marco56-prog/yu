@@ -16,7 +16,7 @@ namespace AccountingSystem.WPF.Views
             InitializeComponent();
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
+
             try
             {
                 LoadLoyaltyProgramData();

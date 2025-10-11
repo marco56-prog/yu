@@ -18,7 +18,7 @@ namespace AccountingSystem.WPF.Views
     public partial class CustomerSearchDialog : Window
     {
         #region Fields
-        
+
         private readonly ObservableCollection<Customer> _originalItems;
         private readonly ObservableCollection<Customer> _filteredItems;
         private readonly ICollectionView _collectionView;

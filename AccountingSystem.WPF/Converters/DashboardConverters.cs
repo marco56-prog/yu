@@ -99,19 +99,19 @@ public class LastRefreshConverter : IValueConverter
         if (value is DateTime dateTime)
         {
             var timeSpan = DateTime.Now - dateTime;
-            
+
             if (timeSpan.TotalMinutes < 1)
                 return "تم التحديث الآن";
-            
+
             if (timeSpan.TotalMinutes < 60)
                 return $"تم التحديث منذ {timeSpan.Minutes} دقيقة";
-                
+
             if (timeSpan.TotalHours < 24)
                 return $"تم التحديث منذ {timeSpan.Hours} ساعة";
-                
+
             return $"تم التحديث في {dateTime:MM/dd HH:mm}";
         }
-        
+
         return "لم يتم التحديث بعد";
     }
 
@@ -140,7 +140,7 @@ public class NotificationPriorityToColorConverter : IValueConverter
                 _ => new SolidColorBrush(Colors.Gray)
             };
         }
-        
+
         return new SolidColorBrush(Colors.Gray);
     }
 
@@ -169,7 +169,7 @@ public class NotificationStatusToTextConverter : IValueConverter
                 _ => "غير معروف"
             };
         }
-        
+
         return "غير معروف";
     }
 
@@ -190,17 +190,17 @@ public class CurrencyConverter : IValueConverter
         {
             return $"{amount:N0} ج.م";
         }
-        
+
         if (value is double doubleAmount)
         {
             return $"{doubleAmount:N0} ج.م";
         }
-        
+
         if (value is int intAmount)
         {
             return $"{intAmount:N0} ج.م";
         }
-        
+
         return "0 ج.م";
     }
 
@@ -214,7 +214,7 @@ public class CurrencyConverter : IValueConverter
                 return result;
             }
         }
-        
+
         return 0m;
     }
 }

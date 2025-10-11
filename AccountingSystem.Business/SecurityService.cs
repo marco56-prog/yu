@@ -169,44 +169,44 @@ namespace AccountingSystem.Business
     // =============================
     public static class Permissions
     {
-        public const string CUSTOMERS_VIEW   = "customers.view";
+        public const string CUSTOMERS_VIEW = "customers.view";
         public const string CUSTOMERS_CREATE = "customers.create";
-        public const string CUSTOMERS_EDIT   = "customers.edit";
+        public const string CUSTOMERS_EDIT = "customers.edit";
         public const string CUSTOMERS_DELETE = "customers.delete";
 
-        public const string SUPPLIERS_VIEW   = "suppliers.view";
+        public const string SUPPLIERS_VIEW = "suppliers.view";
         public const string SUPPLIERS_CREATE = "suppliers.create";
-        public const string SUPPLIERS_EDIT   = "suppliers.edit";
+        public const string SUPPLIERS_EDIT = "suppliers.edit";
         public const string SUPPLIERS_DELETE = "suppliers.delete";
 
-        public const string PRODUCTS_VIEW    = "products.view";
-        public const string PRODUCTS_CREATE  = "products.create";
-        public const string PRODUCTS_EDIT    = "products.edit";
-        public const string PRODUCTS_DELETE  = "products.delete";
+        public const string PRODUCTS_VIEW = "products.view";
+        public const string PRODUCTS_CREATE = "products.create";
+        public const string PRODUCTS_EDIT = "products.edit";
+        public const string PRODUCTS_DELETE = "products.delete";
 
-        public const string SALES_INVOICES_VIEW   = "sales_invoices.view";
+        public const string SALES_INVOICES_VIEW = "sales_invoices.view";
         public const string SALES_INVOICES_CREATE = "sales_invoices.create";
-        public const string SALES_INVOICES_EDIT   = "sales_invoices.edit";
+        public const string SALES_INVOICES_EDIT = "sales_invoices.edit";
         public const string SALES_INVOICES_DELETE = "sales_invoices.delete";
-        public const string SALES_INVOICES_POST   = "sales_invoices.post";
+        public const string SALES_INVOICES_POST = "sales_invoices.post";
 
-        public const string REPORTS_SALES     = "reports.sales";
+        public const string REPORTS_SALES = "reports.sales";
         public const string REPORTS_INVENTORY = "reports.inventory";
-        public const string REPORTS_PROFIT    = "reports.profit";
+        public const string REPORTS_PROFIT = "reports.profit";
         public const string REPORTS_CUSTOMERS = "reports.customers";
 
         public const string SYSTEM_SETTINGS = "system.settings";
         public const string USER_MANAGEMENT = "user.management";
-        public const string BACKUP_RESTORE  = "backup.restore";
+        public const string BACKUP_RESTORE = "backup.restore";
     }
 
     public static class Roles
     {
-        public const string ADMIN      = "admin";
-        public const string MANAGER    = "manager";
+        public const string ADMIN = "admin";
+        public const string MANAGER = "manager";
         public const string ACCOUNTANT = "accountant";
-        public const string CASHIER    = "cashier";
-        public const string VIEWER     = "viewer";
+        public const string CASHIER = "cashier";
+        public const string VIEWER = "viewer";
 
         public static readonly Dictionary<string, List<string>> RolePermissions =
             new(StringComparer.OrdinalIgnoreCase)
@@ -321,7 +321,7 @@ namespace AccountingSystem.Business
     internal static class PasswordHasherPBKDF2
     {
         private const int SaltSize = 16;               // 128-bit
-        private const int KeySize  = 32;               // 256-bit
+        private const int KeySize = 32;               // 256-bit
         private const int DefaultIterations = 120_000; // عدّل حسب الأداء
         private const string Label = "PBKDF2";
 
@@ -353,7 +353,7 @@ namespace AccountingSystem.Business
             if (!int.TryParse(parts[1], out int iters) || iters <= 0) return false;
 
             var salt = Convert.FromBase64String(parts[2]);
-            var key  = Convert.FromBase64String(parts[3]);
+            var key = Convert.FromBase64String(parts[3]);
 
             using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iters, HashAlgorithmName.SHA256);
             var check = pbkdf2.GetBytes(key.Length);

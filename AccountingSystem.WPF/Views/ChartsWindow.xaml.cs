@@ -20,7 +20,7 @@ public partial class ChartsWindow : Window
     // LiveCharts Properties for example charts
     public ISeries[] SalesSeries { get; set; } = Array.Empty<ISeries>();
     public string[] SalesLabels { get; set; } = Array.Empty<string>();
-    
+
     public ChartsWindow()
     {
         InitializeComponent();
@@ -30,24 +30,24 @@ public partial class ChartsWindow : Window
         };
         _updateTimer.Tick += UpdateCurrentDateTime;
         _updateTimer.Start();
-        
+
         LoadSampleData();
         UpdateStatusInfo();
     }
-    
+
     public ChartsWindow(IUnitOfWork unitOfWork, IReportService? reportService)
     {
         InitializeComponent();
         _unitOfWork = unitOfWork;
         _reportService = reportService;
-        
+
         _updateTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
         };
         _updateTimer.Tick += UpdateCurrentDateTime;
         _updateTimer.Start();
-        
+
         _ = LoadChartsDataAsync();
         UpdateStatusInfo();
     }
@@ -73,7 +73,7 @@ public partial class ChartsWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -95,7 +95,7 @@ public partial class ChartsWindow : Window
             {
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ", 
+                    MessageBox.Show($"خطأ في تحميل البيانات: {ex.Message}", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
@@ -112,7 +112,7 @@ public partial class ChartsWindow : Window
     private void btnRefreshData_Click(object sender, RoutedEventArgs e)
     {
         LoadSampleData();
-        MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث البيانات", 
+        MessageBox.Show("تم تحديث البيانات بنجاح", "تحديث البيانات",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -120,19 +120,19 @@ public partial class ChartsWindow : Window
     {
         try
         {
-            MessageBox.Show("سيتم تصدير التقارير قريباً", "تصدير التقارير", 
+            MessageBox.Show("سيتم تصدير التقارير قريباً", "تصدير التقارير",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في تصدير التقارير: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في تصدير التقارير: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
     private void btnChartSettings_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("إعدادات الرسوم البيانية ستتوفر قريباً", "الإعدادات", 
+        MessageBox.Show("إعدادات الرسوم البيانية ستتوفر قريباً", "الإعدادات",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -171,80 +171,80 @@ public partial class ChartsWindow : Window
     private void btnLoadSampleData_Click(object sender, RoutedEventArgs e)
     {
         LoadSampleData();
-        MessageBox.Show("تم تحميل البيانات التجريبية", "البيانات التجريبية", 
+        MessageBox.Show("تم تحميل البيانات التجريبية", "البيانات التجريبية",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     // Report Buttons
     private void btnDailySalesReport_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تقرير المبيعات اليومي سيتوفر قريباً", "التقارير", 
+        MessageBox.Show("تقرير المبيعات اليومي سيتوفر قريباً", "التقارير",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnSalesTrendsAnalysis_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تحليل اتجاهات المبيعات سيتوفر قريباً", "التحليل", 
+        MessageBox.Show("تحليل اتجاهات المبيعات سيتوفر قريباً", "التحليل",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnTopProductsReport_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تقرير أفضل المنتجات سيتوفر قريباً", "التقارير", 
+        MessageBox.Show("تقرير أفضل المنتجات سيتوفر قريباً", "التقارير",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnInventoryStatusReport_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تقرير حالة المخزون سيتوفر قريباً", "التقارير", 
+        MessageBox.Show("تقرير حالة المخزون سيتوفر قريباً", "التقارير",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnLowStockAlerts_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تنبيهات نقص المخزون ستتوفر قريباً", "التنبيهات", 
+        MessageBox.Show("تنبيهات نقص المخزون ستتوفر قريباً", "التنبيهات",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnProductProfitabilityAnalysis_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تحليل ربحية المنتجات سيتوفر قريباً", "التحليل", 
+        MessageBox.Show("تحليل ربحية المنتجات سيتوفر قريباً", "التحليل",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnCustomerBehaviorAnalysis_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تحليل سلوك العملاء سيتوفر قريباً", "التحليل", 
+        MessageBox.Show("تحليل سلوك العملاء سيتوفر قريباً", "التحليل",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnMonthlyPerformanceComparison_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("مقارنة الأداء الشهري ستتوفر قريباً", "التحليل", 
+        MessageBox.Show("مقارنة الأداء الشهري ستتوفر قريباً", "التحليل",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnSeasonalTrendsAnalysis_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تحليل الاتجاهات الموسمية سيتوفر قريباً", "التحليل", 
+        MessageBox.Show("تحليل الاتجاهات الموسمية سيتوفر قريباً", "التحليل",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnSalesForecast_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("توقعات المبيعات ستتوفر قريباً", "التوقعات", 
+        MessageBox.Show("توقعات المبيعات ستتوفر قريباً", "التوقعات",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnDemandPlanning_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("تخطيط الطلب سيتوفر قريباً", "التخطيط", 
+        MessageBox.Show("تخطيط الطلب سيتوفر قريباً", "التخطيط",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void btnInteractiveDashboard_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("اللوحة التفاعلية ستتوفر قريباً", "اللوحة التفاعلية", 
+        MessageBox.Show("اللوحة التفاعلية ستتوفر قريباً", "اللوحة التفاعلية",
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

@@ -12,13 +12,13 @@ namespace AccountingSystem.WPF.UserControls
         public ThemeToggleControl()
         {
             InitializeComponent();
-            
+
             // ربط الحدث لتغيير الثيم
             ThemeManager.Instance.ThemeChanged += (s, theme) =>
             {
                 UpdateButtonsState();
             };
-            
+
             UpdateButtonsState();
         }
 
@@ -42,9 +42,9 @@ namespace AccountingSystem.WPF.UserControls
             // التأكد من أن العناصر موجودة قبل تحديثها
             var lightButton = FindName("LightThemeButton") as Button;
             var darkButton = FindName("DarkThemeButton") as Button;
-            
+
             if (lightButton == null || darkButton == null) return;
-            
+
             var currentTheme = ThemeManager.Instance.CurrentTheme;
             lightButton.IsEnabled = currentTheme != AppTheme.Light;
             darkButton.IsEnabled = currentTheme != AppTheme.Dark;

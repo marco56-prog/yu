@@ -49,27 +49,27 @@ namespace AccountingSystem.WPF.Views
             {
                 InitializeComponent();
 
-                _serviceProvider        = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+                _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
                 _purchaseInvoiceService = serviceProvider.GetRequiredService<IPurchaseInvoiceService>();
-                _supplierService        = serviceProvider.GetRequiredService<ISupplierService>();
-                _productService         = serviceProvider.GetRequiredService<IProductService>();
-                _priceHistoryService    = serviceProvider.GetRequiredService<IPriceHistoryService>();
-                _context                = serviceProvider.GetRequiredService<AccountingDbContext>();
+                _supplierService = serviceProvider.GetRequiredService<ISupplierService>();
+                _productService = serviceProvider.GetRequiredService<IProductService>();
+                _priceHistoryService = serviceProvider.GetRequiredService<IPriceHistoryService>();
+                _context = serviceProvider.GetRequiredService<AccountingDbContext>();
 
                 _context.ChangeTracker.Clear();
 
-                _returnDetails    = new ObservableCollection<PurchaseReturnDetail>();
-                _suppliers        = new ObservableCollection<Supplier>();
+                _returnDetails = new ObservableCollection<PurchaseReturnDetail>();
+                _suppliers = new ObservableCollection<Supplier>();
                 _originalInvoices = new ObservableCollection<PurchaseInvoice>();
 
                 _suppliersView = CollectionViewSource.GetDefaultView(_suppliers);
-                _invoicesView  = CollectionViewSource.GetDefaultView(_originalInvoices);
+                _invoicesView = CollectionViewSource.GetDefaultView(_originalInvoices);
 
                 _culture = new CultureInfo("ar-EG");
                 _culture.NumberFormat.CurrencySymbol = "ج.م";
 
-                dgItems.ItemsSource           = _returnDetails;
-                cmbSupplier.ItemsSource       = _suppliersView;
+                dgItems.ItemsSource = _returnDetails;
+                cmbSupplier.ItemsSource = _suppliersView;
                 cmbOriginalInvoice.ItemsSource = _invoicesView;
 
                 EnableEditMode(false);
@@ -134,11 +134,11 @@ namespace AccountingSystem.WPF.Views
         }
 
         private static string NormalizeDigits(string? s) => s?
-            .Replace('٠','0').Replace('١','1').Replace('٢','2').Replace('٣','3').Replace('٤','4')
-            .Replace('٥','5').Replace('٦','6').Replace('٧','7').Replace('٨','8').Replace('٩','9')
-            .Replace('۰','0').Replace('۱','1').Replace('۲','2').Replace('۳','3').Replace('۴','4')
-            .Replace('۵','5').Replace('۶','6').Replace('۷','7').Replace('۸','8').Replace('۹','9')
-            .Replace('٫','.') ?? "0";
+            .Replace('٠', '0').Replace('١', '1').Replace('٢', '2').Replace('٣', '3').Replace('٤', '4')
+            .Replace('٥', '5').Replace('٦', '6').Replace('٧', '7').Replace('٨', '8').Replace('٩', '9')
+            .Replace('۰', '0').Replace('۱', '1').Replace('۲', '2').Replace('۳', '3').Replace('۴', '4')
+            .Replace('۵', '5').Replace('۶', '6').Replace('۷', '7').Replace('۸', '8').Replace('۹', '9')
+            .Replace('٫', '.') ?? "0";
 
         private bool TryParseDecimal(string? text, out decimal value)
         {
@@ -221,7 +221,7 @@ namespace AccountingSystem.WPF.Views
                 if (_selectedOriginalInvoice?.Items == null) return;
 
                 dgOriginalItems.ItemsSource = _selectedOriginalInvoice.Items;
-                
+
                 if (pnlOriginalInvoiceInfo != null)
                 {
                     pnlOriginalInvoiceInfo.Visibility = Visibility.Visible;
@@ -260,10 +260,10 @@ namespace AccountingSystem.WPF.Views
 
                 var previouslyReturned = _returnDetails.Where(r => r.OriginalInvoiceDetailId == originalItem.PurchaseInvoiceItemId)
                     .Sum(r => r.Quantity);
-                
+
                 if (previouslyReturned + returnQty > originalItem.Quantity)
                 {
-                    MessageBox.Show($"إجمالي الكمية المرتجعة ({previouslyReturned + returnQty}) يتجاوز الكمية الأصلية ({originalItem.Quantity})", 
+                    MessageBox.Show($"إجمالي الكمية المرتجعة ({previouslyReturned + returnQty}) يتجاوز الكمية الأصلية ({originalItem.Quantity})",
                         TitleWarning, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -403,11 +403,11 @@ namespace AccountingSystem.WPF.Views
                 };
 
                 SetBusy(true);
-                
+
                 // مؤقتاً حفظ مباشر في قاعدة البيانات
                 _context.PurchaseReturns.Add(purchaseReturn);
                 await _context.SaveChangesAsync();
-                
+
                 _currentReturn = purchaseReturn;
                 lblReturnNumber.Text = $"PRET-{purchaseReturn.PurchaseReturnId}";
 

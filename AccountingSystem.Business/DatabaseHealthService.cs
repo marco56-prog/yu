@@ -109,8 +109,8 @@ namespace AccountingSystem.Business
 
                 // تحديد الحالة العامة
                 result.IsHealthy = !result.Issues.Any() && result.CanConnect && result.DatabaseExists && result.TablesExist;
-                
-                _logger.LogInformation("Database health check completed. Status: {Status}", 
+
+                _logger.LogInformation("Database health check completed. Status: {Status}",
                     result.IsHealthy ? "Healthy" : "Unhealthy");
             }
             catch (Exception ex)
@@ -171,7 +171,7 @@ namespace AccountingSystem.Business
             {
                 status.AppliedMigrations = (await _dbContext.Database.GetAppliedMigrationsAsync()).ToList();
                 status.PendingMigrations = (await _dbContext.Database.GetPendingMigrationsAsync()).ToList();
-                status.AllMigrations = (await _dbContext.Database.GetMigrationsAsync()).ToList();
+                status.AllMigrations = status.AppliedMigrations.Concat(status.PendingMigrations).ToList();
 
                 status.IsUpToDate = !status.PendingMigrations.Any();
                 status.LastAppliedMigration = status.AppliedMigrations.LastOrDefault();
@@ -253,7 +253,7 @@ namespace AccountingSystem.Business
             {
                 var criticalTables = new[]
                 {
-                    "Users", "Customers", "Suppliers", "Products", "Categories", 
+                    "Users", "Customers", "Suppliers", "Products", "Categories",
                     "Units", "SalesInvoices", "PurchaseInvoices", "SystemSettings"
                 };
 

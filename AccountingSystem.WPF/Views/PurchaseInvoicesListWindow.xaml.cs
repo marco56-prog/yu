@@ -70,7 +70,7 @@ namespace AccountingSystem.WPF.Views
 
                 var invoices = await _invoiceService.GetAllPurchaseInvoicesAsync();
                 _all.Clear();
-                
+
                 foreach (var inv in invoices.OrderByDescending(x => x.InvoiceDate))
                 {
                     _all.Add(inv);
@@ -78,7 +78,7 @@ namespace AccountingSystem.WPF.Views
 
                 // تحميل الموردين للفلتر
                 await LoadSuppliersAsync();
-                
+
                 RefreshFilters();
             }
             catch (Exception ex)
@@ -99,12 +99,12 @@ namespace AccountingSystem.WPF.Views
                 var suppliers = await _supplierService.GetAllSuppliersAsync();
                 cmbSupplierFilter.Items.Clear();
                 cmbSupplierFilter.Items.Add(new { SupplierId = 0, SupplierName = "جميع الموردين" });
-                
+
                 foreach (var supplier in suppliers)
                 {
                     cmbSupplierFilter.Items.Add(supplier);
                 }
-                
+
                 cmbSupplierFilter.SelectedIndex = 0;
             }
             catch (Exception ex)
@@ -187,7 +187,7 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 dgInvoices.UpdateLayout();
-                
+
                 for (int i = 0; i < dgInvoices.Items.Count; i++)
                 {
                     if (dgInvoices.ItemContainerGenerator.ContainerFromIndex(i) is not DataGridRow row) continue;
@@ -272,14 +272,14 @@ namespace AccountingSystem.WPF.Views
                 MessageBox.Show(Constants.MSG_SELECT_INVOICE, Constants.CAPTION_WARNING, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            
+
             try
             {
                 var scope = _serviceProvider.CreateScope();
                 var window = scope.ServiceProvider.GetRequiredService<PurchaseInvoiceWindow>();
                 window.Owner = Window.GetWindow(this);
                 window.Closed += (_, __) => { scope.Dispose(); Task.Run(() => RefreshInvoices()); };
-                
+
                 // سيتم إضافة تحميل الفاتورة لاحقاً
                 window.Show();
             }

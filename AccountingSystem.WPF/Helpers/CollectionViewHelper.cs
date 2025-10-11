@@ -24,8 +24,8 @@ namespace AccountingSystem.WPF.Helpers
                 view.Refresh();
             }
             catch (InvalidOperationException ex) when (
-                ex.Message.Contains("Refresh is being deferred") || 
-                ex.Message.Contains("Current position") || 
+                ex.Message.Contains("Refresh is being deferred") ||
+                ex.Message.Contains("Current position") ||
                 ex.Message.Contains("CollectionView"))
             {
                 // جدولة إعادة المحاولة على الـ dispatcher مع أولوية منخفضة
@@ -43,16 +43,16 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var dispatcher = Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
-                
+
                 // محاولة بأولوية Background أولاً
                 dispatcher.BeginInvoke(new Action(() =>
                 {
-                    try 
-                    { 
-                        view.Refresh(); 
-                    } 
-                    catch 
-                    { 
+                    try
+                    {
+                        view.Refresh();
+                    }
+                    catch
+                    {
                         // إذا فشلت، محاولة أخيرة بأولوية أقل
                         dispatcher.BeginInvoke(new Action(() =>
                         {

@@ -23,7 +23,7 @@ public partial class CategoryEditWindow : Window
         DialogResult = true;
         Close();
     }
-    
+
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
         Save_Click(sender, e);

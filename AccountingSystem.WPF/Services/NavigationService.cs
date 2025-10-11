@@ -12,7 +12,7 @@ namespace AccountingSystem.WPF.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<string, Type> _routes = new();
-        
+
         public NavigationService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -28,23 +28,24 @@ namespace AccountingSystem.WPF.Services
             RegisterRoute("SalesInvoice", typeof(Views.SalesInvoiceWindow));
             RegisterRoute("SalesInvoicesList", typeof(Views.SalesInvoicesListWindow));
             RegisterRoute("SalesReturn", typeof(Views.SalesReturnWindow));
-            
+
             // المشتريات
             RegisterRoute("PurchaseInvoice", typeof(Views.PurchaseInvoiceWindow));
             RegisterRoute("PurchaseReturn", typeof(Views.PurchaseReturnWindow));
-            
+
             // المخزون والمنتجات
             RegisterRoute("Products", typeof(Views.ProductsWindow));
             RegisterRoute("Categories", typeof(Views.CategoriesWindow));
             // RegisterRoute("Warehouse", typeof(Views.WarehouseWindow)); // Will be implemented later
-            
+
             // العملاء والموردين
             RegisterRoute("Customers", typeof(Views.CustomersWindow));
             RegisterRoute("Suppliers", typeof(Views.SuppliersWindow));
-            
+
             // النظام
             RegisterRoute("Reports", typeof(Views.ReportsWindow));
             RegisterRoute("Settings", typeof(Views.SettingsWindow));
+            RegisterRoute("CashierManagement", typeof(Views.CashierManagementWindow));
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace AccountingSystem.WPF.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في فتح النافذة: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في فتح النافذة: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -99,7 +100,7 @@ namespace AccountingSystem.WPF.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في فتح الحوار: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في فتح الحوار: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
@@ -166,7 +167,7 @@ namespace AccountingSystem.WPF.Services
             return routeName switch
             {
                 "SalesInvoice" => "فاتورة مبيعات جديدة",
-                "SalesInvoicesList" => "قائمة فواتير المبيعات", 
+                "SalesInvoicesList" => "قائمة فواتير المبيعات",
                 "SalesReturn" => "مرتجعات المبيعات",
                 "PurchaseInvoice" => "فاتورة شراء جديدة",
                 "PurchaseReturn" => "مرتجعات الشراء",

@@ -41,7 +41,7 @@ namespace AccountingSystem.WPF.Services
         {
             try
             {
-                ComprehensiveLogger.LogBusinessOperation("بدء حساب إجماليات الفاتورة", 
+                ComprehensiveLogger.LogBusinessOperation("بدء حساب إجماليات الفاتورة",
                     $"المكون: {ComponentName}, عدد الأصناف: {input.Items?.Count ?? 0}");
 
                 var result = new CalculationResult();
@@ -59,8 +59,8 @@ namespace AccountingSystem.WPF.Services
                 result.TotalDiscount = result.LineDiscounts + result.GlobalDiscount;
 
                 // Step 5: Base amount for tax calculation
-                result.BaseForTax = input.TaxOnNetOfDiscount 
-                    ? Math.Max(0, result.SubTotal - result.TotalDiscount) 
+                result.BaseForTax = input.TaxOnNetOfDiscount
+                    ? Math.Max(0, result.SubTotal - result.TotalDiscount)
                     : result.SubTotal;
 
                 // Step 6: Calculate Tax
@@ -95,7 +95,7 @@ namespace AccountingSystem.WPF.Services
                     IsValid = result.IsValid
                 });
 
-                ComprehensiveLogger.LogBusinessOperation("تم حساب إجماليات الفاتورة بنجاح", 
+                ComprehensiveLogger.LogBusinessOperation("تم حساب إجماليات الفاتورة بنجاح",
                     $"المكون: {ComponentName}, الإجمالي: {result.SubTotal:C}, الصافي: {result.NetTotal:C}");
 
                 return result;
@@ -143,7 +143,7 @@ namespace AccountingSystem.WPF.Services
                 // Step 5: Validation
                 result.IsValid = result.NetAmount >= 0 && result.DiscountAmount <= result.GrossAmount;
 
-                ComprehensiveLogger.LogBusinessOperation("تم حساب إجمالي السطر", 
+                ComprehensiveLogger.LogBusinessOperation("تم حساب إجمالي السطر",
                     $"المكون: {ComponentName}, الكمية: {input.Quantity}, السعر: {input.UnitPrice:C}, الصافي: {result.NetAmount:C}");
 
                 return result;
@@ -240,7 +240,7 @@ namespace AccountingSystem.WPF.Services
                 result.TotalIncludingTax = input.BaseAmount + result.TaxAmount;
                 result.IsValid = result.TaxAmount >= 0;
 
-                ComprehensiveLogger.LogBusinessOperation("تم حساب الضريبة", 
+                ComprehensiveLogger.LogBusinessOperation("تم حساب الضريبة",
                     $"المكون: {ComponentName}, الأساس: {input.BaseAmount:C}, المعدل: {input.TaxRate}%, الضريبة: {result.TaxAmount:C}");
 
                 return result;
@@ -298,7 +298,7 @@ namespace AccountingSystem.WPF.Services
             if (subTotal <= 0 || discountAmount <= 0)
                 return 0;
 
-            return isPercentage 
+            return isPercentage
                 ? Math.Round(subTotal * (discountAmount / 100m), 2)
                 : Math.Min(discountAmount, subTotal);
         }

@@ -24,10 +24,10 @@ namespace AccountingSystem.Data.Extensions
                     {
                         var builder = modelBuilder.Entity(entityType.ClrType)
                             .Property(property.Name);
-                        
+
                         // تأكد من استخدام NVARCHAR
                         builder.IsUnicode(true);
-                        
+
                         // تعيين طول افتراضي مناسب
                         if (property.GetMaxLength() == null)
                         {
@@ -58,8 +58,8 @@ namespace AccountingSystem.Data.Extensions
         /// تكوين خاصية نص لدعم العربية مع تخصيص الطول
         /// </summary>
         public static PropertyBuilder<string?> ConfigureArabicText<T>(
-            this EntityTypeBuilder<T> builder, 
-            string propertyName, 
+            this EntityTypeBuilder<T> builder,
+            string propertyName,
             int maxLength = 200) where T : class
         {
             return (PropertyBuilder<string?>)builder.Property(propertyName)
@@ -72,7 +72,7 @@ namespace AccountingSystem.Data.Extensions
         /// تكوين خاصية نص طويل لدعم العربية
         /// </summary>
         public static PropertyBuilder<string?> ConfigureArabicLongText<T>(
-            this EntityTypeBuilder<T> builder, 
+            this EntityTypeBuilder<T> builder,
             string propertyName) where T : class
         {
             return (PropertyBuilder<string?>)builder.Property(propertyName)
@@ -80,6 +80,6 @@ namespace AccountingSystem.Data.Extensions
                 .HasColumnType("nvarchar(max)");
         }
     }
-    
+
     // تم تعطيل UnicodeStringConvention مؤقتاً - سيتم استخدام ConfigureConventions بدلاً منها
 }

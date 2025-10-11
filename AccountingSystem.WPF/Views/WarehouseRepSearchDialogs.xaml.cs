@@ -15,7 +15,7 @@ namespace AccountingSystem.WPF.Views
     public partial class WarehouseSearchDialog : Window
     {
         #region Fields
-        
+
         private readonly ObservableCollection<Warehouse> _originalItems;
         private readonly ObservableCollection<Warehouse> _filteredItems;
         private string _searchText = "";
@@ -194,7 +194,7 @@ namespace AccountingSystem.WPF.Views
     public partial class RepresentativeSearchDialog : Window
     {
         #region Fields
-        
+
         private readonly ObservableCollection<Representative> _originalItems;
         private readonly ObservableCollection<Representative> _filteredItems;
         private string _searchText = "";

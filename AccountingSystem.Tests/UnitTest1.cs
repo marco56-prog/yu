@@ -1,4 +1,6 @@
-﻿namespace AccountingSystem.Tests;
+﻿using Xunit;
+
+namespace AccountingSystem.Tests;
 
 public class UnitTest1
 {

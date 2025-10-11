@@ -40,10 +40,10 @@ namespace AccountingSystem.WPF.Views
         public SimpleItemEntryDialog(List<Product> products, List<Customer> customers, int customerId = 0)
         {
             InitializeComponent();
-            
+
             _allProducts = products ?? new List<Product>();
             _allCustomers = customers ?? new List<Customer>();
-            
+
             FlowDirection = FlowDirection.RightToLeft;
             Title = "إضافة صنف جديد";
 
@@ -200,7 +200,7 @@ namespace AccountingSystem.WPF.Views
             // تحديث الواجهة
             txtProduct.Text = _selectedProduct.ProductName;
             txtProduct.Tag = _selectedProduct.ProductId;
-            
+
             // تعيين السعر الافتراضي
             _unitPrice = _selectedProduct.SalePrice;
             txtPrice.Text = _unitPrice.ToString("N2");

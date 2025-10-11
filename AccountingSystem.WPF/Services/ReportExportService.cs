@@ -17,35 +17,35 @@ namespace AccountingSystem.WPF.Services
     {
         // تصدير PDF
         Task<ExportResult> ExportToPdfAsync(ReportExportRequest request);
-        
+
         // تصدير Excel
         Task<ExportResult> ExportToExcelAsync(ReportExportRequest request);
-        
+
         // تصدير Word
         Task<ExportResult> ExportToWordAsync(ReportExportRequest request);
-        
+
         // تصدير CSV
         Task<ExportResult> ExportToCsvAsync(ReportExportRequest request);
-        
+
         // تصدير HTML
         Task<ExportResult> ExportToHtmlAsync(ReportExportRequest request);
-        
+
         // تصدير JSON
         Task<ExportResult> ExportToJsonAsync(ReportExportRequest request);
-        
+
         // تصدير XML
         Task<ExportResult> ExportToXmlAsync(ReportExportRequest request);
-        
+
         // تصدير الرسوم البيانية
         Task<ExportResult> ExportChartsAsync(List<ChartConfiguration> charts, string outputPath, ExportFormat format);
-        
+
         // قوالب التصدير
         Task<List<ExportTemplate>> GetAvailableTemplatesAsync(ExportFormat format);
         Task SaveExportTemplateAsync(ExportTemplate template);
-        
+
         // معاينة قبل التصدير
         Task<PreviewResult> GeneratePreviewAsync(ReportExportRequest request);
-        
+
         // إعدادات التصدير
         ExportSettings GetDefaultSettings(ExportFormat format);
         void UpdateExportSettings(ExportFormat format, ExportSettings settings);
@@ -62,7 +62,7 @@ namespace AccountingSystem.WPF.Services
             _culture = new CultureInfo("ar-EG");
             _culture.NumberFormat.CurrencySymbol = "ج.م";
             _defaultSettings = InitializeDefaultSettings();
-            
+
             ComprehensiveLogger.LogInfo("تم تهيئة خدمة تصدير التقارير", ComponentName);
         }
 
@@ -83,16 +83,16 @@ namespace AccountingSystem.WPF.Services
 
                 // إنشاء محتوى PDF
                 var pdfContent = await GeneratePdfContentAsync(request);
-                
+
                 // سيتم استخدام مكتبة PDF مناسبة هنا
                 await File.WriteAllTextAsync(result.FilePath, pdfContent, Encoding.UTF8);
-                
+
                 result.IsSuccess = true;
                 result.FileSize = new FileInfo(result.FilePath).Length;
                 result.GeneratedAt = DateTime.Now;
 
-                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى PDF بنجاح", 
-                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت", 
+                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى PDF بنجاح",
+                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت",
                     isSuccess: true);
 
                 return result;
@@ -112,7 +112,7 @@ namespace AccountingSystem.WPF.Services
         private async Task<string> GeneratePdfContentAsync(ReportExportRequest request)
         {
             await Task.Delay(1); // محاكاة العملية
-            
+
             var content = new StringBuilder();
             content.AppendLine("<!DOCTYPE html>");
             content.AppendLine("<html dir='rtl' lang='ar'>");
@@ -124,22 +124,22 @@ namespace AccountingSystem.WPF.Services
             content.AppendLine("</style>");
             content.AppendLine("</head>");
             content.AppendLine("<body>");
-            
+
             // رأس التقرير
             content.AppendLine("<div class='header'>");
             content.AppendLine("<div class='logo'>نظام المحاسبة</div>");
             content.AppendLine($"<h1>{request.ReportTitle}</h1>");
             content.AppendLine($"<div class='date'>تاريخ الإنشاء: {DateTime.Now:yyyy-MM-dd HH:mm}</div>");
             content.AppendLine("</div>");
-            
+
             // محتوى التقرير
             content.AppendLine("<div class='content'>");
-            
+
             if (request.Data?.Any() == true)
             {
                 content.AppendLine(GenerateHtmlTable(request.Data, request.Headers));
             }
-            
+
             if (request.Summary?.Any() == true)
             {
                 content.AppendLine("<div class='summary'>");
@@ -153,17 +153,17 @@ namespace AccountingSystem.WPF.Services
                 }
                 content.AppendLine("</div>");
             }
-            
+
             content.AppendLine("</div>");
-            
+
             // تذييل التقرير
             content.AppendLine("<div class='footer'>");
             content.AppendLine($"<div>صفحة 1 من 1 | إجمالي السجلات: {request.Data?.Count ?? 0}</div>");
             content.AppendLine("</div>");
-            
+
             content.AppendLine("</body>");
             content.AppendLine("</html>");
-            
+
             return content.ToString();
         }
 
@@ -207,14 +207,14 @@ namespace AccountingSystem.WPF.Services
                 // إنشاء محتوى Excel (CSV مؤقتاً)
                 var csvContent = await GenerateCsvContentAsync(request);
                 await File.WriteAllTextAsync(result.FilePath.Replace(".xlsx", ".csv"), csvContent, Encoding.UTF8);
-                
+
                 result.IsSuccess = true;
                 result.FilePath = result.FilePath.Replace(".xlsx", ".csv");
                 result.FileSize = new FileInfo(result.FilePath).Length;
                 result.GeneratedAt = DateTime.Now;
 
-                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى Excel بنجاح", 
-                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت", 
+                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى Excel بنجاح",
+                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت",
                     isSuccess: true);
 
                 return result;
@@ -250,13 +250,13 @@ namespace AccountingSystem.WPF.Services
 
                 var csvContent = await GenerateCsvContentAsync(request);
                 await File.WriteAllTextAsync(result.FilePath, csvContent, Encoding.UTF8);
-                
+
                 result.IsSuccess = true;
                 result.FileSize = new FileInfo(result.FilePath).Length;
                 result.GeneratedAt = DateTime.Now;
 
-                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى CSV بنجاح", 
-                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت", 
+                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى CSV بنجاح",
+                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت",
                     isSuccess: true);
 
                 return result;
@@ -276,23 +276,23 @@ namespace AccountingSystem.WPF.Services
         private async Task<string> GenerateCsvContentAsync(ReportExportRequest request)
         {
             await Task.Delay(1);
-            
+
             var content = new StringBuilder();
-            
+
             // إضافة UTF-8 BOM للدعم العربي
             content.Append('\ufeff');
-            
+
             // رأس التقرير
             content.AppendLine($"# {request.ReportTitle}");
             content.AppendLine($"# تاريخ الإنشاء: {DateTime.Now:yyyy-MM-dd HH:mm}");
             content.AppendLine();
-            
+
             // رؤوس الأعمدة
             if (request.Headers?.Any() == true)
             {
                 content.AppendLine(string.Join(",", request.Headers.Select(EscapeCsvField)));
             }
-            
+
             // البيانات
             if (request.Data?.Any() == true)
             {
@@ -307,14 +307,14 @@ namespace AccountingSystem.WPF.Services
                     content.AppendLine(string.Join(",", values));
                 }
             }
-            
+
             return content.ToString();
         }
 
         private static string EscapeCsvField(string field)
         {
             if (string.IsNullOrEmpty(field)) return "\"\"";
-            
+
             // إذا كان الحقل يحتوي على فاصلة أو علامات اقتباس أو أسطر جديدة
             if (field.Contains(',') || field.Contains('"') || field.Contains('\n') || field.Contains('\r'))
             {
@@ -323,7 +323,7 @@ namespace AccountingSystem.WPF.Services
                 // إحاطة الحقل بعلامات اقتباس
                 return $"\"{field}\"";
             }
-            
+
             return field;
         }
 
@@ -346,13 +346,13 @@ namespace AccountingSystem.WPF.Services
 
                 var htmlContent = await GenerateHtmlContentAsync(request);
                 await File.WriteAllTextAsync(result.FilePath, htmlContent, Encoding.UTF8);
-                
+
                 result.IsSuccess = true;
                 result.FileSize = new FileInfo(result.FilePath).Length;
                 result.GeneratedAt = DateTime.Now;
 
-                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى HTML بنجاح", 
-                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت", 
+                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى HTML بنجاح",
+                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت",
                     isSuccess: true);
 
                 return result;
@@ -372,7 +372,7 @@ namespace AccountingSystem.WPF.Services
         private async Task<string> GenerateHtmlContentAsync(ReportExportRequest request)
         {
             await Task.Delay(1);
-            
+
             var content = new StringBuilder();
             content.AppendLine("<!DOCTYPE html>");
             content.AppendLine("<html dir='rtl' lang='ar'>");
@@ -385,7 +385,7 @@ namespace AccountingSystem.WPF.Services
             content.AppendLine("</style>");
             content.AppendLine("</head>");
             content.AppendLine("<body>");
-            
+
             // رأس التقرير
             content.AppendLine("<div class='container'>");
             content.AppendLine("<header class='report-header'>");
@@ -397,7 +397,7 @@ namespace AccountingSystem.WPF.Services
             content.AppendLine($"<span>عدد السجلات: {request.Data?.Count ?? 0}</span>");
             content.AppendLine("</div>");
             content.AppendLine("</header>");
-            
+
             // الملخص
             if (request.Summary?.Any() == true)
             {
@@ -414,7 +414,7 @@ namespace AccountingSystem.WPF.Services
                 content.AppendLine("</div>");
                 content.AppendLine("</section>");
             }
-            
+
             // جدول البيانات
             if (request.Data?.Any() == true)
             {
@@ -425,17 +425,17 @@ namespace AccountingSystem.WPF.Services
                 content.AppendLine("</div>");
                 content.AppendLine("</section>");
             }
-            
+
             // تذييل التقرير
             content.AppendLine("<footer class='report-footer'>");
             content.AppendLine("<div>تم إنشاؤه بواسطة نظام المحاسبة المتقدم</div>");
             content.AppendLine($"<div>© {DateTime.Now.Year} جميع الحقوق محفوظة</div>");
             content.AppendLine("</footer>");
-            
+
             content.AppendLine("</div>");
             content.AppendLine("</body>");
             content.AppendLine("</html>");
-            
+
             return content.ToString();
         }
 
@@ -469,10 +469,10 @@ namespace AccountingSystem.WPF.Services
         private static string GenerateHtmlTable(List<Dictionary<string, object>> data, List<string>? headers)
         {
             if (!data.Any()) return "<p>لا توجد بيانات للعرض</p>";
-            
+
             var table = new StringBuilder();
             table.AppendLine("<table>");
-            
+
             // رؤوس الجدول
             if (headers?.Any() == true)
             {
@@ -485,7 +485,7 @@ namespace AccountingSystem.WPF.Services
                 table.AppendLine("</tr>");
                 table.AppendLine("</thead>");
             }
-            
+
             // بيانات الجدول
             table.AppendLine("<tbody>");
             foreach (var row in data)
@@ -499,7 +499,7 @@ namespace AccountingSystem.WPF.Services
                 table.AppendLine("</tr>");
             }
             table.AppendLine("</tbody>");
-            
+
             table.AppendLine("</table>");
             return table.ToString();
         }
@@ -523,13 +523,13 @@ namespace AccountingSystem.WPF.Services
 
                 var jsonContent = await GenerateJsonContentAsync(request);
                 await File.WriteAllTextAsync(result.FilePath, jsonContent, Encoding.UTF8);
-                
+
                 result.IsSuccess = true;
                 result.FileSize = new FileInfo(result.FilePath).Length;
                 result.GeneratedAt = DateTime.Now;
 
-                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى JSON بنجاح", 
-                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت", 
+                ComprehensiveLogger.LogBusinessOperation("تم تصدير التقرير إلى JSON بنجاح",
+                    $"الملف: {result.FilePath} | الحجم: {result.FileSize} بايت",
                     isSuccess: true);
 
                 return result;
@@ -549,7 +549,7 @@ namespace AccountingSystem.WPF.Services
         private async Task<string> GenerateJsonContentAsync(ReportExportRequest request)
         {
             await Task.Delay(1);
-            
+
             var reportData = new
             {
                 title = request.ReportTitle,
@@ -618,8 +618,8 @@ namespace AccountingSystem.WPF.Services
 
         public ExportSettings GetDefaultSettings(ExportFormat format)
         {
-            return _defaultSettings.TryGetValue(format, out var settings) ? 
-                new ExportSettings(settings) : 
+            return _defaultSettings.TryGetValue(format, out var settings) ?
+                new ExportSettings(settings) :
                 new ExportSettings();
         }
 
@@ -675,7 +675,7 @@ namespace AccountingSystem.WPF.Services
             var fileName = SanitizeFileName(reportTitle);
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var fullFileName = $"{fileName}_{timestamp}.{extension}";
-            
+
             return Path.Combine(outputPath, fullFileName);
         }
 
@@ -683,7 +683,7 @@ namespace AccountingSystem.WPF.Services
         {
             var invalidChars = Path.GetInvalidFileNameChars();
             var sanitized = new StringBuilder();
-            
+
             foreach (var c in fileName)
             {
                 if (!invalidChars.Contains(c))
@@ -691,7 +691,7 @@ namespace AccountingSystem.WPF.Services
                 else
                     sanitized.Append('_');
             }
-            
+
             return sanitized.ToString().Trim('_');
         }
 

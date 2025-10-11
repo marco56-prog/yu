@@ -19,13 +19,13 @@ public partial class CustomerDialog : Window
         _customerService = customerService;
         _customer = null;
         _isEditMode = false;
-        
+
         lblTitle.Text = "إضافة عميل جديد";
         txtBalance.Visibility = Visibility.Collapsed;
         var grid = (Grid)((Grid)Content).Children.OfType<Grid>().First();
         var balanceLabel = grid.Children.OfType<TextBlock>()
             .FirstOrDefault(t => t.Text == "الرصيد الحالي:");
-        if (balanceLabel != null) 
+        if (balanceLabel != null)
             balanceLabel.Visibility = Visibility.Collapsed;
     }
 
@@ -36,7 +36,7 @@ public partial class CustomerDialog : Window
         _customerService = customerService;
         _customer = customer;
         _isEditMode = true;
-        
+
         lblTitle.Text = "تعديل بيانات العميل";
         LoadCustomerData();
     }
@@ -68,7 +68,7 @@ public partial class CustomerDialog : Window
         {
             if (string.IsNullOrWhiteSpace(txtCustomerName.Text))
             {
-                MessageBox.Show("يرجى إدخال اسم العميل", "خطأ", 
+                MessageBox.Show("يرجى إدخال اسم العميل", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 txtCustomerName.Focus();
                 return;
@@ -84,7 +84,7 @@ public partial class CustomerDialog : Window
                 _customer.IsActive = chkIsActive.IsChecked ?? true;
 
                 await _customerService.UpdateCustomerAsync(_customer);
-                MessageBox.Show("تم تحديث بيانات العميل بنجاح", "نجح", 
+                MessageBox.Show("تم تحديث بيانات العميل بنجاح", "نجح",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -100,7 +100,7 @@ public partial class CustomerDialog : Window
                 };
 
                 await _customerService.CreateCustomerAsync(newCustomer);
-                MessageBox.Show("تم إضافة العميل بنجاح", "نجح", 
+                MessageBox.Show("تم إضافة العميل بنجاح", "نجح",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
@@ -109,7 +109,7 @@ public partial class CustomerDialog : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في حفظ البيانات: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في حفظ البيانات: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

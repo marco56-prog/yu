@@ -20,13 +20,13 @@ namespace AccountingSystem.WPF.ViewModels
         {
             _logger = logger;
             Results = new ObservableCollection<SimpleHealthCheckResult>();
-            
+
             // الأوامر
             RunDiagnosticsCommand = new RelayCommand(RunDiagnostics, () => !IsRunning);
             FixIssuesCommand = new RelayCommand(FixIssues, () => !IsRunning && Results.Count > 0);
             RefreshCommand = new RelayCommand(Refresh, () => !IsRunning);
             ExportReportCommand = new RelayCommand(ExportReport, () => Results.Count > 0);
-            
+
             LoadMockData();
         }
 
@@ -92,15 +92,15 @@ namespace AccountingSystem.WPF.ViewModels
             IsRunning = true;
             ProgressValue = 0;
             StatusMessage = "جاري بدء التشخيص...";
-            
+
             try
             {
                 Results.Clear();
-                
+
                 var checks = new[]
                 {
                     "فحص اتصال قاعدة البيانات",
-                    "فحص الترحيلات المعلقة", 
+                    "فحص الترحيلات المعلقة",
                     "فحص موارد النظام",
                     "فحص الثيمات والأنماط",
                     "فحص أداء النظام",
@@ -113,17 +113,17 @@ namespace AccountingSystem.WPF.ViewModels
                 {
                     StatusMessage = $"جاري تشغيل: {checks[i]}";
                     ProgressValue = ((double)(i + 1) / checks.Length) * 100;
-                    
+
                     await Task.Delay(500); // محاكاة وقت المعالجة
-                    
+
                     // إضافة نتيجة عشوائية
                     var status = Random.Shared.Next(10) switch
                     {
                         < 7 => "Ok",
-                        < 9 => "Warning", 
+                        < 9 => "Warning",
                         _ => "Failed"
                     };
-                    
+
                     var result = new SimpleHealthCheckResult
                     {
                         CheckName = checks[i],
@@ -139,14 +139,14 @@ namespace AccountingSystem.WPF.ViewModels
                             _ => "❓"
                         }
                     };
-                    
+
                     Results.Add(result);
                     OnPropertyChanged(nameof(OkCount));
                     OnPropertyChanged(nameof(WarningCount));
                     OnPropertyChanged(nameof(FailedCount));
                     OnPropertyChanged(nameof(IsSystemHealthy));
                 }
-                
+
                 StatusMessage = $"اكتمل التشخيص - {Results.Count} فحص تم تنفيذه";
                 LastCheckTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             }
@@ -166,7 +166,7 @@ namespace AccountingSystem.WPF.ViewModels
         {
             var issuesCount = Results.Count(r => r.Status != "Ok");
             StatusMessage = $"تم إصلاح {issuesCount} مشكلة بنجاح";
-            
+
             // تحويل جميع المشاكل إلى حالة سليمة
             foreach (var result in Results.Where(r => r.Status != "Ok"))
             {
@@ -174,7 +174,7 @@ namespace AccountingSystem.WPF.ViewModels
                 result.StatusIcon = "✅";
                 result.Message = "تم الإصلاح تلقائياً";
             }
-            
+
             OnPropertyChanged(nameof(OkCount));
             OnPropertyChanged(nameof(WarningCount));
             OnPropertyChanged(nameof(FailedCount));
@@ -196,7 +196,7 @@ namespace AccountingSystem.WPF.ViewModels
         private void LoadMockData()
         {
             Results.Clear();
-            
+
             var mockData = new[]
             {
                 new SimpleHealthCheckResult { CheckName = "اتصال قاعدة البيانات", Status = "Ok", Message = "الاتصال يعمل بشكل طبيعي", Category = "قاعدة البيانات", DurationText = "45ms", StatusIcon = "✅" },
@@ -209,12 +209,12 @@ namespace AccountingSystem.WPF.ViewModels
             {
                 Results.Add(item);
             }
-            
+
             OnPropertyChanged(nameof(OkCount));
             OnPropertyChanged(nameof(WarningCount));
             OnPropertyChanged(nameof(FailedCount));
             OnPropertyChanged(nameof(IsSystemHealthy));
-            
+
             LastCheckTime = DateTime.Now.AddMinutes(-5).ToString("yyyy-MM-dd HH:mm:ss");
         }
 
@@ -229,7 +229,7 @@ namespace AccountingSystem.WPF.ViewModels
         private string GetMockCategory(int index) => index switch
         {
             < 2 => "قاعدة البيانات",
-            < 4 => "موارد النظام", 
+            < 4 => "موارد النظام",
             < 6 => "الأداء",
             _ => "الأمان"
         };
@@ -245,7 +245,7 @@ namespace AccountingSystem.WPF.ViewModels
         private string _message = "";
 
         public string CheckName { get; set; } = "";
-        
+
         public string Status
         {
             get => _status;
@@ -255,7 +255,7 @@ namespace AccountingSystem.WPF.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public string StatusIcon
         {
             get => _statusIcon;
@@ -265,7 +265,7 @@ namespace AccountingSystem.WPF.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public string Message
         {
             get => _message;
@@ -275,7 +275,7 @@ namespace AccountingSystem.WPF.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public string Category { get; set; } = "";
         public string DurationText { get; set; } = "";
         public string? Details { get; set; }

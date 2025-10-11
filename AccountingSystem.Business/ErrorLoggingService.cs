@@ -23,7 +23,7 @@ namespace AccountingSystem.Business
     public interface IErrorLoggingService
     {
         // تسجيل الأخطاء الأساسي
-        Task<string> LogErrorAsync(Exception exception, ErrorType errorType = ErrorType.SystemError, 
+        Task<string> LogErrorAsync(Exception exception, ErrorType errorType = ErrorType.SystemError,
             ErrorSeverity severity = ErrorSeverity.Error, int? userId = null, string? username = null);
 
         Task<string> LogErrorAsync(string message, string? details = null, ErrorType errorType = ErrorType.SystemError,
@@ -57,7 +57,7 @@ namespace AccountingSystem.Business
         Task<int> CleanupOldLogsAsync(int retentionDays = 90);
 
         // تقارير الأخطاء
-        Task<ErrorReport> GenerateErrorReportAsync(DateTime fromDate, DateTime toDate, 
+        Task<ErrorReport> GenerateErrorReportAsync(DateTime fromDate, DateTime toDate,
             ErrorType? errorType = null, ErrorSeverity? severity = null);
     }
 
@@ -124,7 +124,7 @@ namespace AccountingSystem.Business
                         using (LogContext.PushProperty("Username", username))
                         using (LogContext.PushProperty("CorrelationId", Activity.Current?.Id))
                         {
-                            Log.Warning("🔄 Duplicate error aggregated: {ErrorId} - Count incremented", 
+                            Log.Warning("🔄 Duplicate error aggregated: {ErrorId} - Count incremented",
                                 existingError.ErrorId);
                         }
 
@@ -148,14 +148,14 @@ namespace AccountingSystem.Business
                 using (LogContext.PushProperty("ErrorType", errorType.ToString()))
                 using (LogContext.PushProperty("Severity", severity.ToString()))
                 {
-                    Log.Fatal(ex, "💥 Critical failure in error logging - Original: {OriginalException}", 
+                    Log.Fatal(ex, "💥 Critical failure in error logging - Original: {OriginalException}",
                         exception?.Message);
                 }
                 return Guid.NewGuid().ToString("N")[..8]; // Shorter fallback ID
             }
         }
 
-        public async Task<string> LogErrorAsync(string message, string? details = null, 
+        public async Task<string> LogErrorAsync(string message, string? details = null,
             ErrorType errorType = ErrorType.SystemError, ErrorSeverity severity = ErrorSeverity.Error,
             int? userId = null, string? username = null)
         {
@@ -231,7 +231,7 @@ namespace AccountingSystem.Business
             return await LogErrorAsync(exception, ErrorType.InventoryError, ErrorSeverity.Error, userId, username);
         }
 
-        public async Task<string> LogReportErrorAsync(Exception exception, string reportName, 
+        public async Task<string> LogReportErrorAsync(Exception exception, string reportName,
             int? userId = null, string? username = null)
         {
             return await LogErrorAsync(exception, ErrorType.ReportError, ErrorSeverity.Error, userId, username);
@@ -433,7 +433,7 @@ namespace AccountingSystem.Business
             if (statistics.TotalErrors > 0)
             {
                 statistics.ResolutionRate = (double)statistics.ResolvedErrors / statistics.TotalErrors * 100;
-                
+
                 var resolvedErrors = errors.Where(e => e.ResolvedAt.HasValue && e.CreatedAt != e.ResolvedAt);
                 if (resolvedErrors.Any())
                 {
@@ -478,7 +478,7 @@ namespace AccountingSystem.Business
             {
                 var cutoffDate = DateTime.Now.AddDays(-retentionDays);
                 var allErrors = await _unitOfWork.Repository<ErrorLog>().GetAllAsync();
-                
+
                 var oldErrors = allErrors.Where(e => e.CreatedAt < cutoffDate &&
                                                     (e.Status == ErrorStatus.Resolved || e.Status == ErrorStatus.Closed) &&
                                                     !e.IsStarred).ToList();
@@ -490,7 +490,7 @@ namespace AccountingSystem.Business
                     {
                         _unitOfWork.Repository<ErrorLog>().Remove(error);
                     }
-                    
+
                     await _unitOfWork.SaveAsync();
                     Log.Information("تم حذف {Count} من سجلات الأخطاء القديمة", count);
                 }
@@ -589,7 +589,7 @@ namespace AccountingSystem.Business
         private static string ComputeErrorSignature(Exception ex)
         {
             var signatureComponents = $"{ex.GetType().FullName}|{ex.Message}|{ex.Source}|{ex.TargetSite?.Name}|{ex.StackTrace}";
-            
+
             var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(signatureComponents));
             return Convert.ToHexString(hashBytes); // .NET 5+ method
         }
@@ -600,7 +600,7 @@ namespace AccountingSystem.Business
         private static string ComputeMessageSignature(string message, string? details)
         {
             var signatureComponents = $"MESSAGE|{message}|{details}";
-            
+
             var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(signatureComponents));
             return Convert.ToHexString(hashBytes);
         }
@@ -742,7 +742,7 @@ namespace AccountingSystem.Business
         /// <summary>
         /// تسجيل شامل لكافة العمليات المحاسبية (ليس فقط الأخطاء)
         /// </summary>
-        public static async Task LogBusinessOperationAsync(string operation, string details, 
+        public static async Task LogBusinessOperationAsync(string operation, string details,
             int? userId = null, string? username = null, bool isSuccess = true)
         {
             try
@@ -755,12 +755,12 @@ namespace AccountingSystem.Business
 
                 if (isSuccess)
                 {
-                    logContext.Information("✅ عملية محاسبية ناجحة: {Operation} - المستخدم: {Username} - التفاصيل: {Details}", 
+                    logContext.Information("✅ عملية محاسبية ناجحة: {Operation} - المستخدم: {Username} - التفاصيل: {Details}",
                            operation, username, details);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ فشل في عملية محاسبية: {Operation} - المستخدم: {Username} - التفاصيل: {Details}", 
+                    logContext.Warning("⚠️ فشل في عملية محاسبية: {Operation} - المستخدم: {Username} - التفاصيل: {Details}",
                            operation, username, details);
                 }
             }
@@ -773,7 +773,7 @@ namespace AccountingSystem.Business
         /// <summary>
         /// تسجيل شامل لعمليات قاعدة البيانات
         /// </summary>
-        public static async Task LogDatabaseOperationAsync(string operation, string tableName, 
+        public static async Task LogDatabaseOperationAsync(string operation, string tableName,
             string? details = null, int? recordId = null, bool isSuccess = true)
         {
             try
@@ -786,12 +786,12 @@ namespace AccountingSystem.Business
 
                 if (isSuccess)
                 {
-                    logContext.Information("🗄️ عملية قاعدة بيانات ناجحة: {Operation} على {TableName} - سجل: {RecordId} - {Details}", 
+                    logContext.Information("🗄️ عملية قاعدة بيانات ناجحة: {Operation} على {TableName} - سجل: {RecordId} - {Details}",
                            operation, tableName, recordId, details);
                 }
                 else
                 {
-                    logContext.Error("❌ فشل في عملية قاعدة بيانات: {Operation} على {TableName} - سجل: {RecordId} - {Details}", 
+                    logContext.Error("❌ فشل في عملية قاعدة بيانات: {Operation} على {TableName} - سجل: {RecordId} - {Details}",
                            operation, tableName, recordId, details);
                 }
             }
@@ -804,7 +804,7 @@ namespace AccountingSystem.Business
         /// <summary>
         /// تسجيل شامل لعمليات المستخدمين
         /// </summary>
-        public static async Task LogUserOperationAsync(string operation, string username, 
+        public static async Task LogUserOperationAsync(string operation, string username,
             int? userId = null, string? details = null, bool isSuccess = true)
         {
             try
@@ -817,12 +817,12 @@ namespace AccountingSystem.Business
 
                 if (isSuccess)
                 {
-                    logContext.Information("👤 عملية مستخدم ناجحة: {Operation} - المستخدم: {Username} - {Details}", 
+                    logContext.Information("👤 عملية مستخدم ناجحة: {Operation} - المستخدم: {Username} - {Details}",
                            operation, username, details);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ فشل في عملية مستخدم: {Operation} - المستخدم: {Username} - {Details}", 
+                    logContext.Warning("⚠️ فشل في عملية مستخدم: {Operation} - المستخدم: {Username} - {Details}",
                            operation, username, details);
                 }
             }
@@ -835,8 +835,8 @@ namespace AccountingSystem.Business
         /// <summary>
         /// تسجيل شامل لعمليات الأمان
         /// </summary>
-        public static async Task LogSecurityOperationAsync(string operation, string? username = null, 
-            string? ipAddress = null, string? details = null, bool isSuccess = true, 
+        public static async Task LogSecurityOperationAsync(string operation, string? username = null,
+            string? ipAddress = null, string? details = null, bool isSuccess = true,
             SecurityEventType eventType = SecurityEventType.General)
         {
             try
@@ -850,12 +850,12 @@ namespace AccountingSystem.Business
 
                 if (isSuccess)
                 {
-                    logContext.Information("🔒 عملية أمان ناجحة: {Operation} - المستخدم: {Username} - IP: {IpAddress} - {Details}", 
+                    logContext.Information("🔒 عملية أمان ناجحة: {Operation} - المستخدم: {Username} - IP: {IpAddress} - {Details}",
                            operation, username, ipAddress, details);
                 }
                 else
                 {
-                    logContext.Warning("🚨 محاولة أمان فاشلة: {Operation} - المستخدم: {Username} - IP: {IpAddress} - {Details}", 
+                    logContext.Warning("🚨 محاولة أمان فاشلة: {Operation} - المستخدم: {Username} - IP: {IpAddress} - {Details}",
                            operation, username, ipAddress, details);
                 }
             }

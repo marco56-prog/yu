@@ -26,7 +26,7 @@ namespace AccountingSystem.WPF.Views
         private ICollectionView _view = null!;
         private readonly CultureInfo _eg = new("ar-EG");
         private readonly DispatcherTimer _searchDebounce = new() { Interval = TimeSpan.FromMilliseconds(220) };
-    private bool _isRefreshScheduled;
+        private bool _isRefreshScheduled;
 
         public SalesInvoicesListWindow(ISalesInvoiceService invoiceService, ICustomerService customerService, IServiceProvider serviceProvider)
         {
@@ -98,11 +98,11 @@ namespace AccountingSystem.WPF.Views
                     _all.Add(inv);
 
                 ScheduleViewRefresh();
-                
+
                 // اختيار أول سطر إن مفيش اختيار
                 if (dgInvoices.SelectedItem == null && dgInvoices.Items.Count > 0)
                     dgInvoices.SelectedIndex = 0;
-                    
+
                 if (lblStatus != null) lblStatus.Text = "تم التحميل";
             }
             catch (Exception ex)
@@ -127,9 +127,9 @@ namespace AccountingSystem.WPF.Views
 
             return statusTag switch
             {
-                "مسودة"  => Set(out desired, InvoiceStatus.Draft),
-                "مؤكدة"  => Set(out desired, InvoiceStatus.Confirmed),
-                "ملغية"  => Set(out desired, InvoiceStatus.Cancelled),
+                "مسودة" => Set(out desired, InvoiceStatus.Draft),
+                "مؤكدة" => Set(out desired, InvoiceStatus.Confirmed),
+                "ملغية" => Set(out desired, InvoiceStatus.Cancelled),
                 _ => false
             };
 
@@ -157,8 +157,8 @@ namespace AccountingSystem.WPF.Views
 
             // عميل
             var selCustomer = cmbCustomer.SelectedItem as Customer;
-            if (selCustomer != null && selCustomer.CustomerId > 0 && 
-                (inv.Customer == null || inv.Customer.CustomerId != selCustomer.CustomerId)) 
+            if (selCustomer != null && selCustomer.CustomerId > 0 &&
+                (inv.Customer == null || inv.Customer.CustomerId != selCustomer.CustomerId))
                 return false;
 
             // حالة
@@ -203,13 +203,13 @@ namespace AccountingSystem.WPF.Views
 
         // ========== أحداث الفلاتر ==========
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) => RefreshFilters();
-        
+
         private void Filter_TextChanged(object sender, TextChangedEventArgs e)
         {
             _searchDebounce.Stop();
             _searchDebounce.Start();
         }
-        
+
         private void Filter_CheckChanged(object sender, RoutedEventArgs e) => RefreshFilters();
 
         private void RefreshFilters()
@@ -326,16 +326,16 @@ namespace AccountingSystem.WPF.Views
                 MessageBox.Show(Constants.MSG_SELECT_INVOICE, Constants.CAPTION_WARNING, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            
+
             try
             {
                 var scope = _serviceProvider.CreateScope();
                 var window = scope.ServiceProvider.GetRequiredService<SalesInvoiceWindow>();
                 window.Owner = Window.GetWindow(this);
                 window.Closed += (_, __) => { scope.Dispose(); Task.Run(() => RefreshInvoices()); };
-                
+
                 // سيتم إضافة تحميل الفاتورة لاحقاً
-                
+
                 window.Show();
             }
             catch (Exception ex)
@@ -431,7 +431,7 @@ namespace AccountingSystem.WPF.Views
             return s;
         }
 
-    private static string BuildSearchIndex(SalesInvoice inv)
+        private static string BuildSearchIndex(SalesInvoice inv)
         {
             var parts = new[]
             {
@@ -447,10 +447,10 @@ namespace AccountingSystem.WPF.Views
             return Normalize(string.Join(" ", parts));
         }
 
-    private static class Constants
-    {
-        public const string MSG_SELECT_INVOICE = "برجاء اختيار فاتورة أولاً.";
-        public const string CAPTION_WARNING = "تنبيه";
-    }
+        private static class Constants
+        {
+            public const string MSG_SELECT_INVOICE = "برجاء اختيار فاتورة أولاً.";
+            public const string CAPTION_WARNING = "تنبيه";
+        }
     }
 }

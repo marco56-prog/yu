@@ -81,7 +81,7 @@ namespace AccountingSystem.Models
             set => CreatedDate = value;
         }
 
-    // CreatedBy already defined above (compatibility alias preserved)
+        // CreatedBy already defined above (compatibility alias preserved)
 
         // Older tests expect IsDraft boolean
         [NotMapped]
@@ -138,6 +138,14 @@ namespace AccountingSystem.Models
 
         [Column(TypeName = "decimal(5,2)")]
         public decimal DiscountPercentage { get; set; }
+
+        // Compatibility alias
+        [NotMapped]
+        public decimal DiscountPercent
+        {
+            get => DiscountPercentage;
+            set => DiscountPercentage = value;
+        }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal DiscountAmount { get; set; }

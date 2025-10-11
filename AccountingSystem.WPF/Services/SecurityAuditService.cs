@@ -76,9 +76,9 @@ namespace AccountingSystem.WPF.Services
                 var hasPermission = CurrentUserRole switch
                 {
                     UserRole.Admin => true, // الأدمن له صلاحية كاملة
-                    UserRole.Manager => permission != Permission.SystemSettings && 
+                    UserRole.Manager => permission != Permission.SystemSettings &&
                                        permission != Permission.UserManagement,
-                    UserRole.User => permission == Permission.ViewInvoices || 
+                    UserRole.User => permission == Permission.ViewInvoices ||
                                     permission == Permission.CreateInvoices ||
                                     permission == Permission.EditDraftInvoices,
                     UserRole.Viewer => permission == Permission.ViewInvoices,
@@ -87,12 +87,12 @@ namespace AccountingSystem.WPF.Services
 
                 if (!hasPermission)
                 {
-                    LogUserAction($"محاولة وصول مرفوضة للصلاحية: {permission}", 
+                    LogUserAction($"محاولة وصول مرفوضة للصلاحية: {permission}",
                         $"المستخدم: {CurrentUserName}, الدور: {CurrentUserRole}");
-                    
+
                     ComprehensiveLogger.LogSecurityOperation(
-                        $"تم رفض الوصول للصلاحية {permission}", 
-                        ComponentName, 
+                        $"تم رفض الوصول للصلاحية {permission}",
+                        ComponentName,
                         CurrentUserName);
                 }
 
@@ -144,7 +144,7 @@ namespace AccountingSystem.WPF.Services
             {
                 _lastActivity = DateTime.Now;
                 _idleTimer.Start();
-                
+
                 ComprehensiveLogger.LogSecurityOperation("تم بدء مؤقت الخمول", ComponentName, CurrentUserName);
             }
             catch (Exception ex)
@@ -191,21 +191,21 @@ namespace AccountingSystem.WPF.Services
                 {
                     CurrentUserName = username;
                     CurrentUserRole = await GetUserRoleAsync(username);
-                    
+
                     LogUserAction("تسجيل دخول ناجح", $"المستخدم: {username}");
-                    
+
                     ComprehensiveLogger.LogSecurityOperation(
-                        $"تم تسجيل دخول ناجح للمستخدم: {username}", 
-                        ComponentName, 
+                        $"تم تسجيل دخول ناجح للمستخدم: {username}",
+                        ComponentName,
                         username);
                 }
                 else
                 {
                     LogUserAction("محاولة تسجيل دخول فاشلة", $"المستخدم: {username}");
-                    
+
                     ComprehensiveLogger.LogSecurityOperation(
-                        $"فشل تسجيل دخول للمستخدم: {username}", 
-                        ComponentName, 
+                        $"فشل تسجيل دخول للمستخدم: {username}",
+                        ComponentName,
                         username);
                 }
 
@@ -223,14 +223,8 @@ namespace AccountingSystem.WPF.Services
             // تطبيق بسيط - يمكن تطويره لاحقاً للتحقق من قاعدة البيانات
             await Task.Delay(100); // محاكاة التحقق
 
-            // افتراضيات للاختبار
-            return username.ToLower() switch
-            {
-                "admin" => password == "admin123",
-                "manager" => password == "manager123",
-                "user" => password == "user123",
-                _ => false
-            };
+            // TODO: Implement secure password validation. Do not use hard-coded passwords.
+            return false;
         }
 
         private async Task<UserRole> GetUserRoleAsync(string username)
@@ -251,7 +245,7 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 var idleTime = DateTime.Now - _lastActivity;
-                
+
                 if (idleTime.TotalMinutes >= IdleTimeoutMinutes)
                 {
                     TriggerIdleLock();
@@ -268,7 +262,7 @@ namespace AccountingSystem.WPF.Services
             try
             {
                 StopIdleTimer();
-                
+
                 var lockEvent = new IdleLockEventArgs
                 {
                     UserName = CurrentUserName,
@@ -281,8 +275,8 @@ namespace AccountingSystem.WPF.Services
                 IdleLockTriggered?.Invoke(this, lockEvent);
 
                 ComprehensiveLogger.LogSecurityOperation(
-                    $"تم قفل النظام تلقائياً بسبب الخمول", 
-                    ComponentName, 
+                    $"تم قفل النظام تلقائياً بسبب الخمول",
+                    ComponentName,
                     CurrentUserName);
             }
             catch (Exception ex)
@@ -297,13 +291,13 @@ namespace AccountingSystem.WPF.Services
             {
                 var hostName = System.Net.Dns.GetHostName();
                 var addresses = System.Net.Dns.GetHostAddresses(hostName);
-                
+
                 foreach (var address in addresses)
                 {
                     if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         return address.ToString();
                 }
-                
+
                 return "Unknown";
             }
             catch

@@ -23,11 +23,11 @@ public partial class SalesReportsWindow : Window
         _reportService = serviceProvider.GetRequiredService<IReportService>();
         _customerService = serviceProvider.GetRequiredService<ICustomerService>();
         _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-        
+
         // إعداد الثقافة المصرية
         _culture = new CultureInfo("ar-EG");
         _culture.NumberFormat.CurrencySymbol = "ج.م";
-        
+
         Loaded += async (s, e) => await LoadDataAsync();
     }
 
@@ -38,11 +38,11 @@ public partial class SalesReportsWindow : Window
             // تحميل العملاء للفلتر
             var customers = await _customerService.GetAllCustomersAsync();
             cmbCustomer.ItemsSource = customers.ToList();
-            
+
             // تعيين التواريخ الافتراضية
             dpFromDate.SelectedDate = DateTime.Today.AddMonths(-1);
             dpToDate.SelectedDate = DateTime.Today;
-            
+
             // تحميل التقرير الافتراضي
             await GenerateReportAsync();
         }
@@ -64,7 +64,7 @@ public partial class SalesReportsWindow : Window
 
             var fromDate = dpFromDate.SelectedDate.Value;
             var toDate = dpToDate.SelectedDate.Value.AddDays(1).AddSeconds(-1); // نهاية اليوم
-            
+
             Customer? selectedCustomer = cmbCustomer.SelectedItem as Customer;
             int? customerId = selectedCustomer?.CustomerId;
 
@@ -76,7 +76,7 @@ public partial class SalesReportsWindow : Window
             lblInvoiceCount.Text = report.InvoiceCount.ToString("N0");
             lblAverageInvoice.Text = report.AverageInvoiceValue.ToString("C", _culture);
             lblTotalDiscount.Text = report.TotalDiscount.ToString("C", _culture);
-            
+
             // عرض الفواتير في الجدول
             dgReport.ItemsSource = report.Invoices.Select(i => new
             {
@@ -170,13 +170,13 @@ public partial class SalesReportsWindow : Window
         {
             var invoiceWindow = new SalesInvoiceWindow(_serviceProvider);
             invoiceWindow.Show();
-            
-            MessageBox.Show($"فتح الفاتورة رقم: {invoice.InvoiceNumber}\nالتاريخ: {invoice.InvoiceDate:dd/MM/yyyy}\nالعميل: {invoice.Customer?.CustomerName ?? "غير محدد"}", 
+
+            MessageBox.Show($"فتح الفاتورة رقم: {invoice.InvoiceNumber}\nالتاريخ: {invoice.InvoiceDate:dd/MM/yyyy}\nالعميل: {invoice.Customer?.CustomerName ?? "غير محدد"}",
                 "تفاصيل الفاتورة", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في فتح الفاتورة: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في فتح الفاتورة: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -187,13 +187,13 @@ public partial class SalesReportsWindow : Window
         {
             var customerWindow = new CustomersWindow(_serviceProvider);
             customerWindow.Show();
-            
-            MessageBox.Show($"سيتم فتح بيانات العميل رقم: {customerId}\nميزة البحث المباشر عن العميل ستُضاف قريباً", 
+
+            MessageBox.Show($"سيتم فتح بيانات العميل رقم: {customerId}\nميزة البحث المباشر عن العميل ستُضاف قريباً",
                 "معلومات", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"خطأ في فتح بيانات العميل: {ex.Message}", "خطأ", 
+            MessageBox.Show($"خطأ في فتح بيانات العميل: {ex.Message}", "خطأ",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

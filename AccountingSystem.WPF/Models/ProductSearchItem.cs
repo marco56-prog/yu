@@ -78,7 +78,7 @@ namespace AccountingSystem.WPF.Models
         /// <summary>
         /// إنشاء عنصر بمعاملات مفصلة (للتوافق مع الكود القديم)
         /// </summary>
-        public static ProductSearchItem Create(int productId, string productCode, string productName, 
+        public static ProductSearchItem Create(int productId, string productCode, string productName,
             string unitName, decimal price, decimal stock)
         {
             return new ProductSearchItem

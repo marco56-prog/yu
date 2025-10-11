@@ -421,7 +421,7 @@ namespace AccountingSystem.Business
                     if (customerPoints == null) { _unitOfWork.RollbackTransaction(); return false; }
 
                     customerPoints.PointsRedeemed += points;
-                    customerPoints.PointsBalance  -= points;
+                    customerPoints.PointsBalance -= points;
                     customerPoints.LastRedeemedDate = DateTime.Now;
 
                     repoPts.Update(customerPoints);

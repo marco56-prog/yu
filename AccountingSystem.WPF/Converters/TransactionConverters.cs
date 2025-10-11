@@ -11,8 +11,8 @@ public sealed class TransactionTypeToArabicConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => value is TransactionType t ? t switch
         {
-            TransactionType.Income   => "دخل",
-            TransactionType.Expense  => "مصروف",
+            TransactionType.Income => "دخل",
+            TransactionType.Expense => "مصروف",
             TransactionType.Transfer => "تحويل",
             _ => value.ToString() ?? ""
         } : "";
@@ -24,13 +24,13 @@ public sealed class TransactionTypeToArabicConverter : IValueConverter
 public sealed class AmountBrushByTypeConverter : IValueConverter
 {
     private static readonly Brush Green = Brushes.Green;
-    private static readonly Brush Red   = Brushes.Red;
+    private static readonly Brush Red = Brushes.Red;
     private static readonly Brush Black = Brushes.Black;
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => value is TransactionType t ? t switch
         {
-            TransactionType.Income  => Green,
+            TransactionType.Income => Green,
             TransactionType.Expense => Red,
             _ => Black
         } : Black;

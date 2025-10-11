@@ -62,31 +62,31 @@ namespace AccountingSystem.WPF.Views
             // تأكد أن الترميز UTF8 (مفيد لو بتكتب ملفات/تقارير)
             Console.OutputEncoding = Encoding.UTF8;
 
-            _serviceProvider     = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _salesInvoiceService = _serviceProvider.GetRequiredService<ISalesInvoiceService>();
-            _customerService     = _serviceProvider.GetRequiredService<ICustomerService>();
-            _productService      = _serviceProvider.GetRequiredService<IProductService>();
+            _customerService = _serviceProvider.GetRequiredService<ICustomerService>();
+            _productService = _serviceProvider.GetRequiredService<IProductService>();
             _priceHistoryService = _serviceProvider.GetRequiredService<IPriceHistoryService>();
-            _context             = _serviceProvider.GetRequiredService<AccountingDbContext>();
+            _context = _serviceProvider.GetRequiredService<AccountingDbContext>();
 
             _customersView = CollectionViewSource.GetDefaultView(_customers);
-            _productsView  = CollectionViewSource.GetDefaultView(_products);
+            _productsView = CollectionViewSource.GetDefaultView(_products);
 
             _culture = new CultureInfo("ar-EG");
             _culture.NumberFormat.CurrencySymbol = "ج.م";
 
             // Bindings
-            dgItems.ItemsSource           = _invoiceDetails;
-            cmbCustomer.ItemsSource       = _customersView;
-            cmbProduct.ItemsSource        = _productsView;
-            cmbUnit.ItemsSource           = _productUnits;
-            cmbWarehouse.ItemsSource      = _warehouses;
+            dgItems.ItemsSource = _invoiceDetails;
+            cmbCustomer.ItemsSource = _customersView;
+            cmbProduct.ItemsSource = _productsView;
+            cmbUnit.ItemsSource = _productUnits;
+            cmbWarehouse.ItemsSource = _warehouses;
             cmbRepresentative.ItemsSource = _representatives;
 
             EnableEditMode(false);
 
             Closing += SalesInvoiceWindow_Closing;
-            Loaded  += async (_, __) => await LoadDataAsync();
+            Loaded += async (_, __) => await LoadDataAsync();
 
             // SelectAll لكل TextBox
             EventManager.RegisterClassHandler(typeof(TextBox),
@@ -128,7 +128,7 @@ namespace AccountingSystem.WPF.Views
                 await LoadTaxRateAsync(ct);
 
                 var customersTask = _customerService.GetAllCustomersAsync();
-                var productsTask  = _productService.GetAllProductsAsync();
+                var productsTask = _productService.GetAllProductsAsync();
                 await Task.WhenAll(customersTask, productsTask);
 
                 _customers.Clear();
@@ -178,12 +178,12 @@ namespace AccountingSystem.WPF.Views
         private static string NormalizeDigits(string? s)
         {
             if (string.IsNullOrWhiteSpace(s)) return "0";
-            s = s.Replace('٠','0').Replace('١','1').Replace('٢','2').Replace('٣','3').Replace('٤','4')
-                 .Replace('٥','5').Replace('٦','6').Replace('٧','7').Replace('٨','8').Replace('٩','9')
-                 .Replace('۰','0').Replace('۱','1').Replace('۲','2').Replace('۳','3').Replace('۴','4')
-                 .Replace('۵','5').Replace('۶','6').Replace('۷','7').Replace('۸','8').Replace('۹','9')
-                 .Replace('٫','.')
-                 .Replace("٬","").Replace(",","");
+            s = s.Replace('٠', '0').Replace('١', '1').Replace('٢', '2').Replace('٣', '3').Replace('٤', '4')
+                 .Replace('٥', '5').Replace('٦', '6').Replace('٧', '7').Replace('٨', '8').Replace('٩', '9')
+                 .Replace('۰', '0').Replace('۱', '1').Replace('۲', '2').Replace('۳', '3').Replace('۴', '4')
+                 .Replace('۵', '5').Replace('۶', '6').Replace('۷', '7').Replace('۸', '8').Replace('۹', '9')
+                 .Replace('٫', '.')
+                 .Replace("٬", "").Replace(",", "");
             return s.Trim();
         }
         private static bool TryParseDecimal(string? text, out decimal value)
@@ -192,9 +192,9 @@ namespace AccountingSystem.WPF.Views
             return decimal.TryParse(text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
                 CultureInfo.InvariantCulture, out value);
         }
-        private void ShowWarn(string msg)  => MessageBox.Show(msg, "تحذير", MessageBoxButton.OK, MessageBoxImage.Warning);
-        private void ShowInfo(string msg)  => MessageBox.Show(msg, "تنبيه",  MessageBoxButton.OK, MessageBoxImage.Information);
-        private void ShowError(string msg) => MessageBox.Show(msg, "خطأ",    MessageBoxButton.OK, MessageBoxImage.Error);
+        private void ShowWarn(string msg) => MessageBox.Show(msg, "تحذير", MessageBoxButton.OK, MessageBoxImage.Warning);
+        private void ShowInfo(string msg) => MessageBox.Show(msg, "تنبيه", MessageBoxButton.OK, MessageBoxImage.Information);
+        private void ShowError(string msg) => MessageBox.Show(msg, "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
 
         // ========= Enter = Tab (مع استثناءات) =========
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -336,7 +336,7 @@ namespace AccountingSystem.WPF.Views
         {
             if (cmbProduct?.SelectedItem is Product product)
             {
-                txtStock.Text     = product.CurrentStock.ToString("F2");
+                txtStock.Text = product.CurrentStock.ToString("F2");
                 txtUnitPrice.Text = product.SalePrice.ToString("F2");
                 await LoadProductUnitsAsync(product.ProductId);
                 await UpdatePriceInfoAsync(product.ProductId);
@@ -467,7 +467,7 @@ namespace AccountingSystem.WPF.Views
         // ========= حسابات =========
         private void QuantityChanged(object sender, TextChangedEventArgs e) { if (IsLoaded) CalculateLineTotal(); }
         private void UnitPriceChanged(object sender, TextChangedEventArgs e) { if (IsLoaded) CalculateLineTotal(); }
-        private void DiscountChanged(object sender, TextChangedEventArgs e)   { if (IsLoaded) CalculateLineTotal(); }
+        private void DiscountChanged(object sender, TextChangedEventArgs e) { if (IsLoaded) CalculateLineTotal(); }
 
         private void CalculateLineTotal()
         {
@@ -477,7 +477,7 @@ namespace AccountingSystem.WPF.Views
                 TryParseDecimal(txtQuantity.Text, out var q);
                 TryParseDecimal(txtUnitPrice.Text, out var p);
                 TryParseDecimal(txtDiscount.Text, out var d);
-                var gross   = q * p;
+                var gross = q * p;
                 var lineNet = Math.Max(0, gross - d);
                 lblTotal.Text = lineNet.ToString("C", _culture);
             }
@@ -496,29 +496,29 @@ namespace AccountingSystem.WPF.Views
                 foreach (var d in _invoiceDetails)
                 {
                     d.TotalPrice = d.Quantity * d.UnitPrice;
-                    d.NetAmount  = Math.Max(0, d.TotalPrice - d.DiscountAmount);
+                    d.NetAmount = Math.Max(0, d.TotalPrice - d.DiscountAmount);
                 }
 
-                var subTotal      = _invoiceDetails.Sum(d => d.TotalPrice);
+                var subTotal = _invoiceDetails.Sum(d => d.TotalPrice);
                 var totalDiscount = _invoiceDetails.Sum(d => d.DiscountAmount);
-                var baseForTax    = _taxOnNetOfDiscount ? Math.Max(0, subTotal - totalDiscount) : subTotal;
-                var taxAmount     = decimal.Round(baseForTax * (_taxRatePercent / 100m), 2);
-                var netTotal      = baseForTax + taxAmount;
+                var baseForTax = _taxOnNetOfDiscount ? Math.Max(0, subTotal - totalDiscount) : subTotal;
+                var taxAmount = decimal.Round(baseForTax * (_taxRatePercent / 100m), 2);
+                var netTotal = baseForTax + taxAmount;
 
                 decimal paidAmount = 0;
                 if (!string.IsNullOrWhiteSpace(txtPaidAmount.Text)) TryParseDecimal(txtPaidAmount.Text, out paidAmount);
                 var remainingAmount = netTotal - paidAmount;
 
-                lblSubTotal.Text        = subTotal.ToString("C", _culture);
-                lblTotalDiscount.Text   = totalDiscount.ToString("C", _culture);
-                lblTaxAmount.Text       = taxAmount.ToString("C", _culture);
-                lblNetTotal.Text        = netTotal.ToString("C", _culture);
+                lblSubTotal.Text = subTotal.ToString("C", _culture);
+                lblTotalDiscount.Text = totalDiscount.ToString("C", _culture);
+                lblTaxAmount.Text = taxAmount.ToString("C", _culture);
+                lblNetTotal.Text = netTotal.ToString("C", _culture);
                 lblRemainingAmount.Text = remainingAmount.ToString("C", _culture);
-                lblTotalItems.Text      = $"عدد الأصناف: {_invoiceDetails.Count}";
+                lblTotalItems.Text = $"عدد الأصناف: {_invoiceDetails.Count}";
 
                 if (FindName("lblQuickItemsCount") is TextBlock qi) qi.Text = _invoiceDetails.Count.ToString();
-                if (FindName("lblQuickDiscount")  is TextBlock qd) qd.Text  = totalDiscount.ToString("N2");
-                if (FindName("lblQuickNet")       is TextBlock qn) qn.Text  = netTotal.ToString("N2");
+                if (FindName("lblQuickDiscount") is TextBlock qd) qd.Text = totalDiscount.ToString("N2");
+                if (FindName("lblQuickNet") is TextBlock qn) qn.Text = netTotal.ToString("N2");
             }
             catch { }
         }
@@ -545,7 +545,7 @@ namespace AccountingSystem.WPF.Views
 
                 // احتياطي: من شريط الإدخال
                 if (cmbProduct.SelectedItem is not Product product ||
-                    cmbUnit.SelectedItem    is not Unit    unit ||
+                    cmbUnit.SelectedItem is not Unit unit ||
                     !TryParseDecimal(txtQuantity.Text, out var quantity) ||
                     !TryParseDecimal(txtUnitPrice.Text, out var unitPrice) ||
                     !TryParseDecimal(txtDiscount.Text, out var discount))
@@ -577,9 +577,9 @@ namespace AccountingSystem.WPF.Views
             var existing = _invoiceDetails.FirstOrDefault(d => d.ProductId == product.ProductId && d.UnitId == unit.UnitId);
             if (existing != null)
             {
-                existing.Quantity   += quantity;
-                existing.TotalPrice  = existing.Quantity * existing.UnitPrice;
-                existing.NetAmount   = Math.Max(0, existing.TotalPrice - existing.DiscountAmount);
+                existing.Quantity += quantity;
+                existing.TotalPrice = existing.Quantity * existing.UnitPrice;
+                existing.NetAmount = Math.Max(0, existing.TotalPrice - existing.DiscountAmount);
                 dgItems.Items.Refresh();
             }
             else
@@ -587,14 +587,14 @@ namespace AccountingSystem.WPF.Views
                 _invoiceDetails.Add(new SalesInvoiceItem
                 {
                     ProductId = product.ProductId,
-                    Product   = product,
-                    UnitId    = unit.UnitId,
-                    Unit      = unit,
-                    Quantity  = quantity,
+                    Product = product,
+                    UnitId = unit.UnitId,
+                    Unit = unit,
+                    Quantity = quantity,
                     UnitPrice = unitPrice,
                     DiscountAmount = discount,
                     TotalPrice = quantity * unitPrice,
-                    NetAmount  = Math.Max(0, (quantity * unitPrice) - discount)
+                    NetAmount = Math.Max(0, (quantity * unitPrice) - discount)
                 });
             }
         }
@@ -612,18 +612,18 @@ namespace AccountingSystem.WPF.Views
         private void ClearItemInputs()
         {
             cmbProduct.SelectedIndex = -1;
-            cmbUnit.SelectedIndex    = -1;
-            txtQuantity.Text         = "1";
-            txtUnitPrice.Text        = "0";
-            txtDiscount.Text         = "0";
-            txtStock.Text            = string.Empty;
-            lblTotal.Text            = "0.00";
+            cmbUnit.SelectedIndex = -1;
+            txtQuantity.Text = "1";
+            txtUnitPrice.Text = "0";
+            txtDiscount.Text = "0";
+            txtStock.Text = string.Empty;
+            lblTotal.Text = "0.00";
 
             lblSelectedProductName.Text = "-";
-            lblCurrentStock.Text        = "0.00";
-            lblLastPurchasePrice.Text   = "-";
-            lblLastCustomerPrice.Text   = "-";
-            pnlProductInfo.Visibility   = Visibility.Collapsed;
+            lblCurrentStock.Text = "0.00";
+            lblLastPurchasePrice.Text = "-";
+            lblLastCustomerPrice.Text = "-";
+            pnlProductInfo.Visibility = Visibility.Collapsed;
 
             cmbProduct.Focus();
             _userOpenedProduct = false;
@@ -640,39 +640,39 @@ namespace AccountingSystem.WPF.Views
                 if (!_invoiceDetails.Any())
                 { ShowWarn("يرجى إضافة منتجات للفاتورة"); return null; }
 
-                var subTotal      = _invoiceDetails.Sum(d => d.TotalPrice);
+                var subTotal = _invoiceDetails.Sum(d => d.TotalPrice);
                 var totalDiscount = _invoiceDetails.Sum(d => d.DiscountAmount);
-                var baseForTax    = _taxOnNetOfDiscount ? Math.Max(0, subTotal - totalDiscount) : subTotal;
-                var taxAmount     = decimal.Round(baseForTax * (_taxRatePercent / 100m), 2);
-                var netTotal      = baseForTax + taxAmount;
+                var baseForTax = _taxOnNetOfDiscount ? Math.Max(0, subTotal - totalDiscount) : subTotal;
+                var taxAmount = decimal.Round(baseForTax * (_taxRatePercent / 100m), 2);
+                var netTotal = baseForTax + taxAmount;
 
                 TryParseDecimal(txtPaidAmount.Text, out var paidAmount);
 
                 var detailsForSave = _invoiceDetails.Select(d => new SalesInvoiceItem
                 {
-                    ProductId      = d.ProductId,
-                    UnitId         = d.UnitId,
-                    Quantity       = d.Quantity,
-                    UnitPrice      = d.UnitPrice,
+                    ProductId = d.ProductId,
+                    UnitId = d.UnitId,
+                    Quantity = d.Quantity,
+                    UnitPrice = d.UnitPrice,
                     DiscountAmount = d.DiscountAmount,
-                    TotalPrice     = d.TotalPrice,
-                    NetAmount      = d.NetAmount
+                    TotalPrice = d.TotalPrice,
+                    NetAmount = d.NetAmount
                 }).ToList();
 
                 var invoice = new SalesInvoice
                 {
-                    InvoiceDate         = dpInvoiceDate.SelectedDate ?? DateTime.Now,
-                    CustomerId          = customer.CustomerId,
-                    SubTotal            = subTotal,
-                    TaxAmount           = taxAmount,
-                    DiscountAmount      = totalDiscount,
-                    NetTotal            = netTotal,
-                    PaidAmount          = paidAmount,
-                    RemainingAmount     = Math.Max(0, netTotal - paidAmount),
-                    Notes               = txtNotes.Text,
-                    Status              = InvoiceStatus.Draft,
-                    CreatedBy           = "system",
-                    Items               = detailsForSave
+                    InvoiceDate = dpInvoiceDate.SelectedDate ?? DateTime.Now,
+                    CustomerId = customer.CustomerId,
+                    SubTotal = subTotal,
+                    TaxAmount = taxAmount,
+                    DiscountAmount = totalDiscount,
+                    NetTotal = netTotal,
+                    PaidAmount = paidAmount,
+                    RemainingAmount = Math.Max(0, netTotal - paidAmount),
+                    Notes = txtNotes.Text,
+                    Status = InvoiceStatus.Draft,
+                    CreatedBy = "system",
+                    Items = detailsForSave
                 };
 
                 SetBusy(true);
@@ -739,9 +739,9 @@ namespace AccountingSystem.WPF.Views
 
         private void SetBusy(bool isBusy)
         {
-            btnSave.IsEnabled    = !isBusy;
-            btnPrint.IsEnabled   = !isBusy;
-            btnCancel.IsEnabled  = !isBusy;
+            btnSave.IsEnabled = !isBusy;
+            btnPrint.IsEnabled = !isBusy;
+            btnCancel.IsEnabled = !isBusy;
             btnAddItem.IsEnabled = !isBusy && (_currentInvoice == null || !_currentInvoice.IsPosted);
             if (FindName("BusyOverlay") is Grid overlay) overlay.Visibility = isBusy ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -792,8 +792,8 @@ namespace AccountingSystem.WPF.Views
             _invoiceDetails.Clear();
             _currentInvoice = null;
             cmbCustomer.SelectedIndex = -1;
-            txtNotes.Text     = string.Empty;
-            txtPaidAmount.Text= "0";
+            txtNotes.Text = string.Empty;
+            txtPaidAmount.Text = "0";
             dpInvoiceDate.SelectedDate = DateTime.Now;
             ClearItemInputs();
             CalculateInvoiceTotals();
@@ -826,10 +826,10 @@ namespace AccountingSystem.WPF.Views
         {
             if (_currentInvoice == null)
             {
-                bool anyDetail   = _invoiceDetails.Any();
+                bool anyDetail = _invoiceDetails.Any();
                 bool hasCustomer = cmbCustomer?.SelectedItem is Customer;
-                bool hasPaid     = TryParseDecimal(txtPaidAmount?.Text, out var paidAmount) && paidAmount != 0;
-                bool hasNotes    = !string.IsNullOrWhiteSpace(txtNotes?.Text);
+                bool hasPaid = TryParseDecimal(txtPaidAmount?.Text, out var paidAmount) && paidAmount != 0;
+                bool hasNotes = !string.IsNullOrWhiteSpace(txtNotes?.Text);
                 return anyDetail || hasCustomer || hasPaid || hasNotes;
             }
             if (_currentInvoice.IsPosted) return false;
@@ -894,7 +894,7 @@ namespace AccountingSystem.WPF.Views
         {
             try
             {
-                invoice.PaidAmount     += paymentAmount;
+                invoice.PaidAmount += paymentAmount;
                 invoice.RemainingAmount = Math.Max(0, invoice.NetTotal - invoice.PaidAmount);
                 _context.SalesInvoices.Update(invoice);
                 await _context.SaveChangesAsync();
@@ -907,7 +907,7 @@ namespace AccountingSystem.WPF.Views
 
         // ========= تنقل بين الفواتير =========
         private async void btnPreviousInvoice_Click(object sender, RoutedEventArgs e) => await NavigateToInvoice(NavigationDirection.Previous);
-        private async void btnNextInvoice_Click(object sender, RoutedEventArgs e)     => await NavigateToInvoice(NavigationDirection.Next);
+        private async void btnNextInvoice_Click(object sender, RoutedEventArgs e) => await NavigateToInvoice(NavigationDirection.Next);
 
         private enum NavigationDirection { Previous, Next }
 
@@ -963,11 +963,11 @@ namespace AccountingSystem.WPF.Views
             try
             {
                 _currentInvoice = invoice;
-                lblInvoiceNumber.Text      = invoice.InvoiceNumber;
+                lblInvoiceNumber.Text = invoice.InvoiceNumber;
                 dpInvoiceDate.SelectedDate = invoice.InvoiceDate;
-                cmbCustomer.SelectedItem   = _customers.FirstOrDefault(c => c.CustomerId == invoice.CustomerId);
-                txtNotes.Text              = invoice.Notes ?? string.Empty;
-                txtPaidAmount.Text         = invoice.PaidAmount.ToString("F2");
+                cmbCustomer.SelectedItem = _customers.FirstOrDefault(c => c.CustomerId == invoice.CustomerId);
+                txtNotes.Text = invoice.Notes ?? string.Empty;
+                txtPaidAmount.Text = invoice.PaidAmount.ToString("F2");
 
                 _invoiceDetails.Clear();
                 foreach (var detail in invoice.Items) _invoiceDetails.Add(detail);
@@ -1007,24 +1007,24 @@ namespace AccountingSystem.WPF.Views
             txtDiscount.IsEnabled = enabled;
 
             btnSearchCustomer.IsEnabled = enabled;
-            btnSearchProduct.IsEnabled  = enabled;
+            btnSearchProduct.IsEnabled = enabled;
             UpdateButtonStates();
         }
 
         private void UpdateButtonStates()
         {
             var hasInvoice = _currentInvoice != null;
-            var isPosted   = hasInvoice && _currentInvoice!.IsPosted;
-            var canEdit    = hasInvoice && !isPosted;
+            var isPosted = hasInvoice && _currentInvoice!.IsPosted;
+            var canEdit = hasInvoice && !isPosted;
             btnPrint.IsEnabled = hasInvoice;
-            (FindName("btnEdit") as Button)            ?.SetValue(IsEnabledProperty, canEdit);
-            (FindName("btnPreviousInvoice") as Button) ?.SetValue(IsEnabledProperty, hasInvoice);
-            (FindName("btnNextInvoice") as Button)     ?.SetValue(IsEnabledProperty, hasInvoice);
+            (FindName("btnEdit") as Button)?.SetValue(IsEnabledProperty, canEdit);
+            (FindName("btnPreviousInvoice") as Button)?.SetValue(IsEnabledProperty, hasInvoice);
+            (FindName("btnNextInvoice") as Button)?.SetValue(IsEnabledProperty, hasInvoice);
         }
 
         // ========= حوارات البحث =========
         private void btnSearchCustomer_Click(object sender, RoutedEventArgs e) => ShowCustomerSearchDialog();
-        private void btnSearchProduct_Click(object sender, RoutedEventArgs e)  => ShowProductSearchDialog();
+        private void btnSearchProduct_Click(object sender, RoutedEventArgs e) => ShowProductSearchDialog();
         private void btnSearchInvoices_Click(object sender, RoutedEventArgs e) => ShowInvoiceSearchDialog();
 
         private void ShowCustomerSearchDialog()

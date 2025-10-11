@@ -138,7 +138,7 @@ namespace AccountingSystem.Business
         {
             if (allowZero)
                 return quantity >= 0;
-            
+
             return quantity > 0;
         }
 
@@ -189,7 +189,7 @@ namespace AccountingSystem.Business
                 return false;
 
             var trimmedCode = code.Trim();
-            
+
             // الطول بين 2-20 حرف
             if (trimmedCode.Length < 2 || trimmedCode.Length > 20)
                 return false;
@@ -220,7 +220,7 @@ namespace AccountingSystem.Business
                 return false;
 
             var trimmedNumber = commercialNumber.Trim();
-            
+
             // الطول بين 5-20 حرف/رقم
             if (trimmedNumber.Length < 5 || trimmedNumber.Length > 20)
                 return false;
@@ -243,7 +243,7 @@ namespace AccountingSystem.Business
             public string PropertyName { get; set; } = string.Empty;
 
             public static ValidationResult Success() => new() { IsValid = true };
-            
+
             public static ValidationResult Error(string message, string propertyName = "")
                 => new() { IsValid = false, ErrorMessage = message, PropertyName = propertyName };
         }

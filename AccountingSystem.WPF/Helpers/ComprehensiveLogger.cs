@@ -17,7 +17,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية محاسبية
         /// </summary>
-        public static void LogBusinessOperation(string operation, string details, 
+        public static void LogBusinessOperation(string operation, string details,
             int? userId = null, string? username = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -26,7 +26,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("BusinessOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("UserId", userId)
@@ -38,12 +38,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Information("✅ عملية محاسبية: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Information("✅ عملية محاسبية: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ فشل عملية محاسبية: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Warning("⚠️ فشل عملية محاسبية: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, details, fileName, caller, lineNumber);
                 }
 
@@ -55,10 +55,10 @@ namespace AccountingSystem.WPF.Helpers
                         var serviceProvider = App.ServiceProvider;
                         using var scope = serviceProvider?.CreateScope();
                         var errorLoggingService = scope?.ServiceProvider.GetService<IErrorLoggingService>();
-                        
+
                         if (errorLoggingService != null && !isSuccess)
                         {
-                            await errorLoggingService.LogErrorAsync($"فشل في العملية المحاسبية: {operation}", 
+                            await errorLoggingService.LogErrorAsync($"فشل في العملية المحاسبية: {operation}",
                                 details, ErrorType.BusinessLogicError, ErrorSeverity.Warning, userId, username);
                         }
                     }
@@ -74,7 +74,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية قاعدة بيانات
         /// </summary>
-        public static void LogDatabaseOperation(string operation, string tableName, 
+        public static void LogDatabaseOperation(string operation, string tableName,
             string? details = null, int? recordId = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -83,7 +83,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("DatabaseOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("TableName", tableName)
@@ -95,12 +95,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Information("🗄️ قاعدة بيانات: {Operation} على {TableName} | سجل: {RecordId} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Information("🗄️ قاعدة بيانات: {Operation} على {TableName} | سجل: {RecordId} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, tableName, recordId, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Error("❌ فشل قاعدة بيانات: {Operation} على {TableName} | سجل: {RecordId} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Error("❌ فشل قاعدة بيانات: {Operation} على {TableName} | سجل: {RecordId} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, tableName, recordId, details, fileName, caller, lineNumber);
                 }
             }
@@ -113,7 +113,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية مستخدم
         /// </summary>
-        public static void LogUserOperation(string operation, string username, 
+        public static void LogUserOperation(string operation, string username,
             int? userId = null, string? details = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -122,7 +122,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("UserOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("Username", username)
@@ -134,12 +134,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Information("👤 عملية مستخدم: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Information("👤 عملية مستخدم: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ فشل عملية مستخدم: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Warning("⚠️ فشل عملية مستخدم: {Operation} | المستخدم: {Username} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, details, fileName, caller, lineNumber);
                 }
             }
@@ -152,7 +152,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية أمان
         /// </summary>
-        public static void LogSecurityOperation(string operation, string? username = null, 
+        public static void LogSecurityOperation(string operation, string? username = null,
             string? ipAddress = null, string? details = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -161,7 +161,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("SecurityOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("Username", username)
@@ -173,12 +173,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Information("🔒 عملية أمان: {Operation} | المستخدم: {Username} | IP: {IpAddress} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Information("🔒 عملية أمان: {Operation} | المستخدم: {Username} | IP: {IpAddress} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, ipAddress, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Warning("🚨 محاولة أمان فاشلة: {Operation} | المستخدم: {Username} | IP: {IpAddress} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Warning("🚨 محاولة أمان فاشلة: {Operation} | المستخدم: {Username} | IP: {IpAddress} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, username, ipAddress, details, fileName, caller, lineNumber);
                 }
 
@@ -192,11 +192,11 @@ namespace AccountingSystem.WPF.Helpers
                             var serviceProvider = App.ServiceProvider;
                             using var scope = serviceProvider?.CreateScope();
                             var errorLoggingService = scope?.ServiceProvider.GetService<IErrorLoggingService>();
-                            
+
                             if (errorLoggingService != null)
                             {
                                 await errorLoggingService.LogSecurityErrorAsync(
-                                    new SecurityException($"حدث أمان: {operation} - {details}"), 
+                                    new SecurityException($"حدث أمان: {operation} - {details}"),
                                     null, username);
                             }
                         }
@@ -213,7 +213,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية نافذة/واجهة مستخدم
         /// </summary>
-        public static void LogUIOperation(string operation, string windowName, 
+        public static void LogUIOperation(string operation, string windowName,
             string? details = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -222,7 +222,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("UIOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("WindowName", windowName)
@@ -233,12 +233,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Debug("🖼️ واجهة المستخدم: {Operation} | النافذة: {WindowName} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Debug("🖼️ واجهة المستخدم: {Operation} | النافذة: {WindowName} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, windowName, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ مشكلة في واجهة المستخدم: {Operation} | النافذة: {WindowName} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Warning("⚠️ مشكلة في واجهة المستخدم: {Operation} | النافذة: {WindowName} | {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, windowName, details, fileName, caller, lineNumber);
                 }
             }
@@ -259,11 +259,11 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 Log.ForContext("SourceFile", fileName)
                    .ForContext("SourceMethod", caller)
                    .ForContext("LineNumber", lineNumber)
-                   .Error(exception, "❌ استثناء: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                   .Error(exception, "❌ استثناء: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                           context ?? "غير محدد", fileName, caller, lineNumber);
 
                 // تسجيل في خدمة قاعدة البيانات أيضاً
@@ -274,10 +274,10 @@ namespace AccountingSystem.WPF.Helpers
                         var serviceProvider = App.ServiceProvider;
                         using var scope = serviceProvider?.CreateScope();
                         var errorLoggingService = scope?.ServiceProvider.GetService<IErrorLoggingService>();
-                        
+
                         if (errorLoggingService != null)
                         {
-                            await errorLoggingService.LogErrorAsync(exception, 
+                            await errorLoggingService.LogErrorAsync(exception,
                                 ErrorType.SystemError, ErrorSeverity.Error);
                         }
                     }
@@ -301,7 +301,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("SourceFile", fileName)
                                    .ForContext("SourceMethod", caller)
                                    .ForContext("LineNumber", lineNumber)
@@ -309,12 +309,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (exception != null)
                 {
-                    logContext.Error(exception, "❌ خطأ: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Error(exception, "❌ خطأ: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            message, context, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Error("❌ خطأ: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Error("❌ خطأ: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            message, context, fileName, caller, lineNumber);
                 }
 
@@ -326,17 +326,17 @@ namespace AccountingSystem.WPF.Helpers
                         var serviceProvider = App.ServiceProvider;
                         using var scope = serviceProvider?.CreateScope();
                         var errorLoggingService = scope?.ServiceProvider.GetService<IErrorLoggingService>();
-                        
+
                         if (errorLoggingService != null)
                         {
                             if (exception != null)
                             {
-                                await errorLoggingService.LogErrorAsync(exception, 
+                                await errorLoggingService.LogErrorAsync(exception,
                                     ErrorType.SystemError, ErrorSeverity.Error);
                             }
                             else
                             {
-                                await errorLoggingService.LogErrorAsync(message, 
+                                await errorLoggingService.LogErrorAsync(message,
                                     context, ErrorType.SystemError, ErrorSeverity.Error);
                             }
                         }
@@ -361,11 +361,11 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 Log.ForContext("SourceFile", fileName)
                    .ForContext("SourceMethod", caller)
                    .ForContext("LineNumber", lineNumber)
-                   .Information("ℹ️ معلومات: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                   .Information("ℹ️ معلومات: {Message} | السياق: {Context} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                           message, context ?? "عام", fileName, caller, lineNumber);
             }
             catch (Exception ex)
@@ -377,7 +377,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية أداء
         /// </summary>
-        public static void LogPerformanceOperation(string operation, string? context = null, 
+        public static void LogPerformanceOperation(string operation, string? context = null,
             object? metrics = null,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -386,7 +386,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 Log.ForContext("PerformanceOperation", true)
                    .ForContext("Operation", operation)
                    .ForContext("Context", context)
@@ -394,7 +394,7 @@ namespace AccountingSystem.WPF.Helpers
                    .ForContext("SourceFile", fileName)
                    .ForContext("SourceMethod", caller)
                    .ForContext("LineNumber", lineNumber)
-                   .Information("⚡ أداء: {Operation} | السياق: {Context} | المقاييس: {Metrics} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                   .Information("⚡ أداء: {Operation} | السياق: {Context} | المقاييس: {Metrics} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                           operation, context ?? "عام", metrics, fileName, caller, lineNumber);
             }
             catch (Exception ex)
@@ -406,7 +406,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية تدقيق
         /// </summary>
-        public static void LogAuditOperation(string action, string? context = null, 
+        public static void LogAuditOperation(string action, string? context = null,
             string? username = null, string? details = null,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -415,7 +415,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 Log.ForContext("AuditOperation", true)
                    .ForContext("Action", action)
                    .ForContext("Username", username)
@@ -423,7 +423,7 @@ namespace AccountingSystem.WPF.Helpers
                    .ForContext("SourceFile", fileName)
                    .ForContext("SourceMethod", caller)
                    .ForContext("LineNumber", lineNumber)
-                   .Information("📋 تدقيق: {Action} | المستخدم: {Username} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                   .Information("📋 تدقيق: {Action} | المستخدم: {Username} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                           action, username, context, details, fileName, caller, lineNumber);
 
                 // تسجيل في خدمة قاعدة البيانات أيضاً
@@ -434,10 +434,10 @@ namespace AccountingSystem.WPF.Helpers
                         var serviceProvider = App.ServiceProvider;
                         using var scope = serviceProvider?.CreateScope();
                         var errorLoggingService = scope?.ServiceProvider.GetService<IErrorLoggingService>();
-                        
+
                         if (errorLoggingService != null)
                         {
-                            await errorLoggingService.LogErrorAsync($"عملية تدقيق: {action}", 
+                            await errorLoggingService.LogErrorAsync($"عملية تدقيق: {action}",
                                 details, ErrorType.AuditLog, ErrorSeverity.Info, null, username);
                         }
                     }
@@ -453,7 +453,7 @@ namespace AccountingSystem.WPF.Helpers
         /// <summary>
         /// تسجيل عملية بيانات عامة
         /// </summary>
-        public static void LogDataOperation(string operation, string? context = null, 
+        public static void LogDataOperation(string operation, string? context = null,
             string? details = null, bool isSuccess = true,
             [CallerMemberName] string? caller = null,
             [CallerFilePath] string? filePath = null,
@@ -462,7 +462,7 @@ namespace AccountingSystem.WPF.Helpers
             try
             {
                 var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                
+
                 var logContext = Log.ForContext("DataOperation", true)
                                    .ForContext("Operation", operation)
                                    .ForContext("Context", context)
@@ -473,12 +473,12 @@ namespace AccountingSystem.WPF.Helpers
 
                 if (isSuccess)
                 {
-                    logContext.Information("💾 بيانات: {Operation} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Information("💾 بيانات: {Operation} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, context, details, fileName, caller, lineNumber);
                 }
                 else
                 {
-                    logContext.Warning("⚠️ فشل عملية بيانات: {Operation} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}", 
+                    logContext.Warning("⚠️ فشل عملية بيانات: {Operation} | السياق: {Context} | التفاصيل: {Details} | من: {SourceFile}.{SourceMethod}:{LineNumber}",
                            operation, context, details, fileName, caller, lineNumber);
                 }
             }

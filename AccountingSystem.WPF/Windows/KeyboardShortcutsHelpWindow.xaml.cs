@@ -116,7 +116,7 @@ namespace AccountingSystem.WPF.Windows
         private void AddGeneralShortcuts(StackPanel parent)
         {
             var section = CreateSection("🔧 اختصارات عامة");
-            
+
             var shortcuts = new[]
             {
                 new ShortcutInfo("F1", "عرض المساعدة", "عرض نافذة المساعدة للنافذة الحالية"),
@@ -135,7 +135,7 @@ namespace AccountingSystem.WPF.Windows
         private void AddNavigationShortcuts(StackPanel parent)
         {
             var section = CreateSection("🧭 اختصارات التنقل");
-            
+
             var shortcuts = new[]
             {
                 new ShortcutInfo("Page Up", "السجل السابق", "الانتقال للسجل السابق"),
@@ -153,7 +153,7 @@ namespace AccountingSystem.WPF.Windows
         private void AddDataEntryShortcuts(StackPanel parent)
         {
             var section = CreateSection("📝 اختصارات إدخال البيانات");
-            
+
             var shortcuts = new[]
             {
                 new ShortcutInfo("F6", "اختيار العميل", "فتح نافذة اختيار العميل"),
@@ -202,14 +202,14 @@ namespace AccountingSystem.WPF.Windows
             headerBorder.Child = headerText;
             sectionStack.Children.Add(headerBorder);
             sectionBorder.Child = sectionStack;
-            
+
             return sectionBorder;
         }
 
         private void AddShortcutsToSection(Border section, ShortcutInfo[] shortcuts)
         {
             var sectionStack = (StackPanel)section.Child;
-            
+
             var grid = new Grid
             {
                 Margin = new Thickness(15, 10, 15, 10)

@@ -155,7 +155,7 @@ namespace AccountingSystem.Business
                         .Sum(m => m.QuantityInMainUnit),
                     TotalOutbound = movementsList.Where(m => m.MovementType == StockMovementType.Out)
                         .Sum(m => m.QuantityInMainUnit),
-                    NetMovement = movementsList.Sum(m => m.MovementType == StockMovementType.In 
+                    NetMovement = movementsList.Sum(m => m.MovementType == StockMovementType.In
                         ? m.QuantityInMainUnit : -m.QuantityInMainUnit),
                     MovementDetails = movementsList.Select(m => new MovementDetail
                     {
@@ -194,7 +194,7 @@ namespace AccountingSystem.Business
                 foreach (var product in productsList)
                 {
                     var avgCost = await CalculateAverageCostAsync(product.ProductId, asOfDate);
-                    
+
                     valuationItems.Add(new InventoryValuationItemAdvanced
                     {
                         ProductId = product.ProductId,
@@ -248,7 +248,7 @@ namespace AccountingSystem.Business
                 foreach (var customer in customersList)
                 {
                     var customerInvoices = salesList.Where(s => s.CustomerId == customer.CustomerId).ToList();
-                    
+
                     if (customerInvoices.Count > 0)
                     {
                         customerMetrics.Add(new CustomerMetrics
@@ -292,7 +292,7 @@ namespace AccountingSystem.Business
         private async Task<List<Product>> GetTopSellingProductsAsync(DateTime fromDate, DateTime toDate)
         {
             var salesItems = await _unitOfWork.SalesInvoiceItems
-                .FindAsync(si => si.SalesInvoice.InvoiceDate >= fromDate && 
+                .FindAsync(si => si.SalesInvoice.InvoiceDate >= fromDate &&
                                  si.SalesInvoice.InvoiceDate <= toDate);
 
             var salesItemsList = salesItems.ToList();
@@ -361,8 +361,8 @@ namespace AccountingSystem.Business
             foreach (var product in productsList)
             {
                 var salesItems = await _unitOfWork.SalesInvoiceItems
-                    .FindAsync(si => si.ProductId == product.ProductId && 
-                                     si.SalesInvoice.InvoiceDate >= fromDate && 
+                    .FindAsync(si => si.ProductId == product.ProductId &&
+                                     si.SalesInvoice.InvoiceDate >= fromDate &&
                                      si.SalesInvoice.InvoiceDate <= toDate);
 
                 var totalRevenue = salesItems.Sum(si => si.LineTotal);
@@ -391,8 +391,8 @@ namespace AccountingSystem.Business
             foreach (var customer in customersList)
             {
                 var invoices = await _unitOfWork.SalesInvoices
-                    .FindAsync(s => s.CustomerId == customer.CustomerId && 
-                                    s.InvoiceDate >= fromDate && 
+                    .FindAsync(s => s.CustomerId == customer.CustomerId &&
+                                    s.InvoiceDate >= fromDate &&
                                     s.InvoiceDate <= toDate);
 
                 var invoicesList = invoices.ToList();
@@ -416,7 +416,7 @@ namespace AccountingSystem.Business
         private async Task<decimal> CalculateAverageCostAsync(int productId, DateTime asOfDate)
         {
             var purchaseItems = await _unitOfWork.PurchaseInvoiceItems
-                .FindAsync(pi => pi.ProductId == productId && 
+                .FindAsync(pi => pi.ProductId == productId &&
                                  pi.PurchaseInvoice.InvoiceDate <= asOfDate);
 
             var itemsList = purchaseItems.ToList();
@@ -443,8 +443,8 @@ namespace AccountingSystem.Business
         private async Task<decimal> CalculateProductCostAsync(int productId, DateTime fromDate, DateTime toDate)
         {
             var purchaseItems = await _unitOfWork.PurchaseInvoiceItems
-                .FindAsync(pi => pi.ProductId == productId && 
-                                 pi.PurchaseInvoice.InvoiceDate >= fromDate && 
+                .FindAsync(pi => pi.ProductId == productId &&
+                                 pi.PurchaseInvoice.InvoiceDate >= fromDate &&
                                  pi.PurchaseInvoice.InvoiceDate <= toDate);
 
             return purchaseItems.Sum(pi => pi.LineTotal);
@@ -453,8 +453,8 @@ namespace AccountingSystem.Business
         private async Task<decimal> CalculateCustomerCostAsync(int customerId, DateTime fromDate, DateTime toDate)
         {
             var customerInvoices = await _unitOfWork.SalesInvoices
-                .FindAsync(s => s.CustomerId == customerId && 
-                                s.InvoiceDate >= fromDate && 
+                .FindAsync(s => s.CustomerId == customerId &&
+                                s.InvoiceDate >= fromDate &&
                                 s.InvoiceDate <= toDate);
 
             decimal totalCost = 0;

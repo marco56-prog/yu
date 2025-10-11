@@ -16,17 +16,17 @@ namespace AccountingSystem.WPF.Views
             {
                 throw new InvalidOperationException("LoginWindow must be created on the main UI thread with STA apartment state");
             }
-            
+
             InitializeComponent();
             _securityService = securityService;
-            
+
             // تعيين القيم الافتراضية للاختبار
             txtUsername.Text = "admin";
             txtPassword.Password = "admin";
-            
+
             // التركيز على زر تسجيل الدخول
             Loaded += (s, e) => btnLogin.Focus();
-            
+
             // إظهار رسالة ترحيب
             ShowMessage("البيانات محملة افتراضياً - اضغط تسجيل الدخول", true);
         }
@@ -77,10 +77,10 @@ namespace AccountingSystem.WPF.Views
                 {
                     LoggedInUser = result.User;
                     LoginSuccessful = true;
-                    
+
                     ShowMessage("تم تسجيل الدخول بنجاح! جاري فتح النظام...", true);
                     await System.Threading.Tasks.Task.Delay(500);
-                    
+
                     DialogResult = true;
                     Close();
                 }
@@ -94,7 +94,7 @@ namespace AccountingSystem.WPF.Views
             catch (System.Exception ex)
             {
                 ShowMessage($"خطأ في تسجيل الدخول: {ex.Message}");
-                System.Windows.MessageBox.Show($"تفاصيل الخطأ:\n{ex}", "خطأ في النظام", 
+                System.Windows.MessageBox.Show($"تفاصيل الخطأ:\n{ex}", "خطأ في النظام",
                     System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             finally
@@ -116,8 +116,8 @@ namespace AccountingSystem.WPF.Views
         private void ShowMessage(string message, bool isSuccess = false)
         {
             lblMessage.Text = message;
-            lblMessage.Foreground = isSuccess ? 
-                System.Windows.Media.Brushes.Green : 
+            lblMessage.Foreground = isSuccess ?
+                System.Windows.Media.Brushes.Green :
                 System.Windows.Media.Brushes.Red;
             lblMessage.Visibility = Visibility.Visible;
         }

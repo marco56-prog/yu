@@ -149,7 +149,7 @@ namespace AccountingSystem.Business
             _unitOfWork = unitOfWork;
             _logger = logger;
             _auditService = auditService;
-            _backupDirectory = configuration.GetValue<string>("BackupSettings:BackupDirectory") 
+            _backupDirectory = configuration.GetValue<string>("BackupSettings:BackupDirectory")
                 ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AccountingBackups");
 
             // إنشاء مجلد النسخ الاحتياطي إذا لم يكن موجوداً
@@ -163,14 +163,14 @@ namespace AccountingSystem.Business
         {
             var startTime = DateTime.Now;
             var backupType = options.CompressBackup ? "Compressed" : "Standard";
-            
+
             LogBackupStarted(_logger, backupType, null);
 
             try
             {
                 var fileName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}";
                 var backupPath = Path.Combine(_backupDirectory, $"{fileName}.json");
-                
+
                 var backupData = new
                 {
                     CreatedAt = DateTime.Now,
@@ -225,7 +225,7 @@ namespace AccountingSystem.Business
             catch (Exception ex)
             {
                 LogBackupError(_logger, backupType, ex.Message, ex);
-                
+
                 return new BackupResult
                 {
                     Success = false,
@@ -309,7 +309,7 @@ namespace AccountingSystem.Business
                 return backups;
 
             var files = Directory.GetFiles(_backupDirectory, "backup_*.*");
-            
+
             foreach (var file in files)
             {
                 var fileInfo = new FileInfo(file);
@@ -348,7 +348,7 @@ namespace AccountingSystem.Business
                 if (File.Exists(backupPath))
                 {
                     File.Delete(backupPath);
-                    
+
                     // تسجيل العملية
                     await _auditService.LogAsync(
                         AuditOperations.BackupDeleted,
@@ -360,7 +360,7 @@ namespace AccountingSystem.Business
                         "System",
                         severity: AuditSeverity.Medium
                     );
-                    
+
                     return true;
                 }
                 return false;
@@ -380,9 +380,9 @@ namespace AccountingSystem.Business
             try
             {
                 var content = await ReadBackupFileAsync(backupPath);
-                
+
                 // التحقق من وجود البيانات الأساسية
-                return content != null && 
+                return content != null &&
                        content.RootElement.TryGetProperty("CreatedAt", out _) &&
                        content.RootElement.TryGetProperty("Version", out _) &&
                        content.RootElement.TryGetProperty("Data", out _);
@@ -564,7 +564,7 @@ namespace AccountingSystem.Business
             var salesInvoices = await _unitOfWork.SalesInvoices.GetAllAsync();
             var purchaseInvoices = await _unitOfWork.PurchaseInvoices.GetAllAsync();
 
-            return customers.Count() + suppliers.Count() + products.Count() + 
+            return customers.Count() + suppliers.Count() + products.Count() +
                    salesInvoices.Count() + purchaseInvoices.Count();
         }
 

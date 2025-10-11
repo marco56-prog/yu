@@ -21,16 +21,18 @@ namespace AccountingSystem.WPF.Views
         private readonly ICashierService _cashierService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IServiceProvider? _serviceProvider;
+        private readonly ISecurityService _securityService;
         private readonly ObservableCollection<Cashier> _cashiers;
         private readonly ICollectionView _view;
 
-        public CashierManagementWindow(ICashierService cashierService, IUnitOfWork unitOfWork, IServiceProvider? serviceProvider = null)
+        public CashierManagementWindow(ICashierService cashierService, IUnitOfWork unitOfWork, IServiceProvider? serviceProvider, ISecurityService securityService)
         {
             _cashierService = cashierService;
             _unitOfWork = unitOfWork;
             _serviceProvider = serviceProvider;
+            _securityService = securityService;
             _cashiers = new ObservableCollection<Cashier>();
-            
+
             InitializeComponent();
 
             // Data binding
@@ -61,7 +63,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحميل بيانات الكاشير: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل بيانات الكاشير: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -90,7 +92,7 @@ namespace AccountingSystem.WPF.Views
         private async void btnAddCashier_Click(object sender, RoutedEventArgs e)
         {
             var settingsService = App.ServiceProvider.GetRequiredService<ISystemSettingsService>();
-                var addWindow = new AddCashierWindow(_cashierService, settingsService);
+            var addWindow = new AddCashierWindow(_cashierService, settingsService, _securityService);
             if (addWindow.ShowDialog() == true)
             {
                 await LoadCashiersAsync();
@@ -101,14 +103,14 @@ namespace AccountingSystem.WPF.Views
         {
             if (dgCashiers.SelectedItem is not Cashier selectedCashier)
             {
-                MessageBox.Show("يرجى اختيار كاشير للتعديل", "تنبيه", 
+                MessageBox.Show("يرجى اختيار كاشير للتعديل", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             // مهم: مرر نسخة جديدة لو نافذة التعديل بتعدل الكائن مباشرة
             var settingsService = App.ServiceProvider.GetRequiredService<ISystemSettingsService>();
-                var editWindow = new AddCashierWindow(_cashierService, settingsService, selectedCashier);
+            var editWindow = new AddCashierWindow(_cashierService, settingsService, _securityService, selectedCashier);
             if (editWindow.ShowDialog() == true)
             {
                 await LoadCashiersAsync();
@@ -119,7 +121,7 @@ namespace AccountingSystem.WPF.Views
         {
             if (dgCashiers.SelectedItem is not Cashier selectedCashier)
             {
-                MessageBox.Show("يرجى اختيار كاشير للحذف", "تنبيه", 
+                MessageBox.Show("يرجى اختيار كاشير للحذف", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -135,19 +137,19 @@ namespace AccountingSystem.WPF.Views
                 var deleted = await _cashierService.DeleteCashierAsync(selectedCashier.Id);
                 if (deleted)
                 {
-                    MessageBox.Show("تم حذف الكاشير بنجاح", "نجح", 
+                    MessageBox.Show("تم حذف الكاشير بنجاح", "نجح",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     await LoadCashiersAsync();
                 }
                 else
                 {
-                    MessageBox.Show("فشل في حذف الكاشير", "خطأ", 
+                    MessageBox.Show("فشل في حذف الكاشير", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في حذف الكاشير: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في حذف الكاشير: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -161,7 +163,7 @@ namespace AccountingSystem.WPF.Views
         {
             if (dgCashiers.SelectedItem is not Cashier selectedCashier)
             {
-                MessageBox.Show("يرجى اختيار كاشير لتحديث حالته", "تنبيه", 
+                MessageBox.Show("يرجى اختيار كاشير لتحديث حالته", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -173,19 +175,19 @@ namespace AccountingSystem.WPF.Views
                 if (updated)
                 {
                     var status = selectedCashier.IsActive ? "تم تفعيل" : "تم إلغاء تفعيل";
-                    MessageBox.Show($"{status} الكاشير بنجاح", "نجح", 
+                    MessageBox.Show($"{status} الكاشير بنجاح", "نجح",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     await LoadCashiersAsync();
                 }
                 else
                 {
-                    MessageBox.Show("فشل في تحديث حالة الكاشير", "خطأ", 
+                    MessageBox.Show("فشل في تحديث حالة الكاشير", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في تحديث حالة الكاشير: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحديث حالة الكاشير: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -194,12 +196,12 @@ namespace AccountingSystem.WPF.Views
         {
             if (dgCashiers.SelectedItem is not Cashier selectedCashier)
             {
-                MessageBox.Show("يرجى اختيار كاشير لتعديل صلاحياته", "تنبيه", 
+                MessageBox.Show("يرجى اختيار كاشير لتعديل صلاحياته", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            MessageBox.Show("إدارة الصلاحيات - قيد التطوير", "معلومات", 
+            MessageBox.Show("إدارة الصلاحيات - قيد التطوير", "معلومات",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -215,14 +217,14 @@ namespace AccountingSystem.WPF.Views
         {
             if (dgCashiers.SelectedItem is not Cashier selectedCashier)
             {
-                MessageBox.Show("يرجى اختيار كاشير لفتح نقطة البيع", "تنبيه", 
+                MessageBox.Show("يرجى اختيار كاشير لفتح نقطة البيع", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!selectedCashier.IsActive)
             {
-                MessageBox.Show("لا يمكن فتح نقطة البيع لكاشير غير مفعل", "تنبيه", 
+                MessageBox.Show("لا يمكن فتح نقطة البيع لكاشير غير مفعل", "تنبيه",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -231,14 +233,14 @@ namespace AccountingSystem.WPF.Views
             {
                 if (_serviceProvider == null)
                 {
-                    MessageBox.Show("خدمات النظام غير متاحة", "خطأ", 
+                    MessageBox.Show("خدمات النظام غير متاحة", "خطأ",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 var posService = _serviceProvider.GetRequiredService<IPosService>();
                 var discountService = _serviceProvider.GetRequiredService<IDiscountService>();
-                
+
                 var posWindow = new POSWindow(_unitOfWork, _cashierService, posService, discountService)
                 {
                     Owner = this
@@ -248,7 +250,7 @@ namespace AccountingSystem.WPF.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطأ في فتح نقطة البيع: {ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في فتح نقطة البيع: {ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

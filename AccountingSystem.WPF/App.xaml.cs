@@ -77,7 +77,7 @@ namespace AccountingSystem.WPF
             {
                 // تجاهل أخطاء Console encoding في WPF apps
             }
-            
+
             SetupEarlyErrorHandling();
         }
 
@@ -212,7 +212,7 @@ namespace AccountingSystem.WPF
             {
                 // فرض استخدام العربية في كل التطبيق
                 var arabicLanguage = XmlLanguage.GetLanguage("ar-EG");
-                
+
                 FrameworkElement.LanguageProperty.OverrideMetadata(
                     typeof(FrameworkElement),
                     new FrameworkPropertyMetadata(arabicLanguage));
@@ -254,11 +254,11 @@ namespace AccountingSystem.WPF
                 sb.AppendLine(ex.InnerException.Message);
             }
 
-            try 
-            { 
-                System.Windows.Clipboard.SetText(ex.ToString()); 
-            } 
-            catch (Exception clipEx) 
+            try
+            {
+                System.Windows.Clipboard.SetText(ex.ToString());
+            }
+            catch (Exception clipEx)
             {
                 // تجاهل أخطاء نسخ النص للحافظة - غير ضروري لعمل التطبيق
                 System.Diagnostics.Debug.WriteLine($"Clipboard failed: {clipEx.Message}");
@@ -482,7 +482,7 @@ namespace AccountingSystem.WPF
             services.AddScoped<ISystemSettingsService, SystemSettingsService>();
             services.AddScoped<ICashierService, CashierService>();
             services.AddScoped<IPosService, PosService>();
-            
+
             // Cash Drawer Service - استخدام التنفيذ المؤقت لمنع أخطاء الحقن
             services.AddScoped<ICashDrawerService, AccountingSystem.Business.Services.NullCashDrawerService>();
 
@@ -490,11 +490,11 @@ namespace AccountingSystem.WPF
             services.AddScoped<IAdvancedAnalyticsService, AdvancedAnalyticsService>();
             services.AddScoped<IAdvancedReportsService, AdvancedReportsService>();
             services.AddScoped<IDiscountService, DiscountService>();
-            
+
             // Infrastructure Services - NEW
             services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
             services.AddScoped<IDatabaseConnectionResilienceService, DatabaseConnectionResilienceService>();
-            services.AddScoped<IGlobalExceptionHandler, GlobalExceptionHandler>();
+            services.AddScoped<IGlobalExceptionHandler, AccountingSystem.Business.GlobalExceptionHandler>();
             services.AddScoped<IBusinessLogicValidator, BusinessLogicValidator>();
 
             // Diagnostics System (temporarily disabled)
@@ -516,7 +516,7 @@ namespace AccountingSystem.WPF
             services.AddTransient<SystemSettingsWindow>();
             services.AddTransient<CashBoxWindow>();
             services.AddTransient<SalesInvoicesListWindow>();
-            
+
             // Doctor System ViewModels
             services.AddTransient<SimpleDoctorViewModel>();
             services.AddTransient<Views.PurchaseInvoiceWindow>();
@@ -526,10 +526,10 @@ namespace AccountingSystem.WPF
             // VMs & Helpers
             services.AddScoped<DashboardViewModel>();
             services.AddScoped<WindowHelper>();
-            
+
             // MVVM Services and ViewModels
             services.AddAccountingSystemServices();
-            
+
             // Additional Windows called via GetRequiredService in MainWindow
             services.AddTransient<ChartsWindow>();
             services.AddTransient<Views.ReportsWindow>();
@@ -613,13 +613,13 @@ namespace AccountingSystem.WPF
                 // محاولة إنشاء MainWindow الأصلية
                 var main = _serviceProvider!.GetRequiredService<MainWindow>();
                 MainWindow = main;
-                
+
                 // التأكد من أن النافذة تظهر بشكل صحيح
                 main.Show();
                 main.WindowState = WindowState.Maximized;
                 main.Activate();
                 main.Focus();
-                
+
                 _mainWindowShown = true;
                 SafeAppend(StartupLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] MainWindow shown successfully.{Environment.NewLine}");
             }
@@ -635,19 +635,19 @@ namespace AccountingSystem.WPF
                         detailedError += $"\nInner Exception: {xamlEx.InnerException.Message}";
                     }
                 }
-                
+
                 SafeAppend(StartupErrorLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] MainWindow creation failed: {detailedError}{Environment.NewLine}");
                 SafeAppend(StartupErrorLogPath, $"Stack trace: {ex.StackTrace}{Environment.NewLine}");
-                
+
                 // عرض رسالة خطأ مفيدة للمستخدم
                 MessageBox.Show(
-                    "حدث خطأ في تحميل النافذة الرئيسية:\n\n" + 
+                    "حدث خطأ في تحميل النافذة الرئيسية:\n\n" +
                     detailedError + "\n\n" +
                     "تم تحسين رسائل الخطأ للتشخيص الدقيق.",
-                    "خطأ في النظام", 
-                    MessageBoxButton.OK, 
+                    "خطأ في النظام",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                
+
                 // إغلاق التطبيق بدلاً من استخدام نافذة بديلة
                 Current.Shutdown(1);
             }

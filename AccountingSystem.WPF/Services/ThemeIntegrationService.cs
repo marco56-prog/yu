@@ -28,7 +28,7 @@ namespace AccountingSystem.WPF.Services
     {
         private const string ComponentName = "ThemeIntegrationService";
         private const string ThemePreferenceKey = "UserPreferredTheme";
-        
+
         private ThemeInfo _currentTheme;
         private readonly Dictionary<string, ThemeInfo> _themes;
 
@@ -48,11 +48,11 @@ namespace AccountingSystem.WPF.Services
             _themes = new Dictionary<string, ThemeInfo>();
             InitializeThemes();
             AvailableThemes = _themes.Values.ToList().AsReadOnly();
-            
+
             // Set default theme
             _currentTheme = _themes["Modern"];
-            
-            ComprehensiveLogger.LogUIOperation("تم تهيئة خدمة إدارة الثيمات", ComponentName, 
+
+            ComprehensiveLogger.LogUIOperation("تم تهيئة خدمة إدارة الثيمات", ComponentName,
                 $"عدد الثيمات المتاحة: {_themes.Count}");
         }
 
@@ -138,7 +138,7 @@ namespace AccountingSystem.WPF.Services
                 config.AppSettings.Settings.Remove(ThemePreferenceKey);
                 config.AppSettings.Settings.Add(ThemePreferenceKey, themeName);
                 config.Save(ConfigurationSaveMode.Modified);
-                
+
                 ComprehensiveLogger.LogUIOperation("تم حفظ تفضيل الثيم", ComponentName, themeName);
                 return true;
             }
@@ -159,7 +159,7 @@ namespace AccountingSystem.WPF.Services
                     ComprehensiveLogger.LogUIOperation("تم تحميل تفضيل الثيم", ComponentName, preference);
                     return preference;
                 }
-                
+
                 ComprehensiveLogger.LogUIOperation("استخدام الثيم الافتراضي", ComponentName);
                 return "Modern";
             }
@@ -219,32 +219,32 @@ namespace AccountingSystem.WPF.Services
                 ["BackgroundBrush"] = new SolidColorBrush(Color.FromRgb(240, 240, 240)),
                 ["SurfaceBrush"] = new SolidColorBrush(Color.FromRgb(250, 250, 250)),
                 ["CardBackgroundBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Primary Colors
                 ["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(0, 102, 204)),
                 ["PrimaryDarkBrush"] = new SolidColorBrush(Color.FromRgb(0, 82, 164)),
                 ["AccentBrush"] = new SolidColorBrush(Color.FromRgb(51, 153, 255)),
-                
+
                 // Text Colors
                 ["TextBrush"] = new SolidColorBrush(Color.FromRgb(51, 51, 51)),
                 ["TextMutedBrush"] = new SolidColorBrush(Color.FromRgb(102, 102, 102)),
                 ["TextOnPrimaryBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Border and Lines
                 ["BorderBrush"] = new SolidColorBrush(Color.FromRgb(204, 204, 204)),
                 ["DividerBrush"] = new SolidColorBrush(Color.FromRgb(229, 229, 229)),
-                
+
                 // Status Colors
                 ["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(40, 167, 69)),
                 ["WarningBrush"] = new SolidColorBrush(Color.FromRgb(255, 193, 7)),
                 ["DangerBrush"] = new SolidColorBrush(Color.FromRgb(220, 53, 69)),
                 ["InfoBrush"] = new SolidColorBrush(Color.FromRgb(23, 162, 184)),
-                
+
                 // Interactive States
                 ["HoverBrush"] = new SolidColorBrush(Color.FromRgb(229, 243, 255)),
                 ["PressedBrush"] = new SolidColorBrush(Color.FromRgb(204, 229, 255)),
                 ["DisabledBrush"] = new SolidColorBrush(Color.FromRgb(248, 249, 250)),
-                
+
                 // Font Sizes
                 ["FontSizeSmall"] = 11.0,
                 ["FontSizeNormal"] = 12.0,
@@ -261,32 +261,32 @@ namespace AccountingSystem.WPF.Services
                 ["BackgroundBrush"] = new SolidColorBrush(Color.FromRgb(248, 249, 250)),
                 ["SurfaceBrush"] = new SolidColorBrush(Colors.White),
                 ["CardBackgroundBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Primary Colors
                 ["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(33, 150, 243)),
                 ["PrimaryDarkBrush"] = new SolidColorBrush(Color.FromRgb(25, 118, 210)),
                 ["AccentBrush"] = new SolidColorBrush(Color.FromRgb(255, 87, 34)),
-                
+
                 // Text Colors
                 ["TextBrush"] = new SolidColorBrush(Color.FromRgb(33, 37, 41)),
                 ["TextMutedBrush"] = new SolidColorBrush(Color.FromRgb(108, 117, 125)),
                 ["TextOnPrimaryBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Border and Lines
                 ["BorderBrush"] = new SolidColorBrush(Color.FromRgb(222, 226, 230)),
                 ["DividerBrush"] = new SolidColorBrush(Color.FromRgb(233, 236, 239)),
-                
+
                 // Status Colors
                 ["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(76, 175, 80)),
                 ["WarningBrush"] = new SolidColorBrush(Color.FromRgb(255, 152, 0)),
                 ["DangerBrush"] = new SolidColorBrush(Color.FromRgb(244, 67, 54)),
                 ["InfoBrush"] = new SolidColorBrush(Color.FromRgb(3, 169, 244)),
-                
+
                 // Interactive States  
                 ["HoverBrush"] = new SolidColorBrush(Color.FromRgb(240, 248, 255)),
                 ["PressedBrush"] = new SolidColorBrush(Color.FromRgb(224, 242, 254)),
                 ["DisabledBrush"] = new SolidColorBrush(Color.FromRgb(248, 249, 250)),
-                
+
                 // Font Sizes
                 ["FontSizeSmall"] = 12.0,
                 ["FontSizeNormal"] = 13.0,
@@ -303,32 +303,32 @@ namespace AccountingSystem.WPF.Services
                 ["BackgroundBrush"] = new SolidColorBrush(Color.FromRgb(18, 18, 18)),
                 ["SurfaceBrush"] = new SolidColorBrush(Color.FromRgb(30, 30, 30)),
                 ["CardBackgroundBrush"] = new SolidColorBrush(Color.FromRgb(37, 37, 37)),
-                
+
                 // Primary Colors
                 ["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(100, 181, 246)),
                 ["PrimaryDarkBrush"] = new SolidColorBrush(Color.FromRgb(66, 165, 245)),
                 ["AccentBrush"] = new SolidColorBrush(Color.FromRgb(255, 138, 101)),
-                
+
                 // Text Colors
                 ["TextBrush"] = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
                 ["TextMutedBrush"] = new SolidColorBrush(Color.FromRgb(158, 158, 158)),
                 ["TextOnPrimaryBrush"] = new SolidColorBrush(Color.FromRgb(18, 18, 18)),
-                
+
                 // Border and Lines
                 ["BorderBrush"] = new SolidColorBrush(Color.FromRgb(66, 66, 66)),
                 ["DividerBrush"] = new SolidColorBrush(Color.FromRgb(48, 48, 48)),
-                
+
                 // Status Colors
                 ["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(129, 199, 132)),
                 ["WarningBrush"] = new SolidColorBrush(Color.FromRgb(255, 183, 77)),
                 ["DangerBrush"] = new SolidColorBrush(Color.FromRgb(239, 83, 80)),
                 ["InfoBrush"] = new SolidColorBrush(Color.FromRgb(79, 195, 247)),
-                
+
                 // Interactive States
                 ["HoverBrush"] = new SolidColorBrush(Color.FromRgb(42, 42, 42)),
                 ["PressedBrush"] = new SolidColorBrush(Color.FromRgb(55, 55, 55)),
                 ["DisabledBrush"] = new SolidColorBrush(Color.FromRgb(24, 24, 24)),
-                
+
                 // Font Sizes
                 ["FontSizeSmall"] = 12.0,
                 ["FontSizeNormal"] = 13.0,
@@ -345,32 +345,32 @@ namespace AccountingSystem.WPF.Services
                 ["BackgroundBrush"] = new SolidColorBrush(Colors.White),
                 ["SurfaceBrush"] = new SolidColorBrush(Colors.White),
                 ["CardBackgroundBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Primary Colors
                 ["PrimaryBrush"] = new SolidColorBrush(Colors.Black),
                 ["PrimaryDarkBrush"] = new SolidColorBrush(Color.FromRgb(33, 33, 33)),
                 ["AccentBrush"] = new SolidColorBrush(Color.FromRgb(0, 0, 255)),
-                
+
                 // Text Colors
                 ["TextBrush"] = new SolidColorBrush(Colors.Black),
                 ["TextMutedBrush"] = new SolidColorBrush(Color.FromRgb(66, 66, 66)),
                 ["TextOnPrimaryBrush"] = new SolidColorBrush(Colors.White),
-                
+
                 // Border and Lines
                 ["BorderBrush"] = new SolidColorBrush(Colors.Black),
                 ["DividerBrush"] = new SolidColorBrush(Color.FromRgb(128, 128, 128)),
-                
+
                 // Status Colors
                 ["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(0, 128, 0)),
                 ["WarningBrush"] = new SolidColorBrush(Color.FromRgb(255, 165, 0)),
                 ["DangerBrush"] = new SolidColorBrush(Color.FromRgb(255, 0, 0)),
                 ["InfoBrush"] = new SolidColorBrush(Color.FromRgb(0, 0, 255)),
-                
+
                 // Interactive States
                 ["HoverBrush"] = new SolidColorBrush(Color.FromRgb(240, 240, 240)),
                 ["PressedBrush"] = new SolidColorBrush(Color.FromRgb(220, 220, 220)),
                 ["DisabledBrush"] = new SolidColorBrush(Color.FromRgb(245, 245, 245)),
-                
+
                 // Font Sizes
                 ["FontSizeSmall"] = 13.0,
                 ["FontSizeNormal"] = 14.0,
@@ -385,7 +385,7 @@ namespace AccountingSystem.WPF.Services
             {
                 // Remove theme-specific resource dictionaries
                 var resourcesToRemove = new List<ResourceDictionary>();
-                
+
                 foreach (var resource in app.Resources.MergedDictionaries)
                 {
                     if (resource.Source?.ToString().Contains("Theme") == true)
@@ -403,7 +403,7 @@ namespace AccountingSystem.WPF.Services
                 var keysToRemove = new List<object>();
                 foreach (var key in app.Resources.Keys)
                 {
-                    if (key.ToString()?.EndsWith("Brush") == true || 
+                    if (key.ToString()?.EndsWith("Brush") == true ||
                         key.ToString()?.StartsWith("FontSize") == true)
                     {
                         keysToRemove.Add(key);

@@ -22,7 +22,7 @@ public sealed class CategoriesViewModel : BaseViewModel
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IServiceProvider _serviceProvider;
-    
+
     // Properties for search and filter
     private string _searchText = string.Empty;
     private bool _showInactiveOnly = false;
@@ -49,7 +49,7 @@ public sealed class CategoriesViewModel : BaseViewModel
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        
+
         // Setup collection view for filtering and sorting
         _categoriesViewSource = new CollectionViewSource { Source = _categories };
         _categoriesViewSource.Filter += OnCategoriesFilter;
@@ -60,7 +60,7 @@ public sealed class CategoriesViewModel : BaseViewModel
         RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());
         AddCommand = new RelayCommand(async () => await AddCategoryAsync());
         EditCommand = new RelayCommand<Category>(async (category) => await EditCategoryAsync(category));
-        DeleteCommand = new RelayCommand<Category>(async (category) => await DeleteCategoryAsync(category), 
+        DeleteCommand = new RelayCommand<Category>(async (category) => await DeleteCategoryAsync(category),
             category => category != null);
         ToggleActiveCommand = new RelayCommand<Category>(async (category) => await ToggleActiveCategoryAsync(category),
             category => category != null);
@@ -145,7 +145,7 @@ public sealed class CategoriesViewModel : BaseViewModel
         {
             var categories = await _unitOfWork.Repository<Category>().GetAllAsync();
             categories = categories.OrderBy(c => c.CategoryName).ToList();
-            
+
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 _categories.Clear();
@@ -160,7 +160,7 @@ public sealed class CategoriesViewModel : BaseViewModel
         {
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                MessageBox.Show($"خطأ في تحميل البيانات:\n{ex.Message}", "خطأ", 
+                MessageBox.Show($"خطأ في تحميل البيانات:\n{ex.Message}", "خطأ",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             });
         }
@@ -195,7 +195,7 @@ public sealed class CategoriesViewModel : BaseViewModel
                 // Check for duplicate names (case-insensitive)
                 var exists = await _unitOfWork.Repository<Category>()
                     .AnyAsync(c => (c.CategoryName ?? "").ToLowerInvariant() == name.ToLowerInvariant());
-                
+
                 if (exists)
                 {
                     MessageBox.Show("اسم الفئة موجود بالفعل. يرجى اختيار اسم آخر.", "تنبيه",
@@ -261,7 +261,7 @@ public sealed class CategoriesViewModel : BaseViewModel
                 var exists = await _unitOfWork.Repository<Category>()
                     .AnyAsync(c => c.CategoryId != category.CategoryId &&
                                    (c.CategoryName ?? "").ToLowerInvariant() == name.ToLowerInvariant());
-                
+
                 if (exists)
                 {
                     MessageBox.Show("اسم الفئة موجود بالفعل. يرجى اختيار اسم آخر.", "تنبيه",

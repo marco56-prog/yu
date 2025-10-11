@@ -2,17 +2,17 @@ using System.Windows;
 
 namespace AccountingSystem.WPF.Views
 {
-	public partial class CashBoxReportsWindow : Window
-	{
-		public CashBoxReportsWindow()
-		{
-			InitializeComponent();
-		}
+    public partial class CashBoxReportsWindow : Window
+    {
+        public CashBoxReportsWindow()
+        {
+            InitializeComponent();
+        }
 
-		private void Close_Click(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
-	}
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+    }
 }
 
